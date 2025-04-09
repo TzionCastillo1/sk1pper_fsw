@@ -1,5 +1,0 @@
-test/Testexample.c:18:test_addTwoInts:PASS
-
------------------------
-1 Tests 0 Failures 0 Ignored 
-OK
