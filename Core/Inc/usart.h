@@ -29,7 +29,7 @@ extern "C" {
 #include "main.h"
 
 /* USER CODE BEGIN Includes */
-
+#include "stdint.h"
 /* USER CODE END Includes */
 
 extern UART_HandleTypeDef huart4;
@@ -63,7 +63,7 @@ typedef void (*usartCallback_t)(void);
  * NOTE: For now, this will be treated as a one item buffer
  */
 
-char usart1Buffer[256];
+uint8_t usart1Buffer[1];
 
 void USART1_start();
 
