@@ -8,11 +8,10 @@
 extern "C" {
 #endif /** __cplusplus */
 
-typedef enum packetCharacters_t
-{
-    SOT_CHAR = 63, /*?*/
-    EOT_CHAR, /*@*/
-} packetCharacters_t;
+#include "stdbool.h"
+
+/** Flag describing if a new message has been received */
+bool newMessage = false; 
 
 typedef void (*commsRxCallback_t)(char* data, uint8_t dataLength);
 
@@ -24,7 +23,7 @@ error_t commsStop();
 
 error_t commsWrite();
 
-uint8_t commsRead();
+uint8_t commsReadMessage();
 
 error_t commsSetRxCallback();
 

@@ -57,6 +57,31 @@ typedef struct local_position_ned_t
 
 /** --------------------- Command Definitions -------- */
 
+/**
+ * NOTE: Not sure if I need the empty structs. Could just have one empty struct to cover
+ * all the commands that don't have any accompanying data. 
+ * 
+ */
+typedef struct cmd_abort_t
+{
+
+} cmd_abort_t;
+
+typedef struct cmd_arm_disarm_t
+{
+    uint8_t arm;
+} cmd_arm_disarm_t;
+
+typedef struct cmd_takeoff_t
+{
+    uint16_t desired_altitude;
+} cmd_takeoff_t;
+
+typedef struct cmd_land_t
+{
+
+} cmd_land_t;
+
 /** -------------------- Enum Definitions ------------ */
 typedef enum comms_payload_id_t
 {
@@ -83,10 +108,6 @@ typedef enum sys_mode_t
 
 } sys_mode_t;
 */
-
-Could all of these states be represented through a bit mask?
-
-XXXXXXXX
 
 typedef sys_state_t
 {
