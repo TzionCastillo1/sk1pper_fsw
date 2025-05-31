@@ -4,7 +4,7 @@
 #include "stdint.h"
 #include "stdbool.h"
 #include "errors.h"
-#include "c_library_v2/common/mavlink.h"
+#include "mavlink.h"
 
 #ifdef __cplusplus
 extern "C" {

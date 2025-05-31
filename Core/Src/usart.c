@@ -22,7 +22,6 @@
 
 /* USER CODE BEGIN 0 */
 
-usartCallback_t USART1callback;
 
 /* USER CODE END 0 */
 
@@ -485,17 +484,5 @@ void HAL_UART_MspDeInit(UART_HandleTypeDef* uartHandle)
 }
 
 /* USER CODE BEGIN 1 */
-void USART1registerCallback(usartCallback_t usartCallback)
-{
-  USART1callback = usartCallback;
-}
 
-
-void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
-{
-  if(huart->Instance == USART1)
-  {
-    USART1callback();
-  }
-}
 /* USER CODE END 1 */
