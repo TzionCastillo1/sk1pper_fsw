@@ -36,7 +36,7 @@ SRCT = $(wildcard $(PATHT)*.c)
 COMPILE=gcc -c
 LINK=gcc
 DEPEND=gcc -MM -MG -MF
-TCFLAGS=-I. -I$(PATHU) -I$(PATHS) -I$(PATHI) -DTEST
+TCFLAGS=-I. -I$(PATHU) -I$(PATHS) -I$(PATHI) -Ic_library_v2 -Ic_library_v2/common -I c_library_v2/minimal -DTEST
 
 RESULTS = $(patsubst $(PATHT)Test%.c,$(PATHR)Test%.txt,$(SRCT) )
 
@@ -148,7 +148,9 @@ Core/Src/i2c.c \
 Core/Src/spi.c \
 Core/Src/tim.c \
 Core/Src/usart.c \
-Core/Src/comms.c
+Core/Src/comms.c \
+Core/Src/hermes/hermescodec.c \
+Core/Src/flightmanager.c
 
 # ASM sources
 ASM_SOURCES =  \
@@ -212,7 +214,8 @@ C_INCLUDES =  \
 -IDrivers/STM32F4xx_HAL_Driver/Inc \
 -IDrivers/STM32F4xx_HAL_Driver/Inc/Legacy \
 -IDrivers/CMSIS/Device/ST/STM32F4xx/Include \
--IDrivers/CMSIS/Include
+-IDrivers/CMSIS/Include \
+-ICore/Inc/hermes
 
 
 # compile gcc flags

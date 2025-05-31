@@ -1,45 +1,28 @@
 #include "comms.h"
-#include "peripheralconfig.h"
 
-#include "usart.h"
+static bool is_new_message = false;
+static mavlink_message_t destination_message;
+static mavlink_status_t message_status;
 
-static commsRxCallback_t rxCallback;
-
-comms_packet_t comms_packet;
-
-void commsUSARTCallback();
-
-
-error_t commsInit(commsRxCallback_t callback)
+error_t comms_init()
 {
-    rxCallback = callback;
-    /** defined in peripheralconfig.h might get rid of this later, not sure we need this configurability*/
-    #ifdef TELEM_UART_1
-    MX_USART1_UART_Init();
-    USART1registerCallback(commsUSARTCallback);
-    #endif /** TELEM_UART_1 */
-
+    return NO_ERR;
 }
 
-/**
- * @brief start UART1, triggering an interrupt anytime a byte is received. 
- * 
- * @return error_t 
- */
-error_t commsStart()
+void comms_parse_byte(uint8_t byte)
 {
-    HAL_UART_Receive_IT(&huart1, usart1Buffer, 1);
-}
-
-/**
- * @brief function for placing data from USART into a comms packet buffer and setting a flag. 
- * TODO: implement!
- */
-void commsUSARTCallback()
-{
-    if(commsDecodePacket(byte, &comms_packet))
+    if(mavlink_parse_char(COMMS_DEFAULT_CHANNEL, byte, &destination_message, &message_status))
     {
-        newMessage = true;
+        is_new_message = true;
     }
-    HAL_UART_Receive_IT(&huart1, usart1Buffer, 1);
+    else
+    {
+        is_new_message = false;
+    }
+
+}
+
+comms_status_t comms_is_new_message(mavlink_message_t *message_destination)
+{
+    return is_new_message;
 }
