@@ -6,23 +6,22 @@ extern "C" {
 #endif /** __cplusplus */
 
 #include "errors.h"
-#include "event.h"
+#include "events.h"
+#include "stdint.h"
 
-error_t batteryMonitorInit();
+error_t battery_monitor_init();
 
-error_t batteryMonitorStart();
+error_t battery_monitor_enable();
 
-error_t batteryMonitorStop();
+error_t battery_monitor_disable();
 
-error_t batteryMonitorUpdate();
+float battery_monitor_get_voltage();
 
-float batteryMonitorGetVoltage();
-
-error_t batteryMonitorLogVoltage();
+uint8_t battery_monitor_get_soc();
 
 
 #ifdef __cplusplus
-extern "C" {
+}
 #endif /** __cplusplus */
 
 #endif /** BATTERYMONITOR_H */

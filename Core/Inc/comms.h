@@ -2,30 +2,32 @@
 #define COMMS_H
 
 #include "stdint.h"
+#include "stdbool.h"
 #include "errors.h"
+#include "mavlink.h"
 
 #ifdef __cplusplus
 extern "C" {
 #endif /** __cplusplus */
 
-#include "stdbool.h"
+#define COMMS_DEFAULT_CHANNEL 0
 
-/** Flag describing if a new message has been received */
-bool newMessage = false; 
+typedef enum comms_status_t
+{
+    NO_MESSAGE = 0,
+    NEW_MESSAGE = 1,
+} comms_status_t;
 
-typedef void (*commsRxCallback_t)(char* data, uint8_t dataLength);
+error_t comms_init();
 
-error_t commsInit(commsRxCallback_t callback);
+void comms_parse_buffer(uint8_t byte);
 
-error_t commsStart();
+comms_status_t comms_is_new_message(mavlink_message_t *message_destination);
 
-error_t commsStop();
-
-error_t commsWrite();
-
-uint8_t commsReadMessage();
-
-error_t commsSetRxCallback();
+/**
+ * TODO: write function to pass data to UART driver for write 
+ * 
+ */
 
 #ifdef __cplusplus
 }

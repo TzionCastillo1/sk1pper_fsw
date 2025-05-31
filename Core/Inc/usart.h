@@ -56,18 +56,7 @@ void MX_USART3_UART_Init(void);
 void MX_USART6_UART_Init(void);
 
 /* USER CODE BEGIN Prototypes */
-typedef void (*usartCallback_t)(void);
 
-/**
- * @brief 
- * NOTE: For now, this will be treated as a one item buffer
- */
-
-uint8_t usart1Buffer[1];
-
-void USART1_start();
-
-void USART1registerCallback(usartCallback_t usartCallback);
 /* USER CODE END Prototypes */
 
 #ifdef __cplusplus
