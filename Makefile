@@ -142,7 +142,6 @@ C_INCLUDES =  \
 -Ic_library_v2 \
 -Ic_library_v2/common \
 -Ic_library_v2/minimal \
-#-I$(PATHT) \
 
 
 # compile gcc flags

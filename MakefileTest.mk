@@ -39,10 +39,10 @@ test: $(BUILD_PATHS) $(RESULTS)
 	@echo "$(PASSED)"
 	@echo "\nDONE"
 
-$(PATHR)%.txt: $(BUILD_DIR)%.$(TARGET_EXTENSION)
+$(PATHR)%.txt: $(BUILD_DIR)/%.$(TARGET_EXTENSION)
 	-./$< > $@ 2>&1
 
-$(BUILD_DIR)Test%.$(TARGET_EXTENSION): $(PATHO)Test%.o $(PATHO)%.o $(PATHO)unity.o #$(PATHD)Test%.d
+$(BUILD_DIR)/Test%.$(TARGET_EXTENSION): $(PATHO)Test%.o $(PATHO)%.o $(PATHO)unity.o #$(PATHD)Test%.d
 	$(LINK) -o $@ $^
 
 $(PATHO)%.o:: $(PATHT)%.c
@@ -67,7 +67,7 @@ $(PATHR):
 	$(MKDIR) $(PATHR)
 
 
-.PRECIOUS: $(BUILD_DIR)Test%.$(TARGET_EXTENSION)
+#.PRECIOUS: $(BUILD_DIR)/Test%.$(TARGET_EXTENSION)
 .PRECIOUS: $(PATHD)%.d
 .PRECIOUS: $(PATHO)%.o
 .PRECIOUS: $(PATHR)%.txt
