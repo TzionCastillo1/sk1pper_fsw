@@ -1,14 +1,30 @@
+/**
+ * @file comms.c
+ * @author Tzion Castillo
+ * @brief This module contains the communications task, which is responsible for sending and receiving
+ * telemetry.
+ * @version 0.1
+ * @date 2025-06-01
+ * 
+ * @copyright Copyright (c) 2025
+ * 
+ */
+
 #ifndef COMMS_H
 #define COMMS_H
+
+#ifdef __cplusplus
+extern "C" {
+#endif /** __cplusplus */
 
 #include "stdint.h"
 #include "stdbool.h"
 #include "errors.h"
 #include "mavlink.h"
+//#include "queue.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif /** __cplusplus */
+
+//QueueHandle_t comms_outgoing_queue;
 
 #define COMMS_DEFAULT_CHANNEL 0
 
