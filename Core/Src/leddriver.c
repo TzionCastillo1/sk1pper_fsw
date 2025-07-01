@@ -10,12 +10,12 @@ void leddriver_init(leddriver_handle_t *leddriver_handle, GPIO_TypeDef *LEDPort,
 
 void leddriver_set(leddriver_handle_t *leddriver_handle)
 {
-    HAL_GPIO_WritePin(leddriver_handle->LEDPort, leddriver_handle->LEDPin, GPIO_PIN_SET);
+    HAL_GPIO_WritePin(leddriver_handle->LEDPort, leddriver_handle->LEDPin, GPIO_PIN_RESET);
 }
 
 void leddriver_reset(leddriver_handle_t *leddriver_handle)
 {
-    HAL_GPIO_WritePin(leddriver_handle->LEDPort, leddriver_handle->LEDPin, GPIO_PIN_RESET);
+    HAL_GPIO_WritePin(leddriver_handle->LEDPort, leddriver_handle->LEDPin, GPIO_PIN_SET);
 }
 
 void leddriver_toggle(leddriver_handle_t *leddriver_handle)

@@ -11,7 +11,9 @@ extern "C" {
  */
 typedef enum error_t
 {
-    NO_ERR,
+    DEBUG = -2,
+    INFO = -1,
+    NO_ERR = 0,
     ERR_GENERIC,
 } error_t;
 

@@ -26,10 +26,13 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "stm32f4xx_hal.h"
+#include "status.h"
+#include "leddriver.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
 typedef StaticTask_t osStaticThreadDef_t;
+typedef StaticTimer_t osStaticTimerDef_t;
 typedef StaticEventGroup_t osStaticEventGroupDef_t;
 /* USER CODE BEGIN PTD */
 
@@ -57,17 +60,25 @@ const osThreadAttr_t defaultTask_attributes = {
   .stack_size = 128 * 4,
   .priority = (osPriority_t) osPriorityNormal,
 };
-/* Definitions for debugTask */
-osThreadId_t debugTaskHandle;
-uint32_t debugTaskBuffer[ 256 ];
-osStaticThreadDef_t debugTaskControlBlock;
-const osThreadAttr_t debugTask_attributes = {
-  .name = "debugTask",
-  .cb_mem = &debugTaskControlBlock,
-  .cb_size = sizeof(debugTaskControlBlock),
-  .stack_mem = &debugTaskBuffer[0],
-  .stack_size = sizeof(debugTaskBuffer),
+/* Definitions for logTask */
+osThreadId_t logTaskHandle;
+uint32_t logTaskBuffer[ 256 ];
+osStaticThreadDef_t logTaskControlBlock;
+const osThreadAttr_t logTask_attributes = {
+  .name = "logTask",
+  .cb_mem = &logTaskControlBlock,
+  .cb_size = sizeof(logTaskControlBlock),
+  .stack_mem = &logTaskBuffer[0],
+  .stack_size = sizeof(logTaskBuffer),
   .priority = (osPriority_t) osPriorityNormal,
+};
+/* Definitions for status_timer */
+osTimerId_t status_timerHandle;
+osStaticTimerDef_t StatusTimerControlBlock;
+const osTimerAttr_t status_timer_attributes = {
+  .name = "status_timer",
+  .cb_mem = &StatusTimerControlBlock,
+  .cb_size = sizeof(StatusTimerControlBlock),
 };
 /* Definitions for Error */
 osEventFlagsId_t ErrorHandle;
@@ -80,11 +91,11 @@ const osEventFlagsAttr_t Error_attributes = {
 
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN FunctionPrototypes */
-
 /* USER CODE END FunctionPrototypes */
 
 void StartDefaultTask(void *argument);
-extern void startDebugTask(void *argument);
+extern void startLogTask(void *argument);
+extern void status_timer_callback(void *argument);
 
 void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
 
@@ -105,6 +116,10 @@ void MX_FREERTOS_Init(void) {
   /* add semaphores, ... */
   /* USER CODE END RTOS_SEMAPHORES */
 
+  /* Create the timer(s) */
+  /* creation of status_timer */
+  status_timerHandle = osTimerNew(status_timer_callback, osTimerPeriodic, NULL, &status_timer_attributes);
+
   /* USER CODE BEGIN RTOS_TIMERS */
   /* start timers, add new ones, ... */
   /* USER CODE END RTOS_TIMERS */
@@ -117,8 +132,8 @@ void MX_FREERTOS_Init(void) {
   /* creation of defaultTask */
   defaultTaskHandle = osThreadNew(StartDefaultTask, NULL, &defaultTask_attributes);
 
-  /* creation of debugTask */
-  debugTaskHandle = osThreadNew(startDebugTask, NULL, &debugTask_attributes);
+  /* creation of logTask */
+  logTaskHandle = osThreadNew(startLogTask, NULL, &logTask_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
@@ -148,7 +163,10 @@ void StartDefaultTask(void *argument)
   for(;;)
   {
     osDelay(2000);
+    osEventFlagsSet(ErrorHandle, EVENT_FLAG_DEBUG);
     HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_14);
+    status_set_armed();
+
   }
   /* USER CODE END StartDefaultTask */
 }
