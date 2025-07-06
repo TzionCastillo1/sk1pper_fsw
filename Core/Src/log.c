@@ -53,6 +53,7 @@ void startLogTask()
          //osMessageQueueGet(log_msg_queue, &log_msg_obj, NULL, 0U);
 
         //Check for the verbosity of the message
+        osDelay(100);
     }
 }
 

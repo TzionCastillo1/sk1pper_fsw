@@ -159,13 +159,14 @@ void MX_FREERTOS_Init(void) {
 void StartDefaultTask(void *argument)
 {
   /* USER CODE BEGIN StartDefaultTask */
+  status_set_error();
   /* Infinite loop */
   for(;;)
   {
-    osDelay(2000);
-    osEventFlagsSet(ErrorHandle, EVENT_FLAG_DEBUG);
-    HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_14);
+    osDelay(4000);
     status_set_armed();
+    //osEventFlagsSet(ErrorHandle, EVENT_FLAG_DEBUG);
+    HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_14);
 
   }
   /* USER CODE END StartDefaultTask */

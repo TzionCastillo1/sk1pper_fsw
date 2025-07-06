@@ -6,6 +6,7 @@ void leddriver_init(leddriver_handle_t *leddriver_handle, GPIO_TypeDef *LEDPort,
 {
     leddriver_handle->LEDPort = LEDPort;
     leddriver_handle->LEDPin = LEDPin;
+    leddriver_reset(leddriver_handle);
 }
 
 void leddriver_set(leddriver_handle_t *leddriver_handle)
