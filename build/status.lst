@@ -1,0 +1,317 @@
+ARM GAS  /tmp/cckb2jI1.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 1
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"status.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.file 1 "Core/Src/status.c"
+  20              		.section	.text.status_init,"ax",%progbits
+  21              		.align	1
+  22              		.global	status_init
+  23              		.syntax unified
+  24              		.thumb
+  25              		.thumb_func
+  27              	status_init:
+  28              	.LFB243:
+   1:Core/Src/status.c **** #include "status.h"
+   2:Core/Src/status.c **** #include "stdint.h"
+   3:Core/Src/status.c **** #include "stdbool.h"
+   4:Core/Src/status.c **** #include "FreeRTOS.h"
+   5:Core/Src/status.c **** #include "leddriver.h"
+   6:Core/Src/status.c **** #include "stdbool.h"
+   7:Core/Src/status.c **** #include "cmsis_os.h"
+   8:Core/Src/status.c **** 
+   9:Core/Src/status.c **** static uint32_t timer_delay = pdMS_TO_TICKS(250);
+  10:Core/Src/status.c **** static leddriver_handle_t log_led_handle;
+  11:Core/Src/status.c **** static bool is_error = false;
+  12:Core/Src/status.c **** extern osTimerId_t status_timerHandle;
+  13:Core/Src/status.c **** 
+  14:Core/Src/status.c **** void status_init()
+  15:Core/Src/status.c **** {
+  29              		.loc 1 15 1 view -0
+  30              		.cfi_startproc
+  31              		@ args = 0, pretend = 0, frame = 0
+  32              		@ frame_needed = 0, uses_anonymous_args = 0
+  33 0000 08B5     		push	{r3, lr}
+  34              	.LCFI0:
+  35              		.cfi_def_cfa_offset 8
+  36              		.cfi_offset 3, -8
+  37              		.cfi_offset 14, -4
+  16:Core/Src/status.c ****     leddriver_init(&log_led_handle, GPIOA, LOG_LED_PIN);
+  38              		.loc 1 16 5 view .LVU1
+  39 0002 4FF40052 		mov	r2, #8192
+  40 0006 0249     		ldr	r1, .L3
+  41 0008 0248     		ldr	r0, .L3+4
+  42 000a FFF7FEFF 		bl	leddriver_init
+ARM GAS  /tmp/cckb2jI1.s 			page 2
+
+
+  43              	.LVL0:
+  17:Core/Src/status.c **** }
+  44              		.loc 1 17 1 is_stmt 0 view .LVU2
+  45 000e 08BD     		pop	{r3, pc}
+  46              	.L4:
+  47              		.align	2
+  48              	.L3:
+  49 0010 00000240 		.word	1073872896
+  50 0014 00000000 		.word	log_led_handle
+  51              		.cfi_endproc
+  52              	.LFE243:
+  54              		.section	.text.status_timer_callback,"ax",%progbits
+  55              		.align	1
+  56              		.global	status_timer_callback
+  57              		.syntax unified
+  58              		.thumb
+  59              		.thumb_func
+  61              	status_timer_callback:
+  62              	.LVL1:
+  63              	.LFB244:
+  18:Core/Src/status.c **** 
+  19:Core/Src/status.c **** void status_timer_callback(void *argument)
+  20:Core/Src/status.c **** {
+  64              		.loc 1 20 1 is_stmt 1 view -0
+  65              		.cfi_startproc
+  66              		@ args = 0, pretend = 0, frame = 0
+  67              		@ frame_needed = 0, uses_anonymous_args = 0
+  68              		.loc 1 20 1 is_stmt 0 view .LVU4
+  69 0000 08B5     		push	{r3, lr}
+  70              	.LCFI1:
+  71              		.cfi_def_cfa_offset 8
+  72              		.cfi_offset 3, -8
+  73              		.cfi_offset 14, -4
+  21:Core/Src/status.c ****     //leddriver_toggle(&log_led_handle);
+  22:Core/Src/status.c ****     HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_13);
+  74              		.loc 1 22 5 is_stmt 1 view .LVU5
+  75 0002 4FF40051 		mov	r1, #8192
+  76 0006 0248     		ldr	r0, .L7
+  77              	.LVL2:
+  78              		.loc 1 22 5 is_stmt 0 view .LVU6
+  79 0008 FFF7FEFF 		bl	HAL_GPIO_TogglePin
+  80              	.LVL3:
+  23:Core/Src/status.c **** }
+  81              		.loc 1 23 1 view .LVU7
+  82 000c 08BD     		pop	{r3, pc}
+  83              	.L8:
+  84 000e 00BF     		.align	2
+  85              	.L7:
+  86 0010 00000240 		.word	1073872896
+  87              		.cfi_endproc
+  88              	.LFE244:
+  90              		.section	.text.status_set_armed,"ax",%progbits
+  91              		.align	1
+  92              		.global	status_set_armed
+  93              		.syntax unified
+  94              		.thumb
+  95              		.thumb_func
+ARM GAS  /tmp/cckb2jI1.s 			page 3
+
+
+  97              	status_set_armed:
+  98              	.LFB245:
+  24:Core/Src/status.c **** 
+  25:Core/Src/status.c **** void status_set_armed()
+  26:Core/Src/status.c **** {
+  99              		.loc 1 26 1 is_stmt 1 view -0
+ 100              		.cfi_startproc
+ 101              		@ args = 0, pretend = 0, frame = 0
+ 102              		@ frame_needed = 0, uses_anonymous_args = 0
+ 103 0000 08B5     		push	{r3, lr}
+ 104              	.LCFI2:
+ 105              		.cfi_def_cfa_offset 8
+ 106              		.cfi_offset 3, -8
+ 107              		.cfi_offset 14, -4
+  27:Core/Src/status.c ****     leddriver_set(&log_led_handle);
+ 108              		.loc 1 27 5 view .LVU9
+ 109 0002 0448     		ldr	r0, .L11
+ 110 0004 FFF7FEFF 		bl	leddriver_set
+ 111              	.LVL4:
+  28:Core/Src/status.c ****     osStatus_t status = osTimerStop(status_timerHandle);
+ 112              		.loc 1 28 5 view .LVU10
+ 113              		.loc 1 28 25 is_stmt 0 view .LVU11
+ 114 0008 034B     		ldr	r3, .L11+4
+ 115 000a 1868     		ldr	r0, [r3]
+ 116 000c FFF7FEFF 		bl	osTimerStop
+ 117              	.LVL5:
+  29:Core/Src/status.c **** }
+ 118              		.loc 1 29 1 view .LVU12
+ 119 0010 08BD     		pop	{r3, pc}
+ 120              	.L12:
+ 121 0012 00BF     		.align	2
+ 122              	.L11:
+ 123 0014 00000000 		.word	log_led_handle
+ 124 0018 00000000 		.word	status_timerHandle
+ 125              		.cfi_endproc
+ 126              	.LFE245:
+ 128              		.section	.text.status_set_disarmed,"ax",%progbits
+ 129              		.align	1
+ 130              		.global	status_set_disarmed
+ 131              		.syntax unified
+ 132              		.thumb
+ 133              		.thumb_func
+ 135              	status_set_disarmed:
+ 136              	.LFB246:
+  30:Core/Src/status.c **** 
+  31:Core/Src/status.c **** void status_set_disarmed()
+  32:Core/Src/status.c **** {
+ 137              		.loc 1 32 1 is_stmt 1 view -0
+ 138              		.cfi_startproc
+ 139              		@ args = 0, pretend = 0, frame = 0
+ 140              		@ frame_needed = 0, uses_anonymous_args = 0
+ 141 0000 08B5     		push	{r3, lr}
+ 142              	.LCFI3:
+ 143              		.cfi_def_cfa_offset 8
+ 144              		.cfi_offset 3, -8
+ 145              		.cfi_offset 14, -4
+  33:Core/Src/status.c ****     leddriver_reset(&log_led_handle);
+ARM GAS  /tmp/cckb2jI1.s 			page 4
+
+
+ 146              		.loc 1 33 5 view .LVU14
+ 147 0002 0448     		ldr	r0, .L15
+ 148 0004 FFF7FEFF 		bl	leddriver_reset
+ 149              	.LVL6:
+  34:Core/Src/status.c ****     osStatus_t status = osTimerStop(status_timerHandle);
+ 150              		.loc 1 34 5 view .LVU15
+ 151              		.loc 1 34 25 is_stmt 0 view .LVU16
+ 152 0008 034B     		ldr	r3, .L15+4
+ 153 000a 1868     		ldr	r0, [r3]
+ 154 000c FFF7FEFF 		bl	osTimerStop
+ 155              	.LVL7:
+  35:Core/Src/status.c **** }
+ 156              		.loc 1 35 1 view .LVU17
+ 157 0010 08BD     		pop	{r3, pc}
+ 158              	.L16:
+ 159 0012 00BF     		.align	2
+ 160              	.L15:
+ 161 0014 00000000 		.word	log_led_handle
+ 162 0018 00000000 		.word	status_timerHandle
+ 163              		.cfi_endproc
+ 164              	.LFE246:
+ 166              		.section	.text.status_set_error,"ax",%progbits
+ 167              		.align	1
+ 168              		.global	status_set_error
+ 169              		.syntax unified
+ 170              		.thumb
+ 171              		.thumb_func
+ 173              	status_set_error:
+ 174              	.LFB247:
+  36:Core/Src/status.c **** 
+  37:Core/Src/status.c **** /**
+  38:Core/Src/status.c ****  * @brief Set the status LED to indicate an error. This must be called from a task.
+  39:Core/Src/status.c ****  * @param - none
+  40:Core/Src/status.c ****  * @return - none 
+  41:Core/Src/status.c ****  * 
+  42:Core/Src/status.c ****  */
+  43:Core/Src/status.c **** void status_set_error()
+  44:Core/Src/status.c **** {
+ 175              		.loc 1 44 1 is_stmt 1 view -0
+ 176              		.cfi_startproc
+ 177              		@ args = 0, pretend = 0, frame = 0
+ 178              		@ frame_needed = 0, uses_anonymous_args = 0
+ 179 0000 08B5     		push	{r3, lr}
+ 180              	.LCFI4:
+ 181              		.cfi_def_cfa_offset 8
+ 182              		.cfi_offset 3, -8
+ 183              		.cfi_offset 14, -4
+  45:Core/Src/status.c ****     osStatus_t status = osTimerStart(status_timerHandle, timer_delay);
+ 184              		.loc 1 45 5 view .LVU19
+ 185              		.loc 1 45 25 is_stmt 0 view .LVU20
+ 186 0002 FA21     		movs	r1, #250
+ 187 0004 044B     		ldr	r3, .L21
+ 188 0006 1868     		ldr	r0, [r3]
+ 189 0008 FFF7FEFF 		bl	osTimerStart
+ 190              	.LVL8:
+  46:Core/Src/status.c ****     if (status != osOK)
+ 191              		.loc 1 46 5 is_stmt 1 view .LVU21
+ARM GAS  /tmp/cckb2jI1.s 			page 5
+
+
+ 192              		.loc 1 46 8 is_stmt 0 view .LVU22
+ 193 000c 00B9     		cbnz	r0, .L20
+ 194              	.LVL9:
+ 195              	.L17:
+  47:Core/Src/status.c ****     {
+  48:Core/Src/status.c ****         leddriver_set(&log_led_handle);
+  49:Core/Src/status.c ****     }
+  50:Core/Src/status.c **** }...
+ 196              		.loc 1 50 1 view .LVU23
+ 197 000e 08BD     		pop	{r3, pc}
+ 198              	.LVL10:
+ 199              	.L20:
+  48:Core/Src/status.c ****         leddriver_set(&log_led_handle);
+ 200              		.loc 1 48 9 is_stmt 1 view .LVU24
+ 201 0010 0248     		ldr	r0, .L21+4
+ 202              	.LVL11:
+  48:Core/Src/status.c ****         leddriver_set(&log_led_handle);
+ 203              		.loc 1 48 9 is_stmt 0 view .LVU25
+ 204 0012 FFF7FEFF 		bl	leddriver_set
+ 205              	.LVL12:
+ 206              		.loc 1 50 1 view .LVU26
+ 207 0016 FAE7     		b	.L17
+ 208              	.L22:
+ 209              		.align	2
+ 210              	.L21:
+ 211 0018 00000000 		.word	status_timerHandle
+ 212 001c 00000000 		.word	log_led_handle
+ 213              		.cfi_endproc
+ 214              	.LFE247:
+ 216              		.section	.bss.log_led_handle,"aw",%nobits
+ 217              		.align	2
+ 220              	log_led_handle:
+ 221 0000 00000000 		.space	8
+ 221      00000000 
+ 222              		.text
+ 223              	.Letext0:
+ 224              		.file 2 "/opt/st/stm32cubeclt_1.17.0/GNU-tools-for-STM32/arm-none-eabi/include/machine/_default_ty
+ 225              		.file 3 "/opt/st/stm32cubeclt_1.17.0/GNU-tools-for-STM32/arm-none-eabi/include/sys/_stdint.h"
+ 226              		.file 4 "Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/portmacro.h"
+ 227              		.file 5 "Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f405xx.h"
+ 228              		.file 6 "Core/Inc/leddriver.h"
+ 229              		.file 7 "Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.h"
+ 230              		.file 8 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_gpio.h"
+ARM GAS  /tmp/cckb2jI1.s 			page 6
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 status.c
+     /tmp/cckb2jI1.s:21     .text.status_init:00000000 $t
+     /tmp/cckb2jI1.s:27     .text.status_init:00000000 status_init
+     /tmp/cckb2jI1.s:49     .text.status_init:00000010 $d
+     /tmp/cckb2jI1.s:220    .bss.log_led_handle:00000000 log_led_handle
+     /tmp/cckb2jI1.s:55     .text.status_timer_callback:00000000 $t
+     /tmp/cckb2jI1.s:61     .text.status_timer_callback:00000000 status_timer_callback
+     /tmp/cckb2jI1.s:86     .text.status_timer_callback:00000010 $d
+     /tmp/cckb2jI1.s:91     .text.status_set_armed:00000000 $t
+     /tmp/cckb2jI1.s:97     .text.status_set_armed:00000000 status_set_armed
+     /tmp/cckb2jI1.s:123    .text.status_set_armed:00000014 $d
+     /tmp/cckb2jI1.s:129    .text.status_set_disarmed:00000000 $t
+     /tmp/cckb2jI1.s:135    .text.status_set_disarmed:00000000 status_set_disarmed
+     /tmp/cckb2jI1.s:161    .text.status_set_disarmed:00000014 $d
+     /tmp/cckb2jI1.s:167    .text.status_set_error:00000000 $t
+     /tmp/cckb2jI1.s:173    .text.status_set_error:00000000 status_set_error
+     /tmp/cckb2jI1.s:211    .text.status_set_error:00000018 $d
+     /tmp/cckb2jI1.s:217    .bss.log_led_handle:00000000 $d
+
+UNDEFINED SYMBOLS
+leddriver_init
+HAL_GPIO_TogglePin
+leddriver_set
+osTimerStop
+status_timerHandle
+leddriver_reset
+osTimerStart

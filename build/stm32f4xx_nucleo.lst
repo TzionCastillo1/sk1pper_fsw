@@ -1,0 +1,1001 @@
+ARM GAS  /tmp/ccKrjDbx.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 1
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"stm32f4xx_nucleo.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.file 1 "Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c"
+  20              		.section	.text.BSP_LED_Init,"ax",%progbits
+  21              		.align	1
+  22              		.global	BSP_LED_Init
+  23              		.syntax unified
+  24              		.thumb
+  25              		.thumb_func
+  27              	BSP_LED_Init:
+  28              	.LVL0:
+  29              	.LFB239:
+   1:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c **** #include "stm32f4xx_nucleo.h"
+   2:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c **** 
+   3:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c **** /**
+   4:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  * @defgroup STM32F4XX_NUCLEO_Private_Variables
+   5:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  * @{ 
+   6:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  * 
+   7:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  */
+   8:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c **** 
+   9:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c **** GPIO_TypeDef *GPIO_PORT[LEDn] = {LED2_GPIO_PORT};
+  10:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c **** const uint16_t GPIO_PIN[LEDn] = {LED2_PIN};
+  11:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c **** 
+  12:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c **** const Servo_init_t Servo_Cfg[SERVOn] =
+  13:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c **** {
+  14:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****     /** Servo 0 Configuration */
+  15:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****     {
+  16:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****         SERVO0_GPIO_PORT,
+  17:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****         SERVO0_PIN,
+  18:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****         SERVO0_TIM,
+  19:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****         &SERVO0_TIM->CCR1,
+  20:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****         TIM_CHANNEL_1,
+  21:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****         PWMCORECLOCK,
+  22:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****         0.65,
+  23:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****         2.3
+  24:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****     }
+  25:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c **** };
+  26:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c **** 
+  27:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c **** TIM_HandleTypeDef *SERVO_TIM[SERVOn] = {SERVO0_TIM};
+  28:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c **** 
+  29:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c **** /**
+ARM GAS  /tmp/ccKrjDbx.s 			page 2
+
+
+  30:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  * @} 
+  31:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  * 
+  32:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  */
+  33:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c **** 
+  34:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c **** /** @defgroup LED Functions
+  35:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  * @{
+  36:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  */
+  37:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c **** 
+  38:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c **** /**
+  39:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  * @brief Configure LED GPIO
+  40:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  * @param Led: LED to be configured.
+  41:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  *        This parameter can be one of the follwoing values:
+  42:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  *          @arg LED2 or LED4 on Nucleo-64 with extermal SMPS
+  43:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  * @retval None
+  44:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  * 
+  45:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  */
+  46:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c **** void BSP_LED_Init(Led_t Led)
+  47:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c **** {
+  30              		.loc 1 47 1 view -0
+  31              		.cfi_startproc
+  32              		@ args = 0, pretend = 0, frame = 24
+  33              		@ frame_needed = 0, uses_anonymous_args = 0
+  34              		.loc 1 47 1 is_stmt 0 view .LVU1
+  35 0000 00B5     		push	{lr}
+  36              	.LCFI0:
+  37              		.cfi_def_cfa_offset 4
+  38              		.cfi_offset 14, -4
+  39 0002 87B0     		sub	sp, sp, #28
+  40              	.LCFI1:
+  41              		.cfi_def_cfa_offset 32
+  48:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****     GPIO_InitTypeDef GPIO_InitStruct = {0};
+  42              		.loc 1 48 5 is_stmt 1 view .LVU2
+  43              		.loc 1 48 22 is_stmt 0 view .LVU3
+  44 0004 0023     		movs	r3, #0
+  45 0006 0193     		str	r3, [sp, #4]
+  46 0008 0293     		str	r3, [sp, #8]
+  47 000a 0393     		str	r3, [sp, #12]
+  48 000c 0493     		str	r3, [sp, #16]
+  49 000e 0593     		str	r3, [sp, #20]
+  49:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c **** 
+  50:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****     /* Enable the GPIO_LED CLock */
+  51:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****     LED2_GPIO_CLK_ENABLE();
+  50              		.loc 1 51 5 is_stmt 1 view .LVU4
+  51              	.LBB2:
+  52              		.loc 1 51 5 view .LVU5
+  53 0010 0093     		str	r3, [sp]
+  54              		.loc 1 51 5 view .LVU6
+  55 0012 0C4B     		ldr	r3, .L3
+  56 0014 1A6B     		ldr	r2, [r3, #48]
+  57 0016 42F00102 		orr	r2, r2, #1
+  58 001a 1A63     		str	r2, [r3, #48]
+  59              		.loc 1 51 5 view .LVU7
+  60 001c 1B6B     		ldr	r3, [r3, #48]
+  61 001e 03F00103 		and	r3, r3, #1
+  62 0022 0093     		str	r3, [sp]
+  63              		.loc 1 51 5 view .LVU8
+  64 0024 009B     		ldr	r3, [sp]
+ARM GAS  /tmp/ccKrjDbx.s 			page 3
+
+
+  65              	.LBE2:
+  66              		.loc 1 51 5 view .LVU9
+  52:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c **** 
+  53:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****     /* COnfigure the GPIO_LED pin*/
+  54:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****     GPIO_InitStruct.Pin     = GPIO_PIN[Led];
+  67              		.loc 1 54 5 view .LVU10
+  68              		.loc 1 54 29 is_stmt 0 view .LVU11
+  69 0026 2023     		movs	r3, #32
+  70 0028 0193     		str	r3, [sp, #4]
+  55:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****     GPIO_InitStruct.Mode    = GPIO_MODE_OUTPUT_PP;
+  71              		.loc 1 55 5 is_stmt 1 view .LVU12
+  72              		.loc 1 55 29 is_stmt 0 view .LVU13
+  73 002a 0123     		movs	r3, #1
+  74 002c 0293     		str	r3, [sp, #8]
+  56:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****     GPIO_InitStruct.Pull    = GPIO_NOPULL;
+  75              		.loc 1 56 5 is_stmt 1 view .LVU14
+  57:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****     GPIO_InitStruct.Speed   = GPIO_SPEED_FREQ_HIGH;
+  76              		.loc 1 57 5 view .LVU15
+  77              		.loc 1 57 29 is_stmt 0 view .LVU16
+  78 002e 0223     		movs	r3, #2
+  79 0030 0493     		str	r3, [sp, #16]
+  58:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****     HAL_GPIO_Init(GPIO_PORT[Led], &GPIO_InitStruct);
+  80              		.loc 1 58 5 is_stmt 1 view .LVU17
+  81 0032 01A9     		add	r1, sp, #4
+  82 0034 044B     		ldr	r3, .L3+4
+  83 0036 53F82000 		ldr	r0, [r3, r0, lsl #2]
+  84              	.LVL1:
+  85              		.loc 1 58 5 is_stmt 0 view .LVU18
+  86 003a FFF7FEFF 		bl	HAL_GPIO_Init
+  87              	.LVL2:
+  59:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c **** }
+  88              		.loc 1 59 1 view .LVU19
+  89 003e 07B0     		add	sp, sp, #28
+  90              	.LCFI2:
+  91              		.cfi_def_cfa_offset 4
+  92              		@ sp needed
+  93 0040 5DF804FB 		ldr	pc, [sp], #4
+  94              	.L4:
+  95              		.align	2
+  96              	.L3:
+  97 0044 00380240 		.word	1073887232
+  98 0048 00000000 		.word	GPIO_PORT
+  99              		.cfi_endproc
+ 100              	.LFE239:
+ 102              		.section	.text.BSP_Led_DeInit,"ax",%progbits
+ 103              		.align	1
+ 104              		.global	BSP_Led_DeInit
+ 105              		.syntax unified
+ 106              		.thumb
+ 107              		.thumb_func
+ 109              	BSP_Led_DeInit:
+ 110              	.LVL3:
+ 111              	.LFB240:
+  60:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c **** 
+  61:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c **** /**
+  62:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  * @brief Deinitialize LED GPIO.
+  63:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  * @param LED: LED to be deinitialized.
+ARM GAS  /tmp/ccKrjDbx.s 			page 4
+
+
+  64:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  *      This parameter can be one of the following values:
+  65:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  *          @arg LED2 or LED4 on Nucleo-64 with external SMPS
+  66:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  * @note BSP_LED_Deinit() does not disable the GPIO clock
+  67:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  * @retval None 
+  68:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  */
+  69:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c **** void BSP_Led_DeInit(Led_t Led)
+  70:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c **** {
+ 112              		.loc 1 70 1 is_stmt 1 view -0
+ 113              		.cfi_startproc
+ 114              		@ args = 0, pretend = 0, frame = 24
+ 115              		@ frame_needed = 0, uses_anonymous_args = 0
+ 116              		.loc 1 70 1 is_stmt 0 view .LVU21
+ 117 0000 30B5     		push	{r4, r5, lr}
+ 118              	.LCFI3:
+ 119              		.cfi_def_cfa_offset 12
+ 120              		.cfi_offset 4, -12
+ 121              		.cfi_offset 5, -8
+ 122              		.cfi_offset 14, -4
+ 123 0002 87B0     		sub	sp, sp, #28
+ 124              	.LCFI4:
+ 125              		.cfi_def_cfa_offset 40
+ 126 0004 0446     		mov	r4, r0
+  71:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****     GPIO_InitTypeDef GPIO_InitStruct;
+ 127              		.loc 1 71 5 is_stmt 1 view .LVU22
+  72:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c **** 
+  73:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****     /* Turn off LED */
+  74:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****     HAL_GPIO_WritePin(GPIO_PORT[Led], GPIO_PIN[Led], GPIO_PIN_RESET);
+ 128              		.loc 1 74 5 view .LVU23
+ 129 0006 074D     		ldr	r5, .L7
+ 130 0008 0022     		movs	r2, #0
+ 131 000a 2021     		movs	r1, #32
+ 132 000c 55F82000 		ldr	r0, [r5, r0, lsl #2]
+ 133              	.LVL4:
+ 134              		.loc 1 74 5 is_stmt 0 view .LVU24
+ 135 0010 FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 136              	.LVL5:
+  75:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****     /* DeInit the GPIO_LED pin */
+  76:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****     GPIO_InitStruct.Pin = GPIO_PIN[Led];
+ 137              		.loc 1 76 5 is_stmt 1 view .LVU25
+ 138              		.loc 1 76 25 is_stmt 0 view .LVU26
+ 139 0014 2021     		movs	r1, #32
+ 140 0016 0191     		str	r1, [sp, #4]
+  77:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****     HAL_GPIO_DeInit(GPIO_PORT[Led], GPIO_InitStruct.Pin);
+ 141              		.loc 1 77 5 is_stmt 1 view .LVU27
+ 142 0018 55F82400 		ldr	r0, [r5, r4, lsl #2]
+ 143 001c FFF7FEFF 		bl	HAL_GPIO_DeInit
+ 144              	.LVL6:
+  78:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c **** }
+ 145              		.loc 1 78 1 is_stmt 0 view .LVU28
+ 146 0020 07B0     		add	sp, sp, #28
+ 147              	.LCFI5:
+ 148              		.cfi_def_cfa_offset 12
+ 149              		@ sp needed
+ 150 0022 30BD     		pop	{r4, r5, pc}
+ 151              	.L8:
+ 152              		.align	2
+ 153              	.L7:
+ARM GAS  /tmp/ccKrjDbx.s 			page 5
+
+
+ 154 0024 00000000 		.word	GPIO_PORT
+ 155              		.cfi_endproc
+ 156              	.LFE240:
+ 158              		.section	.text.BSP_LED_On,"ax",%progbits
+ 159              		.align	1
+ 160              		.global	BSP_LED_On
+ 161              		.syntax unified
+ 162              		.thumb
+ 163              		.thumb_func
+ 165              	BSP_LED_On:
+ 166              	.LVL7:
+ 167              	.LFB241:
+  79:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c **** 
+  80:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c **** 
+  81:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c **** /**
+  82:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  * @brief Turn selected LED on.
+  83:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  * @param Led: Specifies the Led to be set on.
+  84:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  *  This parameter can be one of the follwoing parameters:
+  85:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  *  @arg LED2 or LED4 on Nucleo-64 with external SMPS
+  86:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  * 
+  87:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  * @retval None
+  88:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  */
+  89:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c **** void BSP_LED_On(Led_t Led)
+  90:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c **** {
+ 168              		.loc 1 90 1 is_stmt 1 view -0
+ 169              		.cfi_startproc
+ 170              		@ args = 0, pretend = 0, frame = 0
+ 171              		@ frame_needed = 0, uses_anonymous_args = 0
+ 172              		.loc 1 90 1 is_stmt 0 view .LVU30
+ 173 0000 08B5     		push	{r3, lr}
+ 174              	.LCFI6:
+ 175              		.cfi_def_cfa_offset 8
+ 176              		.cfi_offset 3, -8
+ 177              		.cfi_offset 14, -4
+  91:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****     HAL_GPIO_WritePin(GPIO_PORT[Led], GPIO_PIN[Led], GPIO_PIN_SET);
+ 178              		.loc 1 91 5 is_stmt 1 view .LVU31
+ 179 0002 0122     		movs	r2, #1
+ 180 0004 2021     		movs	r1, #32
+ 181 0006 034B     		ldr	r3, .L11
+ 182 0008 53F82000 		ldr	r0, [r3, r0, lsl #2]
+ 183              	.LVL8:
+ 184              		.loc 1 91 5 is_stmt 0 view .LVU32
+ 185 000c FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 186              	.LVL9:
+  92:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c **** }
+ 187              		.loc 1 92 1 view .LVU33
+ 188 0010 08BD     		pop	{r3, pc}
+ 189              	.L12:
+ 190 0012 00BF     		.align	2
+ 191              	.L11:
+ 192 0014 00000000 		.word	GPIO_PORT
+ 193              		.cfi_endproc
+ 194              	.LFE241:
+ 196              		.section	.text.BSP_LED_Off,"ax",%progbits
+ 197              		.align	1
+ 198              		.global	BSP_LED_Off
+ 199              		.syntax unified
+ARM GAS  /tmp/ccKrjDbx.s 			page 6
+
+
+ 200              		.thumb
+ 201              		.thumb_func
+ 203              	BSP_LED_Off:
+ 204              	.LVL10:
+ 205              	.LFB242:
+  93:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c **** 
+  94:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c **** /**
+  95:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  * @brief Turn selected LED Off.
+  96:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  * @param Led: Specifies the Led to be set off.
+  97:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  *  This parameter can be one of the following parameters:
+  98:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  *  @arg LED2 or LED4 on Nucleo-64 with external SMPS
+  99:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  * 
+ 100:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  * @retval None
+ 101:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  */
+ 102:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c **** void BSP_LED_Off(Led_t Led)
+ 103:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c **** {
+ 206              		.loc 1 103 1 is_stmt 1 view -0
+ 207              		.cfi_startproc
+ 208              		@ args = 0, pretend = 0, frame = 0
+ 209              		@ frame_needed = 0, uses_anonymous_args = 0
+ 210              		.loc 1 103 1 is_stmt 0 view .LVU35
+ 211 0000 08B5     		push	{r3, lr}
+ 212              	.LCFI7:
+ 213              		.cfi_def_cfa_offset 8
+ 214              		.cfi_offset 3, -8
+ 215              		.cfi_offset 14, -4
+ 104:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****     HAL_GPIO_WritePin(GPIO_PORT[Led], GPIO_PIN[Led], GPIO_PIN_RESET);
+ 216              		.loc 1 104 5 is_stmt 1 view .LVU36
+ 217 0002 0022     		movs	r2, #0
+ 218 0004 2021     		movs	r1, #32
+ 219 0006 034B     		ldr	r3, .L15
+ 220 0008 53F82000 		ldr	r0, [r3, r0, lsl #2]
+ 221              	.LVL11:
+ 222              		.loc 1 104 5 is_stmt 0 view .LVU37
+ 223 000c FFF7FEFF 		bl	HAL_GPIO_WritePin
+ 224              	.LVL12:
+ 105:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c **** }
+ 225              		.loc 1 105 1 view .LVU38
+ 226 0010 08BD     		pop	{r3, pc}
+ 227              	.L16:
+ 228 0012 00BF     		.align	2
+ 229              	.L15:
+ 230 0014 00000000 		.word	GPIO_PORT
+ 231              		.cfi_endproc
+ 232              	.LFE242:
+ 234              		.section	.text.BSP_LED_Toggle,"ax",%progbits
+ 235              		.align	1
+ 236              		.global	BSP_LED_Toggle
+ 237              		.syntax unified
+ 238              		.thumb
+ 239              		.thumb_func
+ 241              	BSP_LED_Toggle:
+ 242              	.LVL13:
+ 243              	.LFB243:
+ 106:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c **** 
+ 107:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c **** /**
+ 108:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  * @brief Toggle the selected LED.
+ARM GAS  /tmp/ccKrjDbx.s 			page 7
+
+
+ 109:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  * @param Led: Specifies the Led to be toggled.
+ 110:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  *  This parameter can be one of the follwoing parameters:
+ 111:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  *      @arg LED2 or LED4 on Nucleo-64 with external SMPS
+ 112:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  * @retval None
+ 113:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  */
+ 114:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c **** void BSP_LED_Toggle(Led_t Led)
+ 115:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c **** {
+ 244              		.loc 1 115 1 is_stmt 1 view -0
+ 245              		.cfi_startproc
+ 246              		@ args = 0, pretend = 0, frame = 0
+ 247              		@ frame_needed = 0, uses_anonymous_args = 0
+ 248              		.loc 1 115 1 is_stmt 0 view .LVU40
+ 249 0000 08B5     		push	{r3, lr}
+ 250              	.LCFI8:
+ 251              		.cfi_def_cfa_offset 8
+ 252              		.cfi_offset 3, -8
+ 253              		.cfi_offset 14, -4
+ 116:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****     HAL_GPIO_TogglePin(GPIO_PORT[Led], GPIO_PIN[Led]);
+ 254              		.loc 1 116 5 is_stmt 1 view .LVU41
+ 255 0002 2021     		movs	r1, #32
+ 256 0004 024B     		ldr	r3, .L19
+ 257 0006 53F82000 		ldr	r0, [r3, r0, lsl #2]
+ 258              	.LVL14:
+ 259              		.loc 1 116 5 is_stmt 0 view .LVU42
+ 260 000a FFF7FEFF 		bl	HAL_GPIO_TogglePin
+ 261              	.LVL15:
+ 117:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c **** }
+ 262              		.loc 1 117 1 view .LVU43
+ 263 000e 08BD     		pop	{r3, pc}
+ 264              	.L20:
+ 265              		.align	2
+ 266              	.L19:
+ 267 0010 00000000 		.word	GPIO_PORT
+ 268              		.cfi_endproc
+ 269              	.LFE243:
+ 271              		.section	.text.BSP_Servo_Init,"ax",%progbits
+ 272              		.align	1
+ 273              		.global	BSP_Servo_Init
+ 274              		.syntax unified
+ 275              		.thumb
+ 276              		.thumb_func
+ 278              	BSP_Servo_Init:
+ 279              	.LVL16:
+ 280              	.LFB244:
+ 118:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c **** 
+ 119:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c **** /** @} */
+ 120:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c **** TIM_HandleTypeDef htim4;
+ 121:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c **** 
+ 122:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c **** /**
+ 123:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  * @defgroup Servo Functions 
+ 124:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  * @{
+ 125:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  */
+ 126:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c **** 
+ 127:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  /**
+ 128:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****   * @brief Configure Servo PWM  
+ 129:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****   * 
+ 130:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****   * @param Servo: Servo to be initialized.
+ARM GAS  /tmp/ccKrjDbx.s 			page 8
+
+
+ 131:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****   *     @arg Servo can be Servo0 through Servo4
+ 132:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****   * @retval None
+ 133:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****   */
+ 134:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  void BSP_Servo_Init(Servo_t Servo)
+ 135:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  {
+ 281              		.loc 1 135 2 is_stmt 1 view -0
+ 282              		.cfi_startproc
+ 283              		@ args = 0, pretend = 0, frame = 56
+ 284              		@ frame_needed = 0, uses_anonymous_args = 0
+ 285              		.loc 1 135 2 is_stmt 0 view .LVU45
+ 286 0000 10B5     		push	{r4, lr}
+ 287              	.LCFI9:
+ 288              		.cfi_def_cfa_offset 8
+ 289              		.cfi_offset 4, -8
+ 290              		.cfi_offset 14, -4
+ 291 0002 8EB0     		sub	sp, sp, #56
+ 292              	.LCFI10:
+ 293              		.cfi_def_cfa_offset 64
+ 136:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****     /* USER CODE BEGIN TIM4_Init 0 */
+ 137:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c **** 
+ 138:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****     /* USER CODE END TIM4_Init 0 */
+ 139:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c **** 
+ 140:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****     TIM_ClockConfigTypeDef sClockSourceConfig = {0};
+ 294              		.loc 1 140 5 is_stmt 1 view .LVU46
+ 295              		.loc 1 140 28 is_stmt 0 view .LVU47
+ 296 0004 0023     		movs	r3, #0
+ 297 0006 0A93     		str	r3, [sp, #40]
+ 298 0008 0B93     		str	r3, [sp, #44]
+ 299 000a 0C93     		str	r3, [sp, #48]
+ 300 000c 0D93     		str	r3, [sp, #52]
+ 141:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****     TIM_MasterConfigTypeDef sMasterConfig = {0};
+ 301              		.loc 1 141 5 is_stmt 1 view .LVU48
+ 302              		.loc 1 141 29 is_stmt 0 view .LVU49
+ 303 000e 0893     		str	r3, [sp, #32]
+ 304 0010 0993     		str	r3, [sp, #36]
+ 142:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****     TIM_OC_InitTypeDef sConfigOC = {0};
+ 305              		.loc 1 142 5 is_stmt 1 view .LVU50
+ 306              		.loc 1 142 24 is_stmt 0 view .LVU51
+ 307 0012 0193     		str	r3, [sp, #4]
+ 308 0014 0293     		str	r3, [sp, #8]
+ 309 0016 0393     		str	r3, [sp, #12]
+ 310 0018 0493     		str	r3, [sp, #16]
+ 311 001a 0593     		str	r3, [sp, #20]
+ 312 001c 0693     		str	r3, [sp, #24]
+ 313 001e 0793     		str	r3, [sp, #28]
+ 143:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c **** 
+ 144:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****     /* USER CODE BEGIN TIM4_Init 1 */
+ 145:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c **** 
+ 146:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****     /* USER CODE END TIM4_Init 1 */
+ 147:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****     htim4.Instance = Servo_Cfg[Servo].TIMx;
+ 314              		.loc 1 147 5 is_stmt 1 view .LVU52
+ 315              		.loc 1 147 38 is_stmt 0 view .LVU53
+ 316 0020 294A     		ldr	r2, .L35
+ 317 0022 02EB4012 		add	r2, r2, r0, lsl #5
+ 318 0026 9268     		ldr	r2, [r2, #8]
+ 319              		.loc 1 147 20 view .LVU54
+ 320 0028 2848     		ldr	r0, .L35+4
+ARM GAS  /tmp/ccKrjDbx.s 			page 9
+
+
+ 321              	.LVL17:
+ 322              		.loc 1 147 20 view .LVU55
+ 323 002a 0260     		str	r2, [r0]
+ 148:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****     htim4.Init.Prescaler = 200;
+ 324              		.loc 1 148 5 is_stmt 1 view .LVU56
+ 325              		.loc 1 148 26 is_stmt 0 view .LVU57
+ 326 002c C822     		movs	r2, #200
+ 327 002e 4260     		str	r2, [r0, #4]
+ 149:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****     htim4.Init.CounterMode = TIM_COUNTERMODE_UP;
+ 328              		.loc 1 149 5 is_stmt 1 view .LVU58
+ 329              		.loc 1 149 28 is_stmt 0 view .LVU59
+ 330 0030 8360     		str	r3, [r0, #8]
+ 150:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****     htim4.Init.Period = 16000;
+ 331              		.loc 1 150 5 is_stmt 1 view .LVU60
+ 332              		.loc 1 150 23 is_stmt 0 view .LVU61
+ 333 0032 4FF47A52 		mov	r2, #16000
+ 334 0036 C260     		str	r2, [r0, #12]
+ 151:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****     htim4.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+ 335              		.loc 1 151 5 is_stmt 1 view .LVU62
+ 336              		.loc 1 151 30 is_stmt 0 view .LVU63
+ 337 0038 0361     		str	r3, [r0, #16]
+ 152:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****     htim4.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+ 338              		.loc 1 152 5 is_stmt 1 view .LVU64
+ 339              		.loc 1 152 34 is_stmt 0 view .LVU65
+ 340 003a 8361     		str	r3, [r0, #24]
+ 153:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****     if (HAL_TIM_Base_Init(&htim4) != HAL_OK)
+ 341              		.loc 1 153 5 is_stmt 1 view .LVU66
+ 342              		.loc 1 153 9 is_stmt 0 view .LVU67
+ 343 003c FFF7FEFF 		bl	HAL_TIM_Base_Init
+ 344              	.LVL18:
+ 345              		.loc 1 153 8 view .LVU68
+ 346 0040 0028     		cmp	r0, #0
+ 347 0042 2FD1     		bne	.L29
+ 348              	.L22:
+ 154:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****     {
+ 155:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****         Error_Handler();
+ 156:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****     }
+ 157:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****     sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
+ 349              		.loc 1 157 5 is_stmt 1 view .LVU69
+ 350              		.loc 1 157 36 is_stmt 0 view .LVU70
+ 351 0044 4FF48053 		mov	r3, #4096
+ 352 0048 0A93     		str	r3, [sp, #40]
+ 158:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****     if (HAL_TIM_ConfigClockSource(&htim4, &sClockSourceConfig) != HAL_OK)
+ 353              		.loc 1 158 5 is_stmt 1 view .LVU71
+ 354              		.loc 1 158 9 is_stmt 0 view .LVU72
+ 355 004a 0AA9     		add	r1, sp, #40
+ 356 004c 1F48     		ldr	r0, .L35+4
+ 357 004e FFF7FEFF 		bl	HAL_TIM_ConfigClockSource
+ 358              	.LVL19:
+ 359              		.loc 1 158 8 view .LVU73
+ 360 0052 50BB     		cbnz	r0, .L30
+ 361              	.L23:
+ 159:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****     {
+ 160:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****         Error_Handler();
+ 161:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****     }
+ 162:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****     if (HAL_TIM_PWM_Init(&htim4) != HAL_OK)
+ 362              		.loc 1 162 5 is_stmt 1 view .LVU74
+ARM GAS  /tmp/ccKrjDbx.s 			page 10
+
+
+ 363              		.loc 1 162 9 is_stmt 0 view .LVU75
+ 364 0054 1D48     		ldr	r0, .L35+4
+ 365 0056 FFF7FEFF 		bl	HAL_TIM_PWM_Init
+ 366              	.LVL20:
+ 367              		.loc 1 162 8 view .LVU76
+ 368 005a 48BB     		cbnz	r0, .L31
+ 369              	.L24:
+ 163:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****     {
+ 164:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****         Error_Handler();
+ 165:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****     }
+ 166:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****     sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+ 370              		.loc 1 166 5 is_stmt 1 view .LVU77
+ 371              		.loc 1 166 39 is_stmt 0 view .LVU78
+ 372 005c 0023     		movs	r3, #0
+ 373 005e 0893     		str	r3, [sp, #32]
+ 167:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****     sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+ 374              		.loc 1 167 5 is_stmt 1 view .LVU79
+ 375              		.loc 1 167 35 is_stmt 0 view .LVU80
+ 376 0060 0993     		str	r3, [sp, #36]
+ 168:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****     if (HAL_TIMEx_MasterConfigSynchronization(&htim4, &sMasterConfig) != HAL_OK)
+ 377              		.loc 1 168 5 is_stmt 1 view .LVU81
+ 378              		.loc 1 168 9 is_stmt 0 view .LVU82
+ 379 0062 08A9     		add	r1, sp, #32
+ 380 0064 1948     		ldr	r0, .L35+4
+ 381 0066 FFF7FEFF 		bl	HAL_TIMEx_MasterConfigSynchronization
+ 382              	.LVL21:
+ 383              		.loc 1 168 8 view .LVU83
+ 384 006a 20BB     		cbnz	r0, .L32
+ 385              	.L25:
+ 169:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****     {
+ 170:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****         Error_Handler();
+ 171:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****     }
+ 172:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****     sConfigOC.OCMode = TIM_OCMODE_PWM1;
+ 386              		.loc 1 172 5 is_stmt 1 view .LVU84
+ 387              		.loc 1 172 22 is_stmt 0 view .LVU85
+ 388 006c 6023     		movs	r3, #96
+ 389 006e 0193     		str	r3, [sp, #4]
+ 173:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****     sConfigOC.Pulse = 0;
+ 390              		.loc 1 173 5 is_stmt 1 view .LVU86
+ 391              		.loc 1 173 21 is_stmt 0 view .LVU87
+ 392 0070 0022     		movs	r2, #0
+ 393 0072 0292     		str	r2, [sp, #8]
+ 174:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****     sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
+ 394              		.loc 1 174 5 is_stmt 1 view .LVU88
+ 395              		.loc 1 174 26 is_stmt 0 view .LVU89
+ 396 0074 0392     		str	r2, [sp, #12]
+ 175:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****     sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
+ 397              		.loc 1 175 5 is_stmt 1 view .LVU90
+ 398              		.loc 1 175 26 is_stmt 0 view .LVU91
+ 399 0076 0592     		str	r2, [sp, #20]
+ 176:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****     if (HAL_TIM_PWM_ConfigChannel(&htim4, &sConfigOC, TIM_CHANNEL_1) != HAL_OK)
+ 400              		.loc 1 176 5 is_stmt 1 view .LVU92
+ 401              		.loc 1 176 9 is_stmt 0 view .LVU93
+ 402 0078 01A9     		add	r1, sp, #4
+ 403 007a 1448     		ldr	r0, .L35+4
+ 404 007c FFF7FEFF 		bl	HAL_TIM_PWM_ConfigChannel
+ 405              	.LVL22:
+ARM GAS  /tmp/ccKrjDbx.s 			page 11
+
+
+ 406              		.loc 1 176 8 view .LVU94
+ 407 0080 E0B9     		cbnz	r0, .L33
+ 408              	.L26:
+ 177:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****     {
+ 178:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****         Error_Handler();
+ 179:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****     }
+ 180:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****     if (HAL_TIM_PWM_ConfigChannel(&htim4, &sConfigOC, TIM_CHANNEL_2) != HAL_OK)
+ 409              		.loc 1 180 5 is_stmt 1 view .LVU95
+ 410              		.loc 1 180 9 is_stmt 0 view .LVU96
+ 411 0082 0422     		movs	r2, #4
+ 412 0084 0DEB0201 		add	r1, sp, r2
+ 413 0088 1048     		ldr	r0, .L35+4
+ 414 008a FFF7FEFF 		bl	HAL_TIM_PWM_ConfigChannel
+ 415              	.LVL23:
+ 416              		.loc 1 180 8 view .LVU97
+ 417 008e C0B9     		cbnz	r0, .L34
+ 418              	.L27:
+ 181:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****     {
+ 182:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****         Error_Handler();
+ 183:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****     }
+ 184:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****     /* USER CODE BEGIN TIM4_Init 2 */
+ 185:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c **** 
+ 186:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****     /* USER CODE END TIM4_Init 2 */
+ 187:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****     HAL_TIM_MspPostInit(&htim4);
+ 419              		.loc 1 187 5 is_stmt 1 view .LVU98
+ 420 0090 0E4C     		ldr	r4, .L35+4
+ 421 0092 2046     		mov	r0, r4
+ 422 0094 FFF7FEFF 		bl	HAL_TIM_MspPostInit
+ 423              	.LVL24:
+ 188:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c **** 
+ 189:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****     HAL_TIM_PWM_Start(&htim4, TIM_CHANNEL_1);
+ 424              		.loc 1 189 5 view .LVU99
+ 425 0098 0021     		movs	r1, #0
+ 426 009a 2046     		mov	r0, r4
+ 427 009c FFF7FEFF 		bl	HAL_TIM_PWM_Start
+ 428              	.LVL25:
+ 190:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c **** 
+ 191:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  }
+ 429              		.loc 1 191 2 is_stmt 0 view .LVU100
+ 430 00a0 0EB0     		add	sp, sp, #56
+ 431              	.LCFI11:
+ 432              		.cfi_remember_state
+ 433              		.cfi_def_cfa_offset 8
+ 434              		@ sp needed
+ 435 00a2 10BD     		pop	{r4, pc}
+ 436              	.L29:
+ 437              	.LCFI12:
+ 438              		.cfi_restore_state
+ 439              	.LBB3:
+ 155:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****     }
+ 440              		.loc 1 155 9 is_stmt 1 view .LVU101
+ 441 00a4 FFF7FEFF 		bl	Error_Handler
+ 442              	.LVL26:
+ 443 00a8 CCE7     		b	.L22
+ 444              	.L30:
+ 445              	.LBE3:
+ 446              	.LBB4:
+ARM GAS  /tmp/ccKrjDbx.s 			page 12
+
+
+ 160:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****     }
+ 447              		.loc 1 160 9 view .LVU102
+ 448 00aa FFF7FEFF 		bl	Error_Handler
+ 449              	.LVL27:
+ 450 00ae D1E7     		b	.L23
+ 451              	.L31:
+ 452              	.LBE4:
+ 453              	.LBB5:
+ 164:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****     }
+ 454              		.loc 1 164 9 view .LVU103
+ 455 00b0 FFF7FEFF 		bl	Error_Handler
+ 456              	.LVL28:
+ 457 00b4 D2E7     		b	.L24
+ 458              	.L32:
+ 459              	.LBE5:
+ 460              	.LBB6:
+ 170:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****     }
+ 461              		.loc 1 170 9 view .LVU104
+ 462 00b6 FFF7FEFF 		bl	Error_Handler
+ 463              	.LVL29:
+ 464 00ba D7E7     		b	.L25
+ 465              	.L33:
+ 466              	.LBE6:
+ 467              	.LBB7:
+ 178:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****     }
+ 468              		.loc 1 178 9 view .LVU105
+ 469 00bc FFF7FEFF 		bl	Error_Handler
+ 470              	.LVL30:
+ 471 00c0 DFE7     		b	.L26
+ 472              	.L34:
+ 473              	.LBE7:
+ 474              	.LBB8:
+ 182:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****     }
+ 475              		.loc 1 182 9 view .LVU106
+ 476 00c2 FFF7FEFF 		bl	Error_Handler
+ 477              	.LVL31:
+ 478 00c6 E3E7     		b	.L27
+ 479              	.L36:
+ 480              		.align	2
+ 481              	.L35:
+ 482 00c8 00000000 		.word	Servo_Cfg
+ 483 00cc 00000000 		.word	htim4
+ 484              	.LBE8:
+ 485              		.cfi_endproc
+ 486              	.LFE244:
+ 488              		.section	.text.BSP_Servo_DeInit,"ax",%progbits
+ 489              		.align	1
+ 490              		.global	BSP_Servo_DeInit
+ 491              		.syntax unified
+ 492              		.thumb
+ 493              		.thumb_func
+ 495              	BSP_Servo_DeInit:
+ 496              	.LVL32:
+ 497              	.LFB245:
+ 192:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c **** 
+ 193:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  /**
+ 194:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****   * @brief Deinitialize Servo PWM
+ARM GAS  /tmp/ccKrjDbx.s 			page 13
+
+
+ 195:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****   * 
+ 196:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****   * @param Servo: Servo to be Deinitialized.
+ 197:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****   *     @arg Servo can be Servo0 through Servo4
+ 198:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****   * @retval None
+ 199:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****   */
+ 200:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  void BSP_Servo_DeInit(Servo_t Servo)
+ 201:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  {
+ 498              		.loc 1 201 2 view -0
+ 499              		.cfi_startproc
+ 500              		@ args = 0, pretend = 0, frame = 0
+ 501              		@ frame_needed = 0, uses_anonymous_args = 0
+ 502              		@ link register save eliminated.
+ 202:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****     
+ 203:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  }
+ 503              		.loc 1 203 2 view .LVU108
+ 504 0000 7047     		bx	lr
+ 505              		.cfi_endproc
+ 506              	.LFE245:
+ 508              		.section	.text.BSP_Servo_Center,"ax",%progbits
+ 509              		.align	1
+ 510              		.global	BSP_Servo_Center
+ 511              		.syntax unified
+ 512              		.thumb
+ 513              		.thumb_func
+ 515              	BSP_Servo_Center:
+ 516              	.LVL33:
+ 517              	.LFB246:
+ 204:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c **** 
+ 205:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c **** /**
+ 206:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  * @brief Set Servo to the 'center' 
+ 207:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  * 
+ 208:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  * @param Servo: Servo to be centered 
+ 209:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  *      @arg Servo can be Servo0 through Servo4
+ 210:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  * @retval None
+ 211:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  */
+ 212:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  void BSP_Servo_Center(Servo_t Servo)
+ 213:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  {
+ 518              		.loc 1 213 2 view -0
+ 519              		.cfi_startproc
+ 520              		@ args = 0, pretend = 0, frame = 0
+ 521              		@ frame_needed = 0, uses_anonymous_args = 0
+ 522              		@ link register save eliminated.
+ 214:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****     uint32_t Pulse_Ticks = 0.925 * 16000 / 20;
+ 523              		.loc 1 214 5 view .LVU110
+ 215:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****     __HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_1, Pulse_Ticks);
+ 524              		.loc 1 215 5 view .LVU111
+ 525 0000 024B     		ldr	r3, .L39
+ 526 0002 1B68     		ldr	r3, [r3]
+ 527 0004 4FF43972 		mov	r2, #740
+ 528 0008 5A63     		str	r2, [r3, #52]
+ 216:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  }
+ 529              		.loc 1 216 2 is_stmt 0 view .LVU112
+ 530 000a 7047     		bx	lr
+ 531              	.L40:
+ 532              		.align	2
+ 533              	.L39:
+ 534 000c 00000000 		.word	htim4
+ARM GAS  /tmp/ccKrjDbx.s 			page 14
+
+
+ 535              		.cfi_endproc
+ 536              	.LFE246:
+ 538              		.section	.text.BSP_Servo_Min,"ax",%progbits
+ 539              		.align	1
+ 540              		.global	BSP_Servo_Min
+ 541              		.syntax unified
+ 542              		.thumb
+ 543              		.thumb_func
+ 545              	BSP_Servo_Min:
+ 546              	.LVL34:
+ 547              	.LFB247:
+ 217:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c **** 
+ 218:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  /**
+ 219:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****   * @brief Set Servo to the 'minimum'
+ 220:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****   * 
+ 221:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****   * @param Servo: Servo to be minimumed
+ 222:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****   *     @arg Servo can be Servo0 through Servo4
+ 223:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****   * @retval None  
+ 224:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****   */
+ 225:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  void BSP_Servo_Min(Servo_t Servo)
+ 226:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  {
+ 548              		.loc 1 226 2 is_stmt 1 view -0
+ 549              		.cfi_startproc
+ 550              		@ args = 0, pretend = 0, frame = 0
+ 551              		@ frame_needed = 0, uses_anonymous_args = 0
+ 552              		@ link register save eliminated.
+ 227:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c **** 
+ 228:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  }
+ 553              		.loc 1 228 2 view .LVU114
+ 554 0000 7047     		bx	lr
+ 555              		.cfi_endproc
+ 556              	.LFE247:
+ 558              		.section	.text.BSP_Servo_Max,"ax",%progbits
+ 559              		.align	1
+ 560              		.global	BSP_Servo_Max
+ 561              		.syntax unified
+ 562              		.thumb
+ 563              		.thumb_func
+ 565              	BSP_Servo_Max:
+ 566              	.LVL35:
+ 567              	.LFB248:
+ 229:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c **** 
+ 230:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  /**
+ 231:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****   * @brief Set Servo to the 'maximum'
+ 232:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****   * 
+ 233:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****   * @param Servo: Servo to be maximumed 
+ 234:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****   *     @arg Servo can be Servo0 through Servo4
+ 235:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****   * @retval None
+ 236:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****   */
+ 237:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  void BSP_Servo_Max(Servo_t Servo)
+ 238:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  {
+ 568              		.loc 1 238 2 view -0
+ 569              		.cfi_startproc
+ 570              		@ args = 0, pretend = 0, frame = 0
+ 571              		@ frame_needed = 0, uses_anonymous_args = 0
+ 572              		@ link register save eliminated.
+ 239:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****     uint32_t Pulse_Ticks = Servo_Cfg[Servo].MaxPulse * 16000 / 20;
+ARM GAS  /tmp/ccKrjDbx.s 			page 15
+
+
+ 573              		.loc 1 239 5 view .LVU116
+ 240:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****     __HAL_TIM_SET_COMPARE(&htim4, TIM_CHANNEL_1, Pulse_Ticks);
+ 574              		.loc 1 240 5 view .LVU117
+ 575 0000 024B     		ldr	r3, .L43
+ 576 0002 1B68     		ldr	r3, [r3]
+ 577 0004 4FF4E662 		mov	r2, #1840
+ 578 0008 5A63     		str	r2, [r3, #52]
+ 241:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  }
+ 579              		.loc 1 241 2 is_stmt 0 view .LVU118
+ 580 000a 7047     		bx	lr
+ 581              	.L44:
+ 582              		.align	2
+ 583              	.L43:
+ 584 000c 00000000 		.word	htim4
+ 585              		.cfi_endproc
+ 586              	.LFE248:
+ 588              		.section	.text.BSP_Servo_Set,"ax",%progbits
+ 589              		.align	1
+ 590              		.global	BSP_Servo_Set
+ 591              		.syntax unified
+ 592              		.thumb
+ 593              		.thumb_func
+ 595              	BSP_Servo_Set:
+ 596              	.LVL36:
+ 597              	.LFB249:
+ 242:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c **** 
+ 243:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  /**
+ 244:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****   * @brief Set Servo to an arbitrary location
+ 245:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****   * 
+ 246:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****   * @param Servo: Servo to be set to an arbitrary location 
+ 247:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****   *     @arg Servo can be Servo0 through Servo4
+ 248:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****   * @param PulseMicroseconds: location servo is set to
+ 249:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****   *     @arg PuleMicroseconds can be 1000 through 2000
+ 250:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****   * @retval None
+ 251:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****   */
+ 252:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  void BSP_Servo_Set(Servo_t Servo, uint16_t PulseMicroseconds)
+ 253:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  {
+ 598              		.loc 1 253 2 is_stmt 1 view -0
+ 599              		.cfi_startproc
+ 600              		@ args = 0, pretend = 0, frame = 0
+ 601              		@ frame_needed = 0, uses_anonymous_args = 0
+ 602              		@ link register save eliminated.
+ 254:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c **** 
+ 255:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  }
+ 603              		.loc 1 255 2 view .LVU120
+ 604 0000 7047     		bx	lr
+ 605              		.cfi_endproc
+ 606              	.LFE249:
+ 608              		.global	htim4
+ 609              		.section	.bss.htim4,"aw",%nobits
+ 610              		.align	2
+ 613              	htim4:
+ 614 0000 00000000 		.space	72
+ 614      00000000 
+ 614      00000000 
+ 614      00000000 
+ 614      00000000 
+ARM GAS  /tmp/ccKrjDbx.s 			page 16
+
+
+ 615              		.global	SERVO_TIM
+ 616              		.section	.data.SERVO_TIM,"aw"
+ 617              		.align	2
+ 620              	SERVO_TIM:
+ 621 0000 00080040 		.word	1073743872
+ 622              		.global	Servo_Cfg
+ 623              		.section	.rodata.Servo_Cfg,"a"
+ 624              		.align	2
+ 627              	Servo_Cfg:
+ 628 0000 0004     		.short	1024
+ 629 0002 0000     		.space	2
+ 630 0004 80000000 		.word	128
+ 631 0008 00080040 		.word	1073743872
+ 632 000c 34080040 		.word	1073743924
+ 633 0010 00000000 		.word	0
+ 634 0014 00688909 		.word	160000000
+ 635 0018 6666263F 		.word	1059481190
+ 636 001c 33331340 		.word	1075000115
+ 637              		.global	GPIO_PIN
+ 638              		.section	.rodata.GPIO_PIN,"a"
+ 639              		.align	2
+ 642              	GPIO_PIN:
+ 643 0000 2000     		.short	32
+ 644              		.global	GPIO_PORT
+ 645              		.section	.data.GPIO_PORT,"aw"
+ 646              		.align	2
+ 649              	GPIO_PORT:
+ 650 0000 00000240 		.word	1073872896
+ 651              		.text
+ 652              	.Letext0:
+ 653              		.file 2 "/opt/st/stm32cubeclt_1.17.0/GNU-tools-for-STM32/arm-none-eabi/include/machine/_default_ty
+ 654              		.file 3 "/opt/st/stm32cubeclt_1.17.0/GNU-tools-for-STM32/arm-none-eabi/include/sys/_stdint.h"
+ 655              		.file 4 "Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f405xx.h"
+ 656              		.file 5 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_def.h"
+ 657              		.file 6 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_gpio.h"
+ 658              		.file 7 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma.h"
+ 659              		.file 8 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h"
+ 660              		.file 9 "Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.h"
+ 661              		.file 10 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h"
+ARM GAS  /tmp/ccKrjDbx.s 			page 17
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 stm32f4xx_nucleo.c
+     /tmp/ccKrjDbx.s:21     .text.BSP_LED_Init:00000000 $t
+     /tmp/ccKrjDbx.s:27     .text.BSP_LED_Init:00000000 BSP_LED_Init
+     /tmp/ccKrjDbx.s:97     .text.BSP_LED_Init:00000044 $d
+     /tmp/ccKrjDbx.s:649    .data.GPIO_PORT:00000000 GPIO_PORT
+     /tmp/ccKrjDbx.s:103    .text.BSP_Led_DeInit:00000000 $t
+     /tmp/ccKrjDbx.s:109    .text.BSP_Led_DeInit:00000000 BSP_Led_DeInit
+     /tmp/ccKrjDbx.s:154    .text.BSP_Led_DeInit:00000024 $d
+     /tmp/ccKrjDbx.s:159    .text.BSP_LED_On:00000000 $t
+     /tmp/ccKrjDbx.s:165    .text.BSP_LED_On:00000000 BSP_LED_On
+     /tmp/ccKrjDbx.s:192    .text.BSP_LED_On:00000014 $d
+     /tmp/ccKrjDbx.s:197    .text.BSP_LED_Off:00000000 $t
+     /tmp/ccKrjDbx.s:203    .text.BSP_LED_Off:00000000 BSP_LED_Off
+     /tmp/ccKrjDbx.s:230    .text.BSP_LED_Off:00000014 $d
+     /tmp/ccKrjDbx.s:235    .text.BSP_LED_Toggle:00000000 $t
+     /tmp/ccKrjDbx.s:241    .text.BSP_LED_Toggle:00000000 BSP_LED_Toggle
+     /tmp/ccKrjDbx.s:267    .text.BSP_LED_Toggle:00000010 $d
+     /tmp/ccKrjDbx.s:272    .text.BSP_Servo_Init:00000000 $t
+     /tmp/ccKrjDbx.s:278    .text.BSP_Servo_Init:00000000 BSP_Servo_Init
+     /tmp/ccKrjDbx.s:482    .text.BSP_Servo_Init:000000c8 $d
+     /tmp/ccKrjDbx.s:627    .rodata.Servo_Cfg:00000000 Servo_Cfg
+     /tmp/ccKrjDbx.s:613    .bss.htim4:00000000 htim4
+     /tmp/ccKrjDbx.s:489    .text.BSP_Servo_DeInit:00000000 $t
+     /tmp/ccKrjDbx.s:495    .text.BSP_Servo_DeInit:00000000 BSP_Servo_DeInit
+     /tmp/ccKrjDbx.s:509    .text.BSP_Servo_Center:00000000 $t
+     /tmp/ccKrjDbx.s:515    .text.BSP_Servo_Center:00000000 BSP_Servo_Center
+     /tmp/ccKrjDbx.s:534    .text.BSP_Servo_Center:0000000c $d
+     /tmp/ccKrjDbx.s:539    .text.BSP_Servo_Min:00000000 $t
+     /tmp/ccKrjDbx.s:545    .text.BSP_Servo_Min:00000000 BSP_Servo_Min
+     /tmp/ccKrjDbx.s:559    .text.BSP_Servo_Max:00000000 $t
+     /tmp/ccKrjDbx.s:565    .text.BSP_Servo_Max:00000000 BSP_Servo_Max
+     /tmp/ccKrjDbx.s:584    .text.BSP_Servo_Max:0000000c $d
+     /tmp/ccKrjDbx.s:589    .text.BSP_Servo_Set:00000000 $t
+     /tmp/ccKrjDbx.s:595    .text.BSP_Servo_Set:00000000 BSP_Servo_Set
+     /tmp/ccKrjDbx.s:610    .bss.htim4:00000000 $d
+     /tmp/ccKrjDbx.s:620    .data.SERVO_TIM:00000000 SERVO_TIM
+     /tmp/ccKrjDbx.s:617    .data.SERVO_TIM:00000000 $d
+     /tmp/ccKrjDbx.s:624    .rodata.Servo_Cfg:00000000 $d
+     /tmp/ccKrjDbx.s:642    .rodata.GPIO_PIN:00000000 GPIO_PIN
+     /tmp/ccKrjDbx.s:639    .rodata.GPIO_PIN:00000000 $d
+     /tmp/ccKrjDbx.s:646    .data.GPIO_PORT:00000000 $d
+
+UNDEFINED SYMBOLS
+HAL_GPIO_Init
+HAL_GPIO_WritePin
+HAL_GPIO_DeInit
+HAL_GPIO_TogglePin
+HAL_TIM_Base_Init
+HAL_TIM_ConfigClockSource
+HAL_TIM_PWM_Init
+HAL_TIMEx_MasterConfigSynchronization
+HAL_TIM_PWM_ConfigChannel
+HAL_TIM_MspPostInit
+HAL_TIM_PWM_Start
+Error_Handler

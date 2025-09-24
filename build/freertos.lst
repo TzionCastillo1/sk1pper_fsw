@@ -1,0 +1,770 @@
+ARM GAS  /tmp/ccQLQTAc.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 1
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"freertos.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.file 1 "Core/Src/freertos.c"
+  20              		.section	.text.StartDefaultTask,"ax",%progbits
+  21              		.align	1
+  22              		.global	StartDefaultTask
+  23              		.syntax unified
+  24              		.thumb
+  25              		.thumb_func
+  27              	StartDefaultTask:
+  28              	.LVL0:
+  29              	.LFB244:
+   1:Core/Src/freertos.c **** /* USER CODE BEGIN Header */
+   2:Core/Src/freertos.c **** /**
+   3:Core/Src/freertos.c ****   ******************************************************************************
+   4:Core/Src/freertos.c ****   * File Name          : freertos.c
+   5:Core/Src/freertos.c ****   * Description        : Code for freertos applications
+   6:Core/Src/freertos.c ****   ******************************************************************************
+   7:Core/Src/freertos.c ****   * @attention
+   8:Core/Src/freertos.c ****   *
+   9:Core/Src/freertos.c ****   * Copyright (c) 2025 STMicroelectronics.
+  10:Core/Src/freertos.c ****   * All rights reserved.
+  11:Core/Src/freertos.c ****   *
+  12:Core/Src/freertos.c ****   * This software is licensed under terms that can be found in the LICENSE file
+  13:Core/Src/freertos.c ****   * in the root directory of this software component.
+  14:Core/Src/freertos.c ****   * If no LICENSE file comes with this software, it is provided AS-IS.
+  15:Core/Src/freertos.c ****   *
+  16:Core/Src/freertos.c ****   ******************************************************************************
+  17:Core/Src/freertos.c ****   */
+  18:Core/Src/freertos.c **** /* USER CODE END Header */
+  19:Core/Src/freertos.c **** 
+  20:Core/Src/freertos.c **** /* Includes ------------------------------------------------------------------*/
+  21:Core/Src/freertos.c **** #include "FreeRTOS.h"
+  22:Core/Src/freertos.c **** #include "task.h"
+  23:Core/Src/freertos.c **** #include "main.h"
+  24:Core/Src/freertos.c **** #include "cmsis_os.h"
+  25:Core/Src/freertos.c **** 
+  26:Core/Src/freertos.c **** /* Private includes ----------------------------------------------------------*/
+  27:Core/Src/freertos.c **** /* USER CODE BEGIN Includes */
+  28:Core/Src/freertos.c **** #include "stm32f4xx_hal.h"
+  29:Core/Src/freertos.c **** #include "status.h"
+ARM GAS  /tmp/ccQLQTAc.s 			page 2
+
+
+  30:Core/Src/freertos.c **** #include "leddriver.h"
+  31:Core/Src/freertos.c **** /* USER CODE END Includes */
+  32:Core/Src/freertos.c **** 
+  33:Core/Src/freertos.c **** /* Private typedef -----------------------------------------------------------*/
+  34:Core/Src/freertos.c **** typedef StaticTask_t osStaticThreadDef_t;
+  35:Core/Src/freertos.c **** typedef StaticQueue_t osStaticMessageQDef_t;
+  36:Core/Src/freertos.c **** typedef StaticTimer_t osStaticTimerDef_t;
+  37:Core/Src/freertos.c **** typedef StaticEventGroup_t osStaticEventGroupDef_t;
+  38:Core/Src/freertos.c **** /* USER CODE BEGIN PTD */
+  39:Core/Src/freertos.c **** 
+  40:Core/Src/freertos.c **** /* USER CODE END PTD */
+  41:Core/Src/freertos.c **** 
+  42:Core/Src/freertos.c **** /* Private define ------------------------------------------------------------*/
+  43:Core/Src/freertos.c **** /* USER CODE BEGIN PD */
+  44:Core/Src/freertos.c **** 
+  45:Core/Src/freertos.c **** /* USER CODE END PD */
+  46:Core/Src/freertos.c **** 
+  47:Core/Src/freertos.c **** /* Private macro -------------------------------------------------------------*/
+  48:Core/Src/freertos.c **** /* USER CODE BEGIN PM */
+  49:Core/Src/freertos.c **** 
+  50:Core/Src/freertos.c **** /* USER CODE END PM */
+  51:Core/Src/freertos.c **** 
+  52:Core/Src/freertos.c **** /* Private variables ---------------------------------------------------------*/
+  53:Core/Src/freertos.c **** /* USER CODE BEGIN Variables */
+  54:Core/Src/freertos.c **** extern osEventFlagsId_t ErrorHandle;
+  55:Core/Src/freertos.c **** 
+  56:Core/Src/freertos.c **** /* USER CODE END Variables */
+  57:Core/Src/freertos.c **** /* Definitions for defaultTask */
+  58:Core/Src/freertos.c **** osThreadId_t defaultTaskHandle;
+  59:Core/Src/freertos.c **** const osThreadAttr_t defaultTask_attributes = {
+  60:Core/Src/freertos.c ****   .name = "defaultTask",
+  61:Core/Src/freertos.c ****   .stack_size = 128 * 4,
+  62:Core/Src/freertos.c ****   .priority = (osPriority_t) osPriorityNormal,
+  63:Core/Src/freertos.c **** };
+  64:Core/Src/freertos.c **** /* Definitions for logTask */
+  65:Core/Src/freertos.c **** osThreadId_t logTaskHandle;
+  66:Core/Src/freertos.c **** uint32_t logTaskBuffer[ 256 ];
+  67:Core/Src/freertos.c **** osStaticThreadDef_t logTaskControlBlock;
+  68:Core/Src/freertos.c **** const osThreadAttr_t logTask_attributes = {
+  69:Core/Src/freertos.c ****   .name = "logTask",
+  70:Core/Src/freertos.c ****   .cb_mem = &logTaskControlBlock,
+  71:Core/Src/freertos.c ****   .cb_size = sizeof(logTaskControlBlock),
+  72:Core/Src/freertos.c ****   .stack_mem = &logTaskBuffer[0],
+  73:Core/Src/freertos.c ****   .stack_size = sizeof(logTaskBuffer),
+  74:Core/Src/freertos.c ****   .priority = (osPriority_t) osPriorityNormal,
+  75:Core/Src/freertos.c **** };
+  76:Core/Src/freertos.c **** /* Definitions for commsTask */
+  77:Core/Src/freertos.c **** osThreadId_t commsTaskHandle;
+  78:Core/Src/freertos.c **** uint32_t commsTaskBuffer[ 128 ];
+  79:Core/Src/freertos.c **** osStaticThreadDef_t commsTaskControlBlock;
+  80:Core/Src/freertos.c **** const osThreadAttr_t commsTask_attributes = {
+  81:Core/Src/freertos.c ****   .name = "commsTask",
+  82:Core/Src/freertos.c ****   .cb_mem = &commsTaskControlBlock,
+  83:Core/Src/freertos.c ****   .cb_size = sizeof(commsTaskControlBlock),
+  84:Core/Src/freertos.c ****   .stack_mem = &commsTaskBuffer[0],
+  85:Core/Src/freertos.c ****   .stack_size = sizeof(commsTaskBuffer),
+  86:Core/Src/freertos.c ****   .priority = (osPriority_t) osPriorityNormal,
+ARM GAS  /tmp/ccQLQTAc.s 			page 3
+
+
+  87:Core/Src/freertos.c **** };
+  88:Core/Src/freertos.c **** /* Definitions for commsTxMessageQueue */
+  89:Core/Src/freertos.c **** osMessageQueueId_t commsTxMessageQueueHandle;
+  90:Core/Src/freertos.c **** uint8_t commsTxMessageBuffer[ 16 * 280 ];
+  91:Core/Src/freertos.c **** osStaticMessageQDef_t commstxControlBlock;
+  92:Core/Src/freertos.c **** const osMessageQueueAttr_t commsTxMessageQueue_attributes = {
+  93:Core/Src/freertos.c ****   .name = "commsTxMessageQueue",
+  94:Core/Src/freertos.c ****   .cb_mem = &commstxControlBlock,
+  95:Core/Src/freertos.c ****   .cb_size = sizeof(commstxControlBlock),
+  96:Core/Src/freertos.c ****   .mq_mem = &commsTxMessageBuffer,
+  97:Core/Src/freertos.c ****   .mq_size = sizeof(commsTxMessageBuffer)
+  98:Core/Src/freertos.c **** };
+  99:Core/Src/freertos.c **** /* Definitions for status_timer */
+ 100:Core/Src/freertos.c **** osTimerId_t status_timerHandle;
+ 101:Core/Src/freertos.c **** osStaticTimerDef_t StatusTimerControlBlock;
+ 102:Core/Src/freertos.c **** const osTimerAttr_t status_timer_attributes = {
+ 103:Core/Src/freertos.c ****   .name = "status_timer",
+ 104:Core/Src/freertos.c ****   .cb_mem = &StatusTimerControlBlock,
+ 105:Core/Src/freertos.c ****   .cb_size = sizeof(StatusTimerControlBlock),
+ 106:Core/Src/freertos.c **** };
+ 107:Core/Src/freertos.c **** /* Definitions for heartbeat_timer */
+ 108:Core/Src/freertos.c **** osTimerId_t heartbeat_timerHandle;
+ 109:Core/Src/freertos.c **** osStaticTimerDef_t heartbeat_timerControlBlock;
+ 110:Core/Src/freertos.c **** const osTimerAttr_t heartbeat_timer_attributes = {
+ 111:Core/Src/freertos.c ****   .name = "heartbeat_timer",
+ 112:Core/Src/freertos.c ****   .cb_mem = &heartbeat_timerControlBlock,
+ 113:Core/Src/freertos.c ****   .cb_size = sizeof(heartbeat_timerControlBlock),
+ 114:Core/Src/freertos.c **** };
+ 115:Core/Src/freertos.c **** /* Definitions for Error */
+ 116:Core/Src/freertos.c **** osEventFlagsId_t ErrorHandle;
+ 117:Core/Src/freertos.c **** osStaticEventGroupDef_t ErrorControlBlock;
+ 118:Core/Src/freertos.c **** const osEventFlagsAttr_t Error_attributes = {
+ 119:Core/Src/freertos.c ****   .name = "Error",
+ 120:Core/Src/freertos.c ****   .cb_mem = &ErrorControlBlock,
+ 121:Core/Src/freertos.c ****   .cb_size = sizeof(ErrorControlBlock),
+ 122:Core/Src/freertos.c **** };
+ 123:Core/Src/freertos.c **** 
+ 124:Core/Src/freertos.c **** /* Private function prototypes -----------------------------------------------*/
+ 125:Core/Src/freertos.c **** /* USER CODE BEGIN FunctionPrototypes */
+ 126:Core/Src/freertos.c **** /* USER CODE END FunctionPrototypes */
+ 127:Core/Src/freertos.c **** 
+ 128:Core/Src/freertos.c **** void StartDefaultTask(void *argument);
+ 129:Core/Src/freertos.c **** extern void startLogTask(void *argument);
+ 130:Core/Src/freertos.c **** extern void startCommsTask(void *argument);
+ 131:Core/Src/freertos.c **** extern void status_timer_callback(void *argument);
+ 132:Core/Src/freertos.c **** extern void heartbeat_timer_callback(void *argument);
+ 133:Core/Src/freertos.c **** 
+ 134:Core/Src/freertos.c **** void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
+ 135:Core/Src/freertos.c **** 
+ 136:Core/Src/freertos.c **** /**
+ 137:Core/Src/freertos.c ****   * @brief  FreeRTOS initialization
+ 138:Core/Src/freertos.c ****   * @param  None
+ 139:Core/Src/freertos.c ****   * @retval None
+ 140:Core/Src/freertos.c ****   */
+ 141:Core/Src/freertos.c **** void MX_FREERTOS_Init(void) {
+ 142:Core/Src/freertos.c ****   /* USER CODE BEGIN Init */
+ 143:Core/Src/freertos.c ****   /* USER CODE END Init */
+ARM GAS  /tmp/ccQLQTAc.s 			page 4
+
+
+ 144:Core/Src/freertos.c **** 
+ 145:Core/Src/freertos.c ****   /* USER CODE BEGIN RTOS_MUTEX */
+ 146:Core/Src/freertos.c ****   /* add mutexes, ... */
+ 147:Core/Src/freertos.c ****   /* USER CODE END RTOS_MUTEX */
+ 148:Core/Src/freertos.c **** 
+ 149:Core/Src/freertos.c ****   /* USER CODE BEGIN RTOS_SEMAPHORES */
+ 150:Core/Src/freertos.c ****   /* add semaphores, ... */
+ 151:Core/Src/freertos.c ****   /* USER CODE END RTOS_SEMAPHORES */
+ 152:Core/Src/freertos.c **** 
+ 153:Core/Src/freertos.c ****   /* Create the timer(s) */
+ 154:Core/Src/freertos.c ****   /* creation of status_timer */
+ 155:Core/Src/freertos.c ****   status_timerHandle = osTimerNew(status_timer_callback, osTimerPeriodic, NULL, &status_timer_attri
+ 156:Core/Src/freertos.c **** 
+ 157:Core/Src/freertos.c ****   /* creation of heartbeat_timer */
+ 158:Core/Src/freertos.c ****   heartbeat_timerHandle = osTimerNew(heartbeat_timer_callback, osTimerPeriodic, NULL, &heartbeat_ti
+ 159:Core/Src/freertos.c **** 
+ 160:Core/Src/freertos.c ****   /* USER CODE BEGIN RTOS_TIMERS */
+ 161:Core/Src/freertos.c ****   /* start timers, add new ones, ... */
+ 162:Core/Src/freertos.c ****   /* USER CODE END RTOS_TIMERS */
+ 163:Core/Src/freertos.c **** 
+ 164:Core/Src/freertos.c ****   /* Create the queue(s) */
+ 165:Core/Src/freertos.c ****   /* creation of commsTxMessageQueue */
+ 166:Core/Src/freertos.c ****   commsTxMessageQueueHandle = osMessageQueueNew (16, 280, &commsTxMessageQueue_attributes);
+ 167:Core/Src/freertos.c **** 
+ 168:Core/Src/freertos.c ****   /* USER CODE BEGIN RTOS_QUEUES */
+ 169:Core/Src/freertos.c ****   /* add queues, ... */
+ 170:Core/Src/freertos.c ****   /* USER CODE END RTOS_QUEUES */
+ 171:Core/Src/freertos.c **** 
+ 172:Core/Src/freertos.c ****   /* Create the thread(s) */
+ 173:Core/Src/freertos.c ****   /* creation of defaultTask */
+ 174:Core/Src/freertos.c ****   defaultTaskHandle = osThreadNew(StartDefaultTask, NULL, &defaultTask_attributes);
+ 175:Core/Src/freertos.c **** 
+ 176:Core/Src/freertos.c ****   /* creation of logTask */
+ 177:Core/Src/freertos.c ****   logTaskHandle = osThreadNew(startLogTask, NULL, &logTask_attributes);
+ 178:Core/Src/freertos.c **** 
+ 179:Core/Src/freertos.c ****   /* creation of commsTask */
+ 180:Core/Src/freertos.c ****   commsTaskHandle = osThreadNew(startCommsTask, NULL, &commsTask_attributes);
+ 181:Core/Src/freertos.c **** 
+ 182:Core/Src/freertos.c ****   /* USER CODE BEGIN RTOS_THREADS */
+ 183:Core/Src/freertos.c ****   /* add threads, ... */
+ 184:Core/Src/freertos.c ****   /* USER CODE END RTOS_THREADS */
+ 185:Core/Src/freertos.c **** 
+ 186:Core/Src/freertos.c ****   /* Create the event(s) */
+ 187:Core/Src/freertos.c ****   /* creation of Error */
+ 188:Core/Src/freertos.c ****   ErrorHandle = osEventFlagsNew(&Error_attributes);
+ 189:Core/Src/freertos.c **** 
+ 190:Core/Src/freertos.c ****   /* USER CODE BEGIN RTOS_EVENTS */
+ 191:Core/Src/freertos.c ****   /* add events, ... */
+ 192:Core/Src/freertos.c ****   /* USER CODE END RTOS_EVENTS */
+ 193:Core/Src/freertos.c **** 
+ 194:Core/Src/freertos.c **** }
+ 195:Core/Src/freertos.c **** 
+ 196:Core/Src/freertos.c **** /* USER CODE BEGIN Header_StartDefaultTask */
+ 197:Core/Src/freertos.c **** /**
+ 198:Core/Src/freertos.c ****   * @brief  Function implementing the defaultTask thread.
+ 199:Core/Src/freertos.c ****   * This task is for experimenting with.
+ 200:Core/Src/freertos.c ****   * @param  argument: Not used
+ARM GAS  /tmp/ccQLQTAc.s 			page 5
+
+
+ 201:Core/Src/freertos.c ****   * @retval None
+ 202:Core/Src/freertos.c ****   */
+ 203:Core/Src/freertos.c **** /* USER CODE END Header_StartDefaultTask */
+ 204:Core/Src/freertos.c **** void StartDefaultTask(void *argument)
+ 205:Core/Src/freertos.c **** {
+  30              		.loc 1 205 1 view -0
+  31              		.cfi_startproc
+  32              		@ Volatile: function does not return.
+  33              		@ args = 0, pretend = 0, frame = 0
+  34              		@ frame_needed = 0, uses_anonymous_args = 0
+  35              		.loc 1 205 1 is_stmt 0 view .LVU1
+  36 0000 08B5     		push	{r3, lr}
+  37              	.LCFI0:
+  38              		.cfi_def_cfa_offset 8
+  39              		.cfi_offset 3, -8
+  40              		.cfi_offset 14, -4
+ 206:Core/Src/freertos.c ****   /* USER CODE BEGIN StartDefaultTask */
+ 207:Core/Src/freertos.c ****   status_set_error();
+  41              		.loc 1 207 3 is_stmt 1 view .LVU2
+  42 0002 FFF7FEFF 		bl	status_set_error
+  43              	.LVL1:
+  44              	.L2:
+ 208:Core/Src/freertos.c ****   /* Infinite loop */
+ 209:Core/Src/freertos.c ****   for(;;)
+  45              		.loc 1 209 3 discriminator 1 view .LVU3
+ 210:Core/Src/freertos.c ****   {
+ 211:Core/Src/freertos.c ****     osDelay(4000);
+  46              		.loc 1 211 5 discriminator 1 view .LVU4
+  47 0006 4FF47A60 		mov	r0, #4000
+  48 000a FFF7FEFF 		bl	osDelay
+  49              	.LVL2:
+ 212:Core/Src/freertos.c ****     status_set_armed();
+  50              		.loc 1 212 5 discriminator 1 view .LVU5
+  51 000e FFF7FEFF 		bl	status_set_armed
+  52              	.LVL3:
+ 213:Core/Src/freertos.c ****     //osEventFlagsSet(ErrorHandle, EVENT_FLAG_DEBUG);
+ 214:Core/Src/freertos.c ****     HAL_GPIO_TogglePin(GPIOA, GPIO_PIN_14);
+  53              		.loc 1 214 5 discriminator 1 view .LVU6
+  54 0012 4FF48041 		mov	r1, #16384
+  55 0016 0248     		ldr	r0, .L4
+  56 0018 FFF7FEFF 		bl	HAL_GPIO_TogglePin
+  57              	.LVL4:
+ 209:Core/Src/freertos.c ****   {
+  58              		.loc 1 209 3 discriminator 1 view .LVU7
+  59 001c F3E7     		b	.L2
+  60              	.L5:
+  61 001e 00BF     		.align	2
+  62              	.L4:
+  63 0020 00000240 		.word	1073872896
+  64              		.cfi_endproc
+  65              	.LFE244:
+  67              		.section	.text.MX_FREERTOS_Init,"ax",%progbits
+  68              		.align	1
+  69              		.global	MX_FREERTOS_Init
+  70              		.syntax unified
+  71              		.thumb
+  72              		.thumb_func
+ARM GAS  /tmp/ccQLQTAc.s 			page 6
+
+
+  74              	MX_FREERTOS_Init:
+  75              	.LFB243:
+ 141:Core/Src/freertos.c ****   /* USER CODE BEGIN Init */
+  76              		.loc 1 141 29 view -0
+  77              		.cfi_startproc
+  78              		@ args = 0, pretend = 0, frame = 0
+  79              		@ frame_needed = 0, uses_anonymous_args = 0
+  80 0000 08B5     		push	{r3, lr}
+  81              	.LCFI1:
+  82              		.cfi_def_cfa_offset 8
+  83              		.cfi_offset 3, -8
+  84              		.cfi_offset 14, -4
+ 155:Core/Src/freertos.c **** 
+  85              		.loc 1 155 3 view .LVU9
+ 155:Core/Src/freertos.c **** 
+  86              		.loc 1 155 24 is_stmt 0 view .LVU10
+  87 0002 194B     		ldr	r3, .L8
+  88 0004 0022     		movs	r2, #0
+  89 0006 0121     		movs	r1, #1
+  90 0008 1848     		ldr	r0, .L8+4
+  91 000a FFF7FEFF 		bl	osTimerNew
+  92              	.LVL5:
+ 155:Core/Src/freertos.c **** 
+  93              		.loc 1 155 22 view .LVU11
+  94 000e 184B     		ldr	r3, .L8+8
+  95 0010 1860     		str	r0, [r3]
+ 158:Core/Src/freertos.c **** 
+  96              		.loc 1 158 3 is_stmt 1 view .LVU12
+ 158:Core/Src/freertos.c **** 
+  97              		.loc 1 158 27 is_stmt 0 view .LVU13
+  98 0012 184B     		ldr	r3, .L8+12
+  99 0014 0022     		movs	r2, #0
+ 100 0016 0121     		movs	r1, #1
+ 101 0018 1748     		ldr	r0, .L8+16
+ 102 001a FFF7FEFF 		bl	osTimerNew
+ 103              	.LVL6:
+ 158:Core/Src/freertos.c **** 
+ 104              		.loc 1 158 25 view .LVU14
+ 105 001e 174B     		ldr	r3, .L8+20
+ 106 0020 1860     		str	r0, [r3]
+ 166:Core/Src/freertos.c **** 
+ 107              		.loc 1 166 3 is_stmt 1 view .LVU15
+ 166:Core/Src/freertos.c **** 
+ 108              		.loc 1 166 31 is_stmt 0 view .LVU16
+ 109 0022 174A     		ldr	r2, .L8+24
+ 110 0024 4FF48C71 		mov	r1, #280
+ 111 0028 1020     		movs	r0, #16
+ 112 002a FFF7FEFF 		bl	osMessageQueueNew
+ 113              	.LVL7:
+ 166:Core/Src/freertos.c **** 
+ 114              		.loc 1 166 29 view .LVU17
+ 115 002e 154B     		ldr	r3, .L8+28
+ 116 0030 1860     		str	r0, [r3]
+ 174:Core/Src/freertos.c **** 
+ 117              		.loc 1 174 3 is_stmt 1 view .LVU18
+ 174:Core/Src/freertos.c **** 
+ 118              		.loc 1 174 23 is_stmt 0 view .LVU19
+ARM GAS  /tmp/ccQLQTAc.s 			page 7
+
+
+ 119 0032 154A     		ldr	r2, .L8+32
+ 120 0034 0021     		movs	r1, #0
+ 121 0036 1548     		ldr	r0, .L8+36
+ 122 0038 FFF7FEFF 		bl	osThreadNew
+ 123              	.LVL8:
+ 174:Core/Src/freertos.c **** 
+ 124              		.loc 1 174 21 view .LVU20
+ 125 003c 144B     		ldr	r3, .L8+40
+ 126 003e 1860     		str	r0, [r3]
+ 177:Core/Src/freertos.c **** 
+ 127              		.loc 1 177 3 is_stmt 1 view .LVU21
+ 177:Core/Src/freertos.c **** 
+ 128              		.loc 1 177 19 is_stmt 0 view .LVU22
+ 129 0040 144A     		ldr	r2, .L8+44
+ 130 0042 0021     		movs	r1, #0
+ 131 0044 1448     		ldr	r0, .L8+48
+ 132 0046 FFF7FEFF 		bl	osThreadNew
+ 133              	.LVL9:
+ 177:Core/Src/freertos.c **** 
+ 134              		.loc 1 177 17 view .LVU23
+ 135 004a 144B     		ldr	r3, .L8+52
+ 136 004c 1860     		str	r0, [r3]
+ 180:Core/Src/freertos.c **** 
+ 137              		.loc 1 180 3 is_stmt 1 view .LVU24
+ 180:Core/Src/freertos.c **** 
+ 138              		.loc 1 180 21 is_stmt 0 view .LVU25
+ 139 004e 144A     		ldr	r2, .L8+56
+ 140 0050 0021     		movs	r1, #0
+ 141 0052 1448     		ldr	r0, .L8+60
+ 142 0054 FFF7FEFF 		bl	osThreadNew
+ 143              	.LVL10:
+ 180:Core/Src/freertos.c **** 
+ 144              		.loc 1 180 19 view .LVU26
+ 145 0058 134B     		ldr	r3, .L8+64
+ 146 005a 1860     		str	r0, [r3]
+ 188:Core/Src/freertos.c **** 
+ 147              		.loc 1 188 3 is_stmt 1 view .LVU27
+ 188:Core/Src/freertos.c **** 
+ 148              		.loc 1 188 17 is_stmt 0 view .LVU28
+ 149 005c 1348     		ldr	r0, .L8+68
+ 150 005e FFF7FEFF 		bl	osEventFlagsNew
+ 151              	.LVL11:
+ 188:Core/Src/freertos.c **** 
+ 152              		.loc 1 188 15 view .LVU29
+ 153 0062 134B     		ldr	r3, .L8+72
+ 154 0064 1860     		str	r0, [r3]
+ 194:Core/Src/freertos.c **** 
+ 155              		.loc 1 194 1 view .LVU30
+ 156 0066 08BD     		pop	{r3, pc}
+ 157              	.L9:
+ 158              		.align	2
+ 159              	.L8:
+ 160 0068 00000000 		.word	status_timer_attributes
+ 161 006c 00000000 		.word	status_timer_callback
+ 162 0070 00000000 		.word	status_timerHandle
+ 163 0074 00000000 		.word	heartbeat_timer_attributes
+ 164 0078 00000000 		.word	heartbeat_timer_callback
+ARM GAS  /tmp/ccQLQTAc.s 			page 8
+
+
+ 165 007c 00000000 		.word	heartbeat_timerHandle
+ 166 0080 00000000 		.word	commsTxMessageQueue_attributes
+ 167 0084 00000000 		.word	commsTxMessageQueueHandle
+ 168 0088 00000000 		.word	defaultTask_attributes
+ 169 008c 00000000 		.word	StartDefaultTask
+ 170 0090 00000000 		.word	defaultTaskHandle
+ 171 0094 00000000 		.word	logTask_attributes
+ 172 0098 00000000 		.word	startLogTask
+ 173 009c 00000000 		.word	logTaskHandle
+ 174 00a0 00000000 		.word	commsTask_attributes
+ 175 00a4 00000000 		.word	startCommsTask
+ 176 00a8 00000000 		.word	commsTaskHandle
+ 177 00ac 00000000 		.word	Error_attributes
+ 178 00b0 00000000 		.word	ErrorHandle
+ 179              		.cfi_endproc
+ 180              	.LFE243:
+ 182              		.global	Error_attributes
+ 183              		.section	.rodata.str1.4,"aMS",%progbits,1
+ 184              		.align	2
+ 185              	.LC0:
+ 186 0000 4572726F 		.ascii	"Error\000"
+ 186      7200
+ 187              		.section	.rodata.Error_attributes,"a"
+ 188              		.align	2
+ 191              	Error_attributes:
+ 192 0000 00000000 		.word	.LC0
+ 193 0004 00000000 		.space	4
+ 194 0008 00000000 		.word	ErrorControlBlock
+ 195 000c 20000000 		.word	32
+ 196              		.global	ErrorControlBlock
+ 197              		.section	.bss.ErrorControlBlock,"aw",%nobits
+ 198              		.align	2
+ 201              	ErrorControlBlock:
+ 202 0000 00000000 		.space	32
+ 202      00000000 
+ 202      00000000 
+ 202      00000000 
+ 202      00000000 
+ 203              		.global	ErrorHandle
+ 204              		.section	.bss.ErrorHandle,"aw",%nobits
+ 205              		.align	2
+ 208              	ErrorHandle:
+ 209 0000 00000000 		.space	4
+ 210              		.global	heartbeat_timer_attributes
+ 211              		.section	.rodata.str1.4
+ 212 0006 0000     		.align	2
+ 213              	.LC1:
+ 214 0008 68656172 		.ascii	"heartbeat_timer\000"
+ 214      74626561 
+ 214      745F7469 
+ 214      6D657200 
+ 215              		.section	.rodata.heartbeat_timer_attributes,"a"
+ 216              		.align	2
+ 219              	heartbeat_timer_attributes:
+ 220 0000 08000000 		.word	.LC1
+ 221 0004 00000000 		.space	4
+ 222 0008 00000000 		.word	heartbeat_timerControlBlock
+ARM GAS  /tmp/ccQLQTAc.s 			page 9
+
+
+ 223 000c 2C000000 		.word	44
+ 224              		.global	heartbeat_timerControlBlock
+ 225              		.section	.bss.heartbeat_timerControlBlock,"aw",%nobits
+ 226              		.align	2
+ 229              	heartbeat_timerControlBlock:
+ 230 0000 00000000 		.space	44
+ 230      00000000 
+ 230      00000000 
+ 230      00000000 
+ 230      00000000 
+ 231              		.global	heartbeat_timerHandle
+ 232              		.section	.bss.heartbeat_timerHandle,"aw",%nobits
+ 233              		.align	2
+ 236              	heartbeat_timerHandle:
+ 237 0000 00000000 		.space	4
+ 238              		.global	status_timer_attributes
+ 239              		.section	.rodata.str1.4
+ 240              		.align	2
+ 241              	.LC2:
+ 242 0018 73746174 		.ascii	"status_timer\000"
+ 242      75735F74 
+ 242      696D6572 
+ 242      00
+ 243              		.section	.rodata.status_timer_attributes,"a"
+ 244              		.align	2
+ 247              	status_timer_attributes:
+ 248 0000 18000000 		.word	.LC2
+ 249 0004 00000000 		.space	4
+ 250 0008 00000000 		.word	StatusTimerControlBlock
+ 251 000c 2C000000 		.word	44
+ 252              		.global	StatusTimerControlBlock
+ 253              		.section	.bss.StatusTimerControlBlock,"aw",%nobits
+ 254              		.align	2
+ 257              	StatusTimerControlBlock:
+ 258 0000 00000000 		.space	44
+ 258      00000000 
+ 258      00000000 
+ 258      00000000 
+ 258      00000000 
+ 259              		.global	status_timerHandle
+ 260              		.section	.bss.status_timerHandle,"aw",%nobits
+ 261              		.align	2
+ 264              	status_timerHandle:
+ 265 0000 00000000 		.space	4
+ 266              		.global	commsTxMessageQueue_attributes
+ 267              		.section	.rodata.str1.4
+ 268 0025 000000   		.align	2
+ 269              	.LC3:
+ 270 0028 636F6D6D 		.ascii	"commsTxMessageQueue\000"
+ 270      7354784D 
+ 270      65737361 
+ 270      67655175 
+ 270      65756500 
+ 271              		.section	.rodata.commsTxMessageQueue_attributes,"a"
+ 272              		.align	2
+ 275              	commsTxMessageQueue_attributes:
+ 276 0000 28000000 		.word	.LC3
+ARM GAS  /tmp/ccQLQTAc.s 			page 10
+
+
+ 277 0004 00000000 		.space	4
+ 278 0008 00000000 		.word	commstxControlBlock
+ 279 000c 50000000 		.word	80
+ 280 0010 00000000 		.word	commsTxMessageBuffer
+ 281 0014 80110000 		.word	4480
+ 282              		.global	commstxControlBlock
+ 283              		.section	.bss.commstxControlBlock,"aw",%nobits
+ 284              		.align	2
+ 287              	commstxControlBlock:
+ 288 0000 00000000 		.space	80
+ 288      00000000 
+ 288      00000000 
+ 288      00000000 
+ 288      00000000 
+ 289              		.global	commsTxMessageBuffer
+ 290              		.section	.bss.commsTxMessageBuffer,"aw",%nobits
+ 291              		.align	2
+ 294              	commsTxMessageBuffer:
+ 295 0000 00000000 		.space	4480
+ 295      00000000 
+ 295      00000000 
+ 295      00000000 
+ 295      00000000 
+ 296              		.global	commsTxMessageQueueHandle
+ 297              		.section	.bss.commsTxMessageQueueHandle,"aw",%nobits
+ 298              		.align	2
+ 301              	commsTxMessageQueueHandle:
+ 302 0000 00000000 		.space	4
+ 303              		.global	commsTask_attributes
+ 304              		.section	.rodata.str1.4
+ 305              		.align	2
+ 306              	.LC4:
+ 307 003c 636F6D6D 		.ascii	"commsTask\000"
+ 307      73546173 
+ 307      6B00
+ 308              		.section	.rodata.commsTask_attributes,"a"
+ 309              		.align	2
+ 312              	commsTask_attributes:
+ 313 0000 3C000000 		.word	.LC4
+ 314 0004 00000000 		.space	4
+ 315 0008 00000000 		.word	commsTaskControlBlock
+ 316 000c 5C000000 		.word	92
+ 317 0010 00000000 		.word	commsTaskBuffer
+ 318 0014 00020000 		.word	512
+ 319 0018 18000000 		.word	24
+ 320 001c 00000000 		.space	8
+ 320      00000000 
+ 321              		.global	commsTaskControlBlock
+ 322              		.section	.bss.commsTaskControlBlock,"aw",%nobits
+ 323              		.align	2
+ 326              	commsTaskControlBlock:
+ 327 0000 00000000 		.space	92
+ 327      00000000 
+ 327      00000000 
+ 327      00000000 
+ 327      00000000 
+ 328              		.global	commsTaskBuffer
+ARM GAS  /tmp/ccQLQTAc.s 			page 11
+
+
+ 329              		.section	.bss.commsTaskBuffer,"aw",%nobits
+ 330              		.align	2
+ 333              	commsTaskBuffer:
+ 334 0000 00000000 		.space	512
+ 334      00000000 
+ 334      00000000 
+ 334      00000000 
+ 334      00000000 
+ 335              		.global	commsTaskHandle
+ 336              		.section	.bss.commsTaskHandle,"aw",%nobits
+ 337              		.align	2
+ 340              	commsTaskHandle:
+ 341 0000 00000000 		.space	4
+ 342              		.global	logTask_attributes
+ 343              		.section	.rodata.str1.4
+ 344 0046 0000     		.align	2
+ 345              	.LC5:
+ 346 0048 6C6F6754 		.ascii	"logTask\000"
+ 346      61736B00 
+ 347              		.section	.rodata.logTask_attributes,"a"
+ 348              		.align	2
+ 351              	logTask_attributes:
+ 352 0000 48000000 		.word	.LC5
+ 353 0004 00000000 		.space	4
+ 354 0008 00000000 		.word	logTaskControlBlock
+ 355 000c 5C000000 		.word	92
+ 356 0010 00000000 		.word	logTaskBuffer
+ 357 0014 00040000 		.word	1024
+ 358 0018 18000000 		.word	24
+ 359 001c 00000000 		.space	8
+ 359      00000000 
+ 360              		.global	logTaskControlBlock
+ 361              		.section	.bss.logTaskControlBlock,"aw",%nobits
+ 362              		.align	2
+ 365              	logTaskControlBlock:
+ 366 0000 00000000 		.space	92
+ 366      00000000 
+ 366      00000000 
+ 366      00000000 
+ 366      00000000 
+ 367              		.global	logTaskBuffer
+ 368              		.section	.bss.logTaskBuffer,"aw",%nobits
+ 369              		.align	2
+ 372              	logTaskBuffer:
+ 373 0000 00000000 		.space	1024
+ 373      00000000 
+ 373      00000000 
+ 373      00000000 
+ 373      00000000 
+ 374              		.global	logTaskHandle
+ 375              		.section	.bss.logTaskHandle,"aw",%nobits
+ 376              		.align	2
+ 379              	logTaskHandle:
+ 380 0000 00000000 		.space	4
+ 381              		.global	defaultTask_attributes
+ 382              		.section	.rodata.str1.4
+ 383              		.align	2
+ARM GAS  /tmp/ccQLQTAc.s 			page 12
+
+
+ 384              	.LC6:
+ 385 0050 64656661 		.ascii	"defaultTask\000"
+ 385      756C7454 
+ 385      61736B00 
+ 386              		.section	.rodata.defaultTask_attributes,"a"
+ 387              		.align	2
+ 390              	defaultTask_attributes:
+ 391 0000 50000000 		.word	.LC6
+ 392 0004 00000000 		.space	16
+ 392      00000000 
+ 392      00000000 
+ 392      00000000 
+ 393 0014 00020000 		.word	512
+ 394 0018 18000000 		.word	24
+ 395 001c 00000000 		.space	8
+ 395      00000000 
+ 396              		.global	defaultTaskHandle
+ 397              		.section	.bss.defaultTaskHandle,"aw",%nobits
+ 398              		.align	2
+ 401              	defaultTaskHandle:
+ 402 0000 00000000 		.space	4
+ 403              		.text
+ 404              	.Letext0:
+ 405              		.file 2 "/opt/st/stm32cubeclt_1.17.0/GNU-tools-for-STM32/arm-none-eabi/include/machine/_default_ty
+ 406              		.file 3 "/opt/st/stm32cubeclt_1.17.0/GNU-tools-for-STM32/arm-none-eabi/include/sys/_stdint.h"
+ 407              		.file 4 "Middlewares/Third_Party/FreeRTOS/Source/include/projdefs.h"
+ 408              		.file 5 "Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/portmacro.h"
+ 409              		.file 6 "Middlewares/Third_Party/FreeRTOS/Source/include/FreeRTOS.h"
+ 410              		.file 7 "Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f405xx.h"
+ 411              		.file 8 "Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.h"
+ 412              		.file 9 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_gpio.h"
+ 413              		.file 10 "Core/Inc/status.h"
+ARM GAS  /tmp/ccQLQTAc.s 			page 13
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 freertos.c
+     /tmp/ccQLQTAc.s:21     .text.StartDefaultTask:00000000 $t
+     /tmp/ccQLQTAc.s:27     .text.StartDefaultTask:00000000 StartDefaultTask
+     /tmp/ccQLQTAc.s:63     .text.StartDefaultTask:00000020 $d
+     /tmp/ccQLQTAc.s:68     .text.MX_FREERTOS_Init:00000000 $t
+     /tmp/ccQLQTAc.s:74     .text.MX_FREERTOS_Init:00000000 MX_FREERTOS_Init
+     /tmp/ccQLQTAc.s:160    .text.MX_FREERTOS_Init:00000068 $d
+     /tmp/ccQLQTAc.s:247    .rodata.status_timer_attributes:00000000 status_timer_attributes
+     /tmp/ccQLQTAc.s:264    .bss.status_timerHandle:00000000 status_timerHandle
+     /tmp/ccQLQTAc.s:219    .rodata.heartbeat_timer_attributes:00000000 heartbeat_timer_attributes
+     /tmp/ccQLQTAc.s:236    .bss.heartbeat_timerHandle:00000000 heartbeat_timerHandle
+     /tmp/ccQLQTAc.s:275    .rodata.commsTxMessageQueue_attributes:00000000 commsTxMessageQueue_attributes
+     /tmp/ccQLQTAc.s:301    .bss.commsTxMessageQueueHandle:00000000 commsTxMessageQueueHandle
+     /tmp/ccQLQTAc.s:390    .rodata.defaultTask_attributes:00000000 defaultTask_attributes
+     /tmp/ccQLQTAc.s:401    .bss.defaultTaskHandle:00000000 defaultTaskHandle
+     /tmp/ccQLQTAc.s:351    .rodata.logTask_attributes:00000000 logTask_attributes
+     /tmp/ccQLQTAc.s:379    .bss.logTaskHandle:00000000 logTaskHandle
+     /tmp/ccQLQTAc.s:312    .rodata.commsTask_attributes:00000000 commsTask_attributes
+     /tmp/ccQLQTAc.s:340    .bss.commsTaskHandle:00000000 commsTaskHandle
+     /tmp/ccQLQTAc.s:191    .rodata.Error_attributes:00000000 Error_attributes
+     /tmp/ccQLQTAc.s:208    .bss.ErrorHandle:00000000 ErrorHandle
+     /tmp/ccQLQTAc.s:184    .rodata.str1.4:00000000 $d
+     /tmp/ccQLQTAc.s:188    .rodata.Error_attributes:00000000 $d
+     /tmp/ccQLQTAc.s:201    .bss.ErrorControlBlock:00000000 ErrorControlBlock
+     /tmp/ccQLQTAc.s:198    .bss.ErrorControlBlock:00000000 $d
+     /tmp/ccQLQTAc.s:205    .bss.ErrorHandle:00000000 $d
+     /tmp/ccQLQTAc.s:216    .rodata.heartbeat_timer_attributes:00000000 $d
+     /tmp/ccQLQTAc.s:229    .bss.heartbeat_timerControlBlock:00000000 heartbeat_timerControlBlock
+     /tmp/ccQLQTAc.s:226    .bss.heartbeat_timerControlBlock:00000000 $d
+     /tmp/ccQLQTAc.s:233    .bss.heartbeat_timerHandle:00000000 $d
+     /tmp/ccQLQTAc.s:244    .rodata.status_timer_attributes:00000000 $d
+     /tmp/ccQLQTAc.s:257    .bss.StatusTimerControlBlock:00000000 StatusTimerControlBlock
+     /tmp/ccQLQTAc.s:254    .bss.StatusTimerControlBlock:00000000 $d
+     /tmp/ccQLQTAc.s:261    .bss.status_timerHandle:00000000 $d
+     /tmp/ccQLQTAc.s:272    .rodata.commsTxMessageQueue_attributes:00000000 $d
+     /tmp/ccQLQTAc.s:287    .bss.commstxControlBlock:00000000 commstxControlBlock
+     /tmp/ccQLQTAc.s:294    .bss.commsTxMessageBuffer:00000000 commsTxMessageBuffer
+     /tmp/ccQLQTAc.s:284    .bss.commstxControlBlock:00000000 $d
+     /tmp/ccQLQTAc.s:291    .bss.commsTxMessageBuffer:00000000 $d
+     /tmp/ccQLQTAc.s:298    .bss.commsTxMessageQueueHandle:00000000 $d
+     /tmp/ccQLQTAc.s:309    .rodata.commsTask_attributes:00000000 $d
+     /tmp/ccQLQTAc.s:326    .bss.commsTaskControlBlock:00000000 commsTaskControlBlock
+     /tmp/ccQLQTAc.s:333    .bss.commsTaskBuffer:00000000 commsTaskBuffer
+     /tmp/ccQLQTAc.s:323    .bss.commsTaskControlBlock:00000000 $d
+     /tmp/ccQLQTAc.s:330    .bss.commsTaskBuffer:00000000 $d
+     /tmp/ccQLQTAc.s:337    .bss.commsTaskHandle:00000000 $d
+     /tmp/ccQLQTAc.s:348    .rodata.logTask_attributes:00000000 $d
+     /tmp/ccQLQTAc.s:365    .bss.logTaskControlBlock:00000000 logTaskControlBlock
+     /tmp/ccQLQTAc.s:372    .bss.logTaskBuffer:00000000 logTaskBuffer
+     /tmp/ccQLQTAc.s:362    .bss.logTaskControlBlock:00000000 $d
+     /tmp/ccQLQTAc.s:369    .bss.logTaskBuffer:00000000 $d
+     /tmp/ccQLQTAc.s:376    .bss.logTaskHandle:00000000 $d
+     /tmp/ccQLQTAc.s:387    .rodata.defaultTask_attributes:00000000 $d
+     /tmp/ccQLQTAc.s:398    .bss.defaultTaskHandle:00000000 $d
+
+UNDEFINED SYMBOLS
+ARM GAS  /tmp/ccQLQTAc.s 			page 14
+
+
+status_set_error
+osDelay
+status_set_armed
+HAL_GPIO_TogglePin
+osTimerNew
+osMessageQueueNew
+osThreadNew
+osEventFlagsNew
+status_timer_callback
+heartbeat_timer_callback
+startLogTask
+startCommsTask
