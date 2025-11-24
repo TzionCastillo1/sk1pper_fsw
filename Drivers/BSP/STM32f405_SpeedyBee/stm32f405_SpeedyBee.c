@@ -1,4 +1,4 @@
-#include "stm32f4xx_nucleo.h"
+#include "stm32f4xx_SpeedyBee.h"
 
 /**
  * @defgroup STM32F4XX_NUCLEO_Private_Variables
@@ -8,10 +8,7 @@
 
 GPIO_TypeDef *GPIO_PORT[LEDn] = {LED2_GPIO_PORT};
 const uint16_t GPIO_PIN[LEDn] = {LED2_PIN};
-/**
- * @} 
- * 
- */
+
 
 /** @defgroup LED Functions
  * @{
@@ -97,4 +94,3 @@ void BSP_LED_Toggle(Led_t Led)
 {
     HAL_GPIO_TogglePin(GPIO_PORT[Led], GPIO_PIN[Led]);
 }
-

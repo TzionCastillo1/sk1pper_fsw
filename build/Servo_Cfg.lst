@@ -1,0 +1,92 @@
+ARM GAS  /tmp/cciUriYb.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 6
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"Servo_Cfg.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.file 1 "Drivers/BSP/Components/Servo/Servo_Cfg.c"
+  20              		.global	SERVO_0
+  21              		.section	.data.SERVO_0,"aw"
+  22              		.align	2
+  25              	SERVO_0:
+  26 0000 00000000 		.word	PPM_Channel_0
+  27 0004 6666263F 		.word	1059481190
+  28 0008 9A99993E 		.word	1050253722
+  29 000c 00003443 		.word	1127481344
+  30 0010 00000000 		.word	0
+  31              		.global	SERVO_1
+  32              		.section	.data.SERVO_1,"aw"
+  33              		.align	2
+  36              	SERVO_1:
+  37 0000 00000000 		.word	PPM_Channel_1
+  38 0004 6666263F 		.word	1059481190
+  39 0008 9A99993E 		.word	1050253722
+  40 000c 00003443 		.word	1127481344
+  41 0010 00000000 		.word	0
+  42              		.global	SERVO_2
+  43              		.section	.data.SERVO_2,"aw"
+  44              		.align	2
+  47              	SERVO_2:
+  48 0000 00000000 		.word	PPM_Channel_2
+  49 0004 6666263F 		.word	1059481190
+  50 0008 9A99993E 		.word	1050253722
+  51 000c 00003443 		.word	1127481344
+  52 0010 00000000 		.word	0
+  53              		.global	SERVO_3
+  54              		.section	.data.SERVO_3,"aw"
+  55              		.align	2
+  58              	SERVO_3:
+  59 0000 00000000 		.word	PPM_Channel_3
+  60 0004 6666263F 		.word	1059481190
+  61 0008 9A99993E 		.word	1050253722
+  62 000c 00003443 		.word	1127481344
+  63 0010 00000000 		.word	0
+  64              		.text
+  65              	.Letext0:
+ARM GAS  /tmp/cciUriYb.s 			page 2
+
+
+  66              		.file 2 "/opt/st/stm32cubeclt_1.17.0/GNU-tools-for-STM32/arm-none-eabi/include/machine/_default_ty
+  67              		.file 3 "/opt/st/stm32cubeclt_1.17.0/GNU-tools-for-STM32/arm-none-eabi/include/sys/_stdint.h"
+  68              		.file 4 "Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f405xx.h"
+  69              		.file 5 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_def.h"
+  70              		.file 6 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma.h"
+  71              		.file 7 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h"
+  72              		.file 8 "Drivers/BSP/Components/Servo/PPM.h"
+  73              		.file 9 "Drivers/BSP/Components/Servo/Servo.h"
+  74              		.file 10 "Drivers/BSP/Components/Servo/Servo_Cfg.h"
+  75              		.file 11 "Drivers/BSP/Components/Servo/PPM_Cfg.h"
+ARM GAS  /tmp/cciUriYb.s 			page 3
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 Servo_Cfg.c
+     /tmp/cciUriYb.s:25     .data.SERVO_0:00000000 SERVO_0
+     /tmp/cciUriYb.s:22     .data.SERVO_0:00000000 $d
+     /tmp/cciUriYb.s:36     .data.SERVO_1:00000000 SERVO_1
+     /tmp/cciUriYb.s:33     .data.SERVO_1:00000000 $d
+     /tmp/cciUriYb.s:47     .data.SERVO_2:00000000 SERVO_2
+     /tmp/cciUriYb.s:44     .data.SERVO_2:00000000 $d
+     /tmp/cciUriYb.s:58     .data.SERVO_3:00000000 SERVO_3
+     /tmp/cciUriYb.s:55     .data.SERVO_3:00000000 $d
+
+UNDEFINED SYMBOLS
+PPM_Channel_0
+PPM_Channel_1
+PPM_Channel_2
+PPM_Channel_3

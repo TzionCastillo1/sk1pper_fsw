@@ -48,7 +48,7 @@ SPI_HandleTypeDef hspi1;
 
 TIM_HandleTypeDef htim1;
 TIM_HandleTypeDef htim2;
-TIM_HandleTypeDef htim3;
+//TIM_HandleTypeDef htim3;
 TIM_HandleTypeDef htim8;
 
 UART_HandleTypeDef huart4;
@@ -122,7 +122,7 @@ int main(void)
   MX_SPI1_Init();
   MX_TIM1_Init();
   MX_TIM2_Init();
-  MX_TIM3_Init();
+  //MX_TIM3_Init();
   //MX_TIM4_Init();
   MX_TIM8_Init();
   MX_UART4_Init();
@@ -133,7 +133,14 @@ int main(void)
   MX_USART6_UART_Init();
   /* USER CODE BEGIN 2 */
   BSP_LED_Init(LED2);
-  BSP_Servo_Init(SERVO0);
+  //SERVO_Init(&SERVO_0); 
+  //SERVO_Start(&SERVO_0);
+  SERVO_Init(&SERVO_1); 
+  SERVO_Start(&SERVO_1);
+  SERVO_Init(&SERVO_2); 
+  SERVO_Start(&SERVO_2);
+  SERVO_Init(&SERVO_3); 
+  SERVO_Start(&SERVO_3);
   
 
   /* USER CODE END 2 */
@@ -144,13 +151,13 @@ int main(void)
   {
     /* USER CODE END WHILE */
     BSP_LED_Toggle(LED2);
-    BSP_Servo_Center(SERVO0);
-    HAL_Delay(500);
-    BSP_Servo_Max(SERVO0);
+    SERVO_Test();
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
 }
+
+
 
 /**
   * @brief System Clock Configuration
@@ -473,20 +480,22 @@ static void MX_TIM2_Init(void)
   * @param None
   * @retval None
   */
+
+/*
 static void MX_TIM3_Init(void)
 {
 
-  /* USER CODE BEGIN TIM3_Init 0 */
+  // /* USER CODE BEGIN TIM3_Init 0 
 
-  /* USER CODE END TIM3_Init 0 */
+  // /* USER CODE END TIM3_Init 0 
 
   TIM_ClockConfigTypeDef sClockSourceConfig = {0};
   TIM_MasterConfigTypeDef sMasterConfig = {0};
   TIM_OC_InitTypeDef sConfigOC = {0};
 
-  /* USER CODE BEGIN TIM3_Init 1 */
+  // /* USER CODE BEGIN TIM3_Init 1 
 
-  /* USER CODE END TIM3_Init 1 */
+  // /* USER CODE END TIM3_Init 1 
   htim3.Instance = TIM3;
   htim3.Init.Prescaler = 0;
   htim3.Init.CounterMode = TIM_COUNTERMODE_UP;
@@ -524,13 +533,13 @@ static void MX_TIM3_Init(void)
   {
     Error_Handler();
   }
-  /* USER CODE BEGIN TIM3_Init 2 */
+  // /* USER CODE BEGIN TIM3_Init 2 
 
-  /* USER CODE END TIM3_Init 2 */
+  // /* USER CODE END TIM3_Init 2 
   HAL_TIM_MspPostInit(&htim3);
 
 }
-
+*/
 
 /**
   * @brief TIM4 Initialization Function
@@ -911,6 +920,48 @@ static void MX_GPIO_Init(void)
 
 /* USER CODE BEGIN 4 */
 
+/** Test Functions */
+
+int SERVO_Test()
+{
+    SERVO_ToMax(&SERVO_0);
+    HAL_Delay(500);
+    SERVO_ToMin(&SERVO_0);
+    HAL_Delay(500);
+    SERVO_ToCenter(&SERVO_0);
+
+    SERVO_ToMax(&SERVO_1);
+    HAL_Delay(500);
+    SERVO_ToMin(&SERVO_1);
+    HAL_Delay(500);
+    SERVO_ToCenter(&SERVO_1);
+
+    SERVO_ToMax(&SERVO_2);
+    HAL_Delay(500);
+    SERVO_ToMin(&SERVO_2);
+    HAL_Delay(500);
+    SERVO_ToCenter(&SERVO_2);
+
+    SERVO_ToMax(&SERVO_3);
+    HAL_Delay(500);
+    SERVO_ToMin(&SERVO_3);
+    HAL_Delay(500);
+    SERVO_ToCenter(&SERVO_3);
+}
+
+/**
+ * @brief Power On Self Test. Testing devices, not protocols 
+ * 
+ * @return int 
+ */
+int POST()
+{
+  //  SERVO_POST();
+}
+
+
+
+/** End Test Functions */
 /* USER CODE END 4 */
 
 /**

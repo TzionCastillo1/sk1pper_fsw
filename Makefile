@@ -22,7 +22,7 @@ TARGET = sk1pper_fsw
 # debug build?
 DEBUG = 1
 # optimization
-OPT = -Og
+OPT = -O0
 
 
 #######################################
@@ -62,9 +62,16 @@ Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim.c \
 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_tim_ex.c \
 Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.c \
 Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c \
+Drivers/BSP/Components/Servo/PPM_Cfg.c \
+Drivers/BSP/Components/Servo/PPM.c \
+Drivers/BSP/Components/Servo/Servo.c \
+Drivers/BSP/Components/Servo/Servo_Cfg.c \
 Core/Src/system_stm32f4xx.c \
 Core/Src/sysmem.c \
 Core/Src/syscalls.c  
+
+#C_Sources += \ 
+#Drivers/BSP/STM32f405_SpeedyBee/stm32f405_SpeedyBee.c 
 
 # ASM sources
 ASM_SOURCES =  \
@@ -129,8 +136,11 @@ C_INCLUDES =  \
 -IDrivers/STM32F4xx_HAL_Driver/Inc/Legacy \
 -IDrivers/CMSIS/Device/ST/STM32F4xx/Include \
 -IDrivers/CMSIS/Include \
--IDrivers/BSP/STM32f446_Nucleo 
+-IDrivers/BSP/STM32f446_Nucleo \
+-IDrivers/BSP/Components/Servo
 
+#C_INCLUDES += \
+#-IDrivers/BSP/STM32f405_SpeedyBee \
 
 # compile gcc flags
 ASFLAGS = $(MCU) $(AS_DEFS) $(AS_INCLUDES) $(OPT) -Wall -fdata-sections -ffunction-sections

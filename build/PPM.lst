@@ -1,0 +1,701 @@
+ARM GAS  /tmp/ccrGn01r.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 6
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"PPM.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.file 1 "Drivers/BSP/Components/Servo/PPM.c"
+  20              		.section	.text.PPM_Init,"ax",%progbits
+  21              		.align	1
+  22              		.global	PPM_Init
+  23              		.syntax unified
+  24              		.thumb
+  25              		.thumb_func
+  27              	PPM_Init:
+  28              	.LFB239:
+   1:Drivers/BSP/Components/Servo/PPM.c **** #include "PPM.h"
+   2:Drivers/BSP/Components/Servo/PPM.c **** #include "PPM_Cfg.h"
+   3:Drivers/BSP/Components/Servo/PPM.c **** 
+   4:Drivers/BSP/Components/Servo/PPM.c **** 
+   5:Drivers/BSP/Components/Servo/PPM.c **** /**
+   6:Drivers/BSP/Components/Servo/PPM.c ****  * TODO: Add Error checking/ return values 
+   7:Drivers/BSP/Components/Servo/PPM.c ****  * 
+   8:Drivers/BSP/Components/Servo/PPM.c ****  */
+   9:Drivers/BSP/Components/Servo/PPM.c **** 
+  10:Drivers/BSP/Components/Servo/PPM.c **** uint32_t PPM_MillisecondsToTicks(float Milliseconds);
+  11:Drivers/BSP/Components/Servo/PPM.c **** 
+  12:Drivers/BSP/Components/Servo/PPM.c **** /**
+  13:Drivers/BSP/Components/Servo/PPM.c ****  * @brief Configure Servo PPM
+  14:Drivers/BSP/Components/Servo/PPM.c ****  * 
+  15:Drivers/BSP/Components/Servo/PPM.c ****  * @param me: PPM to be initialized.
+  16:Drivers/BSP/Components/Servo/PPM.c ****  * 
+  17:Drivers/BSP/Components/Servo/PPM.c ****  * @retval None
+  18:Drivers/BSP/Components/Servo/PPM.c ****  */
+  19:Drivers/BSP/Components/Servo/PPM.c **** void PPM_Init(PPM_t *PPM_Channel)
+  20:Drivers/BSP/Components/Servo/PPM.c **** {
+  29              		.loc 1 20 1
+  30              		.cfi_startproc
+  31              		@ args = 0, pretend = 0, frame = 64
+  32              		@ frame_needed = 1, uses_anonymous_args = 0
+  33 0000 80B5     		push	{r7, lr}
+  34              	.LCFI0:
+  35              		.cfi_def_cfa_offset 8
+  36              		.cfi_offset 7, -8
+  37              		.cfi_offset 14, -4
+  38 0002 90B0     		sub	sp, sp, #64
+ARM GAS  /tmp/ccrGn01r.s 			page 2
+
+
+  39              	.LCFI1:
+  40              		.cfi_def_cfa_offset 72
+  41 0004 00AF     		add	r7, sp, #0
+  42              	.LCFI2:
+  43              		.cfi_def_cfa_register 7
+  44 0006 7860     		str	r0, [r7, #4]
+  21:Drivers/BSP/Components/Servo/PPM.c ****     /* USER CODE BEGIN TIM4_Init 0 */
+  22:Drivers/BSP/Components/Servo/PPM.c **** 
+  23:Drivers/BSP/Components/Servo/PPM.c ****     /* USER CODE END TIM4_Init 0 */
+  24:Drivers/BSP/Components/Servo/PPM.c **** 
+  25:Drivers/BSP/Components/Servo/PPM.c ****     TIM_ClockConfigTypeDef sClockSourceConfig = {0};
+  45              		.loc 1 25 28
+  46 0008 07F13003 		add	r3, r7, #48
+  47 000c 0022     		movs	r2, #0
+  48 000e 1A60     		str	r2, [r3]
+  49 0010 5A60     		str	r2, [r3, #4]
+  50 0012 9A60     		str	r2, [r3, #8]
+  51 0014 DA60     		str	r2, [r3, #12]
+  26:Drivers/BSP/Components/Servo/PPM.c ****     TIM_MasterConfigTypeDef sMasterConfig = {0};
+  52              		.loc 1 26 29
+  53 0016 07F12803 		add	r3, r7, #40
+  54 001a 0022     		movs	r2, #0
+  55 001c 1A60     		str	r2, [r3]
+  56 001e 5A60     		str	r2, [r3, #4]
+  27:Drivers/BSP/Components/Servo/PPM.c ****     TIM_OC_InitTypeDef sConfigOC = {0};
+  57              		.loc 1 27 24
+  58 0020 07F10C03 		add	r3, r7, #12
+  59 0024 0022     		movs	r2, #0
+  60 0026 1A60     		str	r2, [r3]
+  61 0028 5A60     		str	r2, [r3, #4]
+  62 002a 9A60     		str	r2, [r3, #8]
+  63 002c DA60     		str	r2, [r3, #12]
+  64 002e 1A61     		str	r2, [r3, #16]
+  65 0030 5A61     		str	r2, [r3, #20]
+  66 0032 9A61     		str	r2, [r3, #24]
+  28:Drivers/BSP/Components/Servo/PPM.c **** 
+  29:Drivers/BSP/Components/Servo/PPM.c ****     /* USER CODE BEGIN TIM4_Init 1 */
+  30:Drivers/BSP/Components/Servo/PPM.c **** 
+  31:Drivers/BSP/Components/Servo/PPM.c ****     /* USER CODE END TIM4_Init 1 */
+  32:Drivers/BSP/Components/Servo/PPM.c ****     //me->htimx->Instance = me->TIMx;
+  33:Drivers/BSP/Components/Servo/PPM.c ****     PPM_Channel->htimx->Init.Prescaler = 200;
+  67              		.loc 1 33 16
+  68 0034 7B68     		ldr	r3, [r7, #4]
+  69 0036 1B68     		ldr	r3, [r3]
+  70              		.loc 1 33 40
+  71 0038 C822     		movs	r2, #200
+  72 003a 5A60     		str	r2, [r3, #4]
+  34:Drivers/BSP/Components/Servo/PPM.c ****     PPM_Channel->htimx->Init.CounterMode = TIM_COUNTERMODE_UP;
+  73              		.loc 1 34 16
+  74 003c 7B68     		ldr	r3, [r7, #4]
+  75 003e 1B68     		ldr	r3, [r3]
+  76              		.loc 1 34 42
+  77 0040 0022     		movs	r2, #0
+  78 0042 9A60     		str	r2, [r3, #8]
+  35:Drivers/BSP/Components/Servo/PPM.c ****     PPM_Channel->htimx->Init.Period = 16000;
+  79              		.loc 1 35 16
+  80 0044 7B68     		ldr	r3, [r7, #4]
+ARM GAS  /tmp/ccrGn01r.s 			page 3
+
+
+  81 0046 1B68     		ldr	r3, [r3]
+  82              		.loc 1 35 37
+  83 0048 4FF47A52 		mov	r2, #16000
+  84 004c DA60     		str	r2, [r3, #12]
+  36:Drivers/BSP/Components/Servo/PPM.c ****     PPM_Channel->htimx->Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  85              		.loc 1 36 16
+  86 004e 7B68     		ldr	r3, [r7, #4]
+  87 0050 1B68     		ldr	r3, [r3]
+  88              		.loc 1 36 44
+  89 0052 0022     		movs	r2, #0
+  90 0054 1A61     		str	r2, [r3, #16]
+  37:Drivers/BSP/Components/Servo/PPM.c ****     PPM_Channel->htimx->Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  91              		.loc 1 37 16
+  92 0056 7B68     		ldr	r3, [r7, #4]
+  93 0058 1B68     		ldr	r3, [r3]
+  94              		.loc 1 37 48
+  95 005a 0022     		movs	r2, #0
+  96 005c 9A61     		str	r2, [r3, #24]
+  38:Drivers/BSP/Components/Servo/PPM.c ****     if (HAL_TIM_Base_Init(PPM_Channel->htimx) != HAL_OK)
+  97              		.loc 1 38 9
+  98 005e 7B68     		ldr	r3, [r7, #4]
+  99 0060 1B68     		ldr	r3, [r3]
+ 100 0062 1846     		mov	r0, r3
+ 101 0064 FFF7FEFF 		bl	HAL_TIM_Base_Init
+ 102 0068 0346     		mov	r3, r0
+ 103              		.loc 1 38 8
+ 104 006a 002B     		cmp	r3, #0
+ 105 006c 01D0     		beq	.L2
+ 106              	.LBB2:
+  39:Drivers/BSP/Components/Servo/PPM.c ****     {
+  40:Drivers/BSP/Components/Servo/PPM.c ****         Error_Handler();
+ 107              		.loc 1 40 9
+ 108 006e FFF7FEFF 		bl	Error_Handler
+ 109              	.L2:
+ 110              	.LBE2:
+  41:Drivers/BSP/Components/Servo/PPM.c ****     }
+  42:Drivers/BSP/Components/Servo/PPM.c ****     sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
+ 111              		.loc 1 42 36
+ 112 0072 4FF48053 		mov	r3, #4096
+ 113 0076 3B63     		str	r3, [r7, #48]
+  43:Drivers/BSP/Components/Servo/PPM.c ****     if (HAL_TIM_ConfigClockSource(PPM_Channel->htimx, &sClockSourceConfig) != HAL_OK)
+ 114              		.loc 1 43 9
+ 115 0078 7B68     		ldr	r3, [r7, #4]
+ 116 007a 1B68     		ldr	r3, [r3]
+ 117 007c 07F13002 		add	r2, r7, #48
+ 118 0080 1146     		mov	r1, r2
+ 119 0082 1846     		mov	r0, r3
+ 120 0084 FFF7FEFF 		bl	HAL_TIM_ConfigClockSource
+ 121 0088 0346     		mov	r3, r0
+ 122              		.loc 1 43 8
+ 123 008a 002B     		cmp	r3, #0
+ 124 008c 01D0     		beq	.L3
+ 125              	.LBB3:
+  44:Drivers/BSP/Components/Servo/PPM.c ****     {
+  45:Drivers/BSP/Components/Servo/PPM.c ****         Error_Handler();
+ 126              		.loc 1 45 9
+ 127 008e FFF7FEFF 		bl	Error_Handler
+ARM GAS  /tmp/ccrGn01r.s 			page 4
+
+
+ 128              	.L3:
+ 129              	.LBE3:
+  46:Drivers/BSP/Components/Servo/PPM.c ****     }
+  47:Drivers/BSP/Components/Servo/PPM.c ****     if (HAL_TIM_PWM_Init(PPM_Channel->htimx) != HAL_OK)
+ 130              		.loc 1 47 9
+ 131 0092 7B68     		ldr	r3, [r7, #4]
+ 132 0094 1B68     		ldr	r3, [r3]
+ 133 0096 1846     		mov	r0, r3
+ 134 0098 FFF7FEFF 		bl	HAL_TIM_PWM_Init
+ 135 009c 0346     		mov	r3, r0
+ 136              		.loc 1 47 8
+ 137 009e 002B     		cmp	r3, #0
+ 138 00a0 01D0     		beq	.L4
+ 139              	.LBB4:
+  48:Drivers/BSP/Components/Servo/PPM.c ****     {
+  49:Drivers/BSP/Components/Servo/PPM.c ****         Error_Handler();
+ 140              		.loc 1 49 9
+ 141 00a2 FFF7FEFF 		bl	Error_Handler
+ 142              	.L4:
+ 143              	.LBE4:
+  50:Drivers/BSP/Components/Servo/PPM.c ****     }
+  51:Drivers/BSP/Components/Servo/PPM.c ****     sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
+ 144              		.loc 1 51 39
+ 145 00a6 0023     		movs	r3, #0
+ 146 00a8 BB62     		str	r3, [r7, #40]
+  52:Drivers/BSP/Components/Servo/PPM.c ****     sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
+ 147              		.loc 1 52 35
+ 148 00aa 0023     		movs	r3, #0
+ 149 00ac FB62     		str	r3, [r7, #44]
+  53:Drivers/BSP/Components/Servo/PPM.c ****     if (HAL_TIMEx_MasterConfigSynchronization(PPM_Channel->htimx, &sMasterConfig) != HAL_OK)
+ 150              		.loc 1 53 9
+ 151 00ae 7B68     		ldr	r3, [r7, #4]
+ 152 00b0 1B68     		ldr	r3, [r3]
+ 153 00b2 07F12802 		add	r2, r7, #40
+ 154 00b6 1146     		mov	r1, r2
+ 155 00b8 1846     		mov	r0, r3
+ 156 00ba FFF7FEFF 		bl	HAL_TIMEx_MasterConfigSynchronization
+ 157 00be 0346     		mov	r3, r0
+ 158              		.loc 1 53 8
+ 159 00c0 002B     		cmp	r3, #0
+ 160 00c2 01D0     		beq	.L5
+ 161              	.LBB5:
+  54:Drivers/BSP/Components/Servo/PPM.c ****     {
+  55:Drivers/BSP/Components/Servo/PPM.c ****         Error_Handler();
+ 162              		.loc 1 55 9
+ 163 00c4 FFF7FEFF 		bl	Error_Handler
+ 164              	.L5:
+ 165              	.LBE5:
+  56:Drivers/BSP/Components/Servo/PPM.c ****     }
+  57:Drivers/BSP/Components/Servo/PPM.c ****     sConfigOC.OCMode = TIM_OCMODE_PWM1;
+ 166              		.loc 1 57 22
+ 167 00c8 6023     		movs	r3, #96
+ 168 00ca FB60     		str	r3, [r7, #12]
+  58:Drivers/BSP/Components/Servo/PPM.c ****     sConfigOC.Pulse = 0;
+ 169              		.loc 1 58 21
+ 170 00cc 0023     		movs	r3, #0
+ 171 00ce 3B61     		str	r3, [r7, #16]
+ARM GAS  /tmp/ccrGn01r.s 			page 5
+
+
+  59:Drivers/BSP/Components/Servo/PPM.c ****     sConfigOC.OCPolarity = TIM_OCPOLARITY_HIGH;
+ 172              		.loc 1 59 26
+ 173 00d0 0023     		movs	r3, #0
+ 174 00d2 7B61     		str	r3, [r7, #20]
+  60:Drivers/BSP/Components/Servo/PPM.c ****     sConfigOC.OCFastMode = TIM_OCFAST_DISABLE;
+ 175              		.loc 1 60 26
+ 176 00d4 0023     		movs	r3, #0
+ 177 00d6 FB61     		str	r3, [r7, #28]
+  61:Drivers/BSP/Components/Servo/PPM.c ****     if (HAL_TIM_PWM_ConfigChannel(PPM_Channel->htimx, &sConfigOC, PPM_Channel->TIM_Channel) != HAL_
+ 178              		.loc 1 61 9
+ 179 00d8 7B68     		ldr	r3, [r7, #4]
+ 180 00da 1868     		ldr	r0, [r3]
+ 181 00dc 7B68     		ldr	r3, [r7, #4]
+ 182 00de 5A68     		ldr	r2, [r3, #4]
+ 183 00e0 07F10C03 		add	r3, r7, #12
+ 184 00e4 1946     		mov	r1, r3
+ 185 00e6 FFF7FEFF 		bl	HAL_TIM_PWM_ConfigChannel
+ 186 00ea 0346     		mov	r3, r0
+ 187              		.loc 1 61 8
+ 188 00ec 002B     		cmp	r3, #0
+ 189 00ee 01D0     		beq	.L6
+ 190              	.LBB6:
+  62:Drivers/BSP/Components/Servo/PPM.c ****     {
+  63:Drivers/BSP/Components/Servo/PPM.c ****         Error_Handler();
+ 191              		.loc 1 63 9
+ 192 00f0 FFF7FEFF 		bl	Error_Handler
+ 193              	.L6:
+ 194              	.LBE6:
+  64:Drivers/BSP/Components/Servo/PPM.c ****     }
+  65:Drivers/BSP/Components/Servo/PPM.c **** 
+  66:Drivers/BSP/Components/Servo/PPM.c ****     /* USER CODE BEGIN TIM4_Init 2 */
+  67:Drivers/BSP/Components/Servo/PPM.c **** 
+  68:Drivers/BSP/Components/Servo/PPM.c ****     /* USER CODE END TIM4_Init 2 */
+  69:Drivers/BSP/Components/Servo/PPM.c ****     HAL_TIM_MspPostInit(PPM_Channel->htimx);
+ 195              		.loc 1 69 5
+ 196 00f4 7B68     		ldr	r3, [r7, #4]
+ 197 00f6 1B68     		ldr	r3, [r3]
+ 198 00f8 1846     		mov	r0, r3
+ 199 00fa FFF7FEFF 		bl	HAL_TIM_MspPostInit
+  70:Drivers/BSP/Components/Servo/PPM.c **** 
+  71:Drivers/BSP/Components/Servo/PPM.c **** }
+ 200              		.loc 1 71 1
+ 201 00fe 00BF     		nop
+ 202 0100 4037     		adds	r7, r7, #64
+ 203              	.LCFI3:
+ 204              		.cfi_def_cfa_offset 8
+ 205 0102 BD46     		mov	sp, r7
+ 206              	.LCFI4:
+ 207              		.cfi_def_cfa_register 13
+ 208              		@ sp needed
+ 209 0104 80BD     		pop	{r7, pc}
+ 210              		.cfi_endproc
+ 211              	.LFE239:
+ 213              		.section	.text.PPM_DeInit,"ax",%progbits
+ 214              		.align	1
+ 215              		.global	PPM_DeInit
+ 216              		.syntax unified
+ARM GAS  /tmp/ccrGn01r.s 			page 6
+
+
+ 217              		.thumb
+ 218              		.thumb_func
+ 220              	PPM_DeInit:
+ 221              	.LFB240:
+  72:Drivers/BSP/Components/Servo/PPM.c **** 
+  73:Drivers/BSP/Components/Servo/PPM.c **** /**
+  74:Drivers/BSP/Components/Servo/PPM.c ****  * @brief Deinitialize PPM 
+  75:Drivers/BSP/Components/Servo/PPM.c ****  * 
+  76:Drivers/BSP/Components/Servo/PPM.c ****  * @param me: PPM channel to be deinitialized. 
+  77:Drivers/BSP/Components/Servo/PPM.c ****  * 
+  78:Drivers/BSP/Components/Servo/PPM.c ****  * @retval None
+  79:Drivers/BSP/Components/Servo/PPM.c ****  */
+  80:Drivers/BSP/Components/Servo/PPM.c **** void PPM_DeInit(PPM_t *PPM_Channel)
+  81:Drivers/BSP/Components/Servo/PPM.c **** {
+ 222              		.loc 1 81 1
+ 223              		.cfi_startproc
+ 224              		@ args = 0, pretend = 0, frame = 8
+ 225              		@ frame_needed = 1, uses_anonymous_args = 0
+ 226 0000 80B5     		push	{r7, lr}
+ 227              	.LCFI5:
+ 228              		.cfi_def_cfa_offset 8
+ 229              		.cfi_offset 7, -8
+ 230              		.cfi_offset 14, -4
+ 231 0002 82B0     		sub	sp, sp, #8
+ 232              	.LCFI6:
+ 233              		.cfi_def_cfa_offset 16
+ 234 0004 00AF     		add	r7, sp, #0
+ 235              	.LCFI7:
+ 236              		.cfi_def_cfa_register 7
+ 237 0006 7860     		str	r0, [r7, #4]
+  82:Drivers/BSP/Components/Servo/PPM.c ****     HAL_TIM_PWM_DeInit(PPM_Channel->htimx);
+ 238              		.loc 1 82 5
+ 239 0008 7B68     		ldr	r3, [r7, #4]
+ 240 000a 1B68     		ldr	r3, [r3]
+ 241 000c 1846     		mov	r0, r3
+ 242 000e FFF7FEFF 		bl	HAL_TIM_PWM_DeInit
+  83:Drivers/BSP/Components/Servo/PPM.c **** }
+ 243              		.loc 1 83 1
+ 244 0012 00BF     		nop
+ 245 0014 0837     		adds	r7, r7, #8
+ 246              	.LCFI8:
+ 247              		.cfi_def_cfa_offset 8
+ 248 0016 BD46     		mov	sp, r7
+ 249              	.LCFI9:
+ 250              		.cfi_def_cfa_register 13
+ 251              		@ sp needed
+ 252 0018 80BD     		pop	{r7, pc}
+ 253              		.cfi_endproc
+ 254              	.LFE240:
+ 256              		.section	.text.PPM_Start,"ax",%progbits
+ 257              		.align	1
+ 258              		.global	PPM_Start
+ 259              		.syntax unified
+ 260              		.thumb
+ 261              		.thumb_func
+ 263              	PPM_Start:
+ 264              	.LFB241:
+ARM GAS  /tmp/ccrGn01r.s 			page 7
+
+
+  84:Drivers/BSP/Components/Servo/PPM.c **** 
+  85:Drivers/BSP/Components/Servo/PPM.c **** /**
+  86:Drivers/BSP/Components/Servo/PPM.c ****  * @brief Start the PPM Channel 
+  87:Drivers/BSP/Components/Servo/PPM.c ****  * 
+  88:Drivers/BSP/Components/Servo/PPM.c ****  * @param me: PPM channel to be started 
+  89:Drivers/BSP/Components/Servo/PPM.c ****  * 
+  90:Drivers/BSP/Components/Servo/PPM.c ****  * @retval None
+  91:Drivers/BSP/Components/Servo/PPM.c ****  */
+  92:Drivers/BSP/Components/Servo/PPM.c **** void PPM_Start(PPM_t *PPM_Channel)
+  93:Drivers/BSP/Components/Servo/PPM.c **** {
+ 265              		.loc 1 93 1
+ 266              		.cfi_startproc
+ 267              		@ args = 0, pretend = 0, frame = 8
+ 268              		@ frame_needed = 1, uses_anonymous_args = 0
+ 269 0000 80B5     		push	{r7, lr}
+ 270              	.LCFI10:
+ 271              		.cfi_def_cfa_offset 8
+ 272              		.cfi_offset 7, -8
+ 273              		.cfi_offset 14, -4
+ 274 0002 82B0     		sub	sp, sp, #8
+ 275              	.LCFI11:
+ 276              		.cfi_def_cfa_offset 16
+ 277 0004 00AF     		add	r7, sp, #0
+ 278              	.LCFI12:
+ 279              		.cfi_def_cfa_register 7
+ 280 0006 7860     		str	r0, [r7, #4]
+  94:Drivers/BSP/Components/Servo/PPM.c ****     HAL_TIM_PWM_Start(PPM_Channel->htimx, PPM_Channel->TIM_Channel);
+ 281              		.loc 1 94 5
+ 282 0008 7B68     		ldr	r3, [r7, #4]
+ 283 000a 1A68     		ldr	r2, [r3]
+ 284 000c 7B68     		ldr	r3, [r7, #4]
+ 285 000e 5B68     		ldr	r3, [r3, #4]
+ 286 0010 1946     		mov	r1, r3
+ 287 0012 1046     		mov	r0, r2
+ 288 0014 FFF7FEFF 		bl	HAL_TIM_PWM_Start
+  95:Drivers/BSP/Components/Servo/PPM.c **** }
+ 289              		.loc 1 95 1
+ 290 0018 00BF     		nop
+ 291 001a 0837     		adds	r7, r7, #8
+ 292              	.LCFI13:
+ 293              		.cfi_def_cfa_offset 8
+ 294 001c BD46     		mov	sp, r7
+ 295              	.LCFI14:
+ 296              		.cfi_def_cfa_register 13
+ 297              		@ sp needed
+ 298 001e 80BD     		pop	{r7, pc}
+ 299              		.cfi_endproc
+ 300              	.LFE241:
+ 302              		.section	.text.PPM_Stop,"ax",%progbits
+ 303              		.align	1
+ 304              		.global	PPM_Stop
+ 305              		.syntax unified
+ 306              		.thumb
+ 307              		.thumb_func
+ 309              	PPM_Stop:
+ 310              	.LFB242:
+  96:Drivers/BSP/Components/Servo/PPM.c **** 
+ARM GAS  /tmp/ccrGn01r.s 			page 8
+
+
+  97:Drivers/BSP/Components/Servo/PPM.c **** /**
+  98:Drivers/BSP/Components/Servo/PPM.c ****  * @brief Stop the PPM Channel 
+  99:Drivers/BSP/Components/Servo/PPM.c ****  * 
+ 100:Drivers/BSP/Components/Servo/PPM.c ****  * @param me: PPM channel to be stopped
+ 101:Drivers/BSP/Components/Servo/PPM.c ****  * 
+ 102:Drivers/BSP/Components/Servo/PPM.c ****  * @retval None 
+ 103:Drivers/BSP/Components/Servo/PPM.c ****  */
+ 104:Drivers/BSP/Components/Servo/PPM.c **** void PPM_Stop(PPM_t *PPM_Channel)
+ 105:Drivers/BSP/Components/Servo/PPM.c **** {
+ 311              		.loc 1 105 1
+ 312              		.cfi_startproc
+ 313              		@ args = 0, pretend = 0, frame = 8
+ 314              		@ frame_needed = 1, uses_anonymous_args = 0
+ 315 0000 80B5     		push	{r7, lr}
+ 316              	.LCFI15:
+ 317              		.cfi_def_cfa_offset 8
+ 318              		.cfi_offset 7, -8
+ 319              		.cfi_offset 14, -4
+ 320 0002 82B0     		sub	sp, sp, #8
+ 321              	.LCFI16:
+ 322              		.cfi_def_cfa_offset 16
+ 323 0004 00AF     		add	r7, sp, #0
+ 324              	.LCFI17:
+ 325              		.cfi_def_cfa_register 7
+ 326 0006 7860     		str	r0, [r7, #4]
+ 106:Drivers/BSP/Components/Servo/PPM.c ****     HAL_TIM_PWM_Stop(PPM_Channel->htimx, PPM_Channel->TIM_Channel);
+ 327              		.loc 1 106 5
+ 328 0008 7B68     		ldr	r3, [r7, #4]
+ 329 000a 1A68     		ldr	r2, [r3]
+ 330 000c 7B68     		ldr	r3, [r7, #4]
+ 331 000e 5B68     		ldr	r3, [r3, #4]
+ 332 0010 1946     		mov	r1, r3
+ 333 0012 1046     		mov	r0, r2
+ 334 0014 FFF7FEFF 		bl	HAL_TIM_PWM_Stop
+ 107:Drivers/BSP/Components/Servo/PPM.c **** }
+ 335              		.loc 1 107 1
+ 336 0018 00BF     		nop
+ 337 001a 0837     		adds	r7, r7, #8
+ 338              	.LCFI18:
+ 339              		.cfi_def_cfa_offset 8
+ 340 001c BD46     		mov	sp, r7
+ 341              	.LCFI19:
+ 342              		.cfi_def_cfa_register 13
+ 343              		@ sp needed
+ 344 001e 80BD     		pop	{r7, pc}
+ 345              		.cfi_endproc
+ 346              	.LFE242:
+ 348              		.section	.text.PPM_SetMilliseconds,"ax",%progbits
+ 349              		.align	1
+ 350              		.global	PPM_SetMilliseconds
+ 351              		.syntax unified
+ 352              		.thumb
+ 353              		.thumb_func
+ 355              	PPM_SetMilliseconds:
+ 356              	.LFB243:
+ 108:Drivers/BSP/Components/Servo/PPM.c **** 
+ 109:Drivers/BSP/Components/Servo/PPM.c **** /**
+ARM GAS  /tmp/ccrGn01r.s 			page 9
+
+
+ 110:Drivers/BSP/Components/Servo/PPM.c ****  * @brief Set the PPM pulse time
+ 111:Drivers/BSP/Components/Servo/PPM.c ****  * 
+ 112:Drivers/BSP/Components/Servo/PPM.c ****  * @param me: PPM channel to be set
+ 113:Drivers/BSP/Components/Servo/PPM.c ****  * @param PulseTimeMS: Pulse time to be set
+ 114:Drivers/BSP/Components/Servo/PPM.c ****  * 
+ 115:Drivers/BSP/Components/Servo/PPM.c ****  * @retval None
+ 116:Drivers/BSP/Components/Servo/PPM.c ****  */
+ 117:Drivers/BSP/Components/Servo/PPM.c **** void PPM_SetMilliseconds(PPM_t *PPM_Channel, float PulseTimeMS)
+ 118:Drivers/BSP/Components/Servo/PPM.c **** {
+ 357              		.loc 1 118 1
+ 358              		.cfi_startproc
+ 359              		@ args = 0, pretend = 0, frame = 16
+ 360              		@ frame_needed = 1, uses_anonymous_args = 0
+ 361 0000 80B5     		push	{r7, lr}
+ 362              	.LCFI20:
+ 363              		.cfi_def_cfa_offset 8
+ 364              		.cfi_offset 7, -8
+ 365              		.cfi_offset 14, -4
+ 366 0002 84B0     		sub	sp, sp, #16
+ 367              	.LCFI21:
+ 368              		.cfi_def_cfa_offset 24
+ 369 0004 00AF     		add	r7, sp, #0
+ 370              	.LCFI22:
+ 371              		.cfi_def_cfa_register 7
+ 372 0006 7860     		str	r0, [r7, #4]
+ 373 0008 87ED000A 		vstr.32	s0, [r7]
+ 119:Drivers/BSP/Components/Servo/PPM.c ****     /**
+ 120:Drivers/BSP/Components/Servo/PPM.c ****      * TODO: Implement function 
+ 121:Drivers/BSP/Components/Servo/PPM.c ****      * 
+ 122:Drivers/BSP/Components/Servo/PPM.c ****      */
+ 123:Drivers/BSP/Components/Servo/PPM.c ****     uint32_t CompareTicks = PPM_MillisecondsToTicks(PulseTimeMS);
+ 374              		.loc 1 123 29
+ 375 000c 97ED000A 		vldr.32	s0, [r7]
+ 376 0010 FFF7FEFF 		bl	PPM_MillisecondsToTicks
+ 377 0014 F860     		str	r0, [r7, #12]
+ 124:Drivers/BSP/Components/Servo/PPM.c ****     __HAL_TIM_SET_COMPARE(PPM_Channel->htimx, PPM_Channel->TIM_Channel, CompareTicks);
+ 378              		.loc 1 124 5
+ 379 0016 7B68     		ldr	r3, [r7, #4]
+ 380 0018 5B68     		ldr	r3, [r3, #4]
+ 381 001a 002B     		cmp	r3, #0
+ 382 001c 05D1     		bne	.L11
+ 383              		.loc 1 124 5 is_stmt 0 discriminator 1
+ 384 001e 7B68     		ldr	r3, [r7, #4]
+ 385 0020 1B68     		ldr	r3, [r3]
+ 386 0022 1B68     		ldr	r3, [r3]
+ 387 0024 FA68     		ldr	r2, [r7, #12]
+ 388 0026 5A63     		str	r2, [r3, #52]
+ 125:Drivers/BSP/Components/Servo/PPM.c **** 
+ 126:Drivers/BSP/Components/Servo/PPM.c **** }
+ 389              		.loc 1 126 1 is_stmt 1 discriminator 1
+ 390 0028 18E0     		b	.L17
+ 391              	.L11:
+ 124:Drivers/BSP/Components/Servo/PPM.c ****     __HAL_TIM_SET_COMPARE(PPM_Channel->htimx, PPM_Channel->TIM_Channel, CompareTicks);
+ 392              		.loc 1 124 5 discriminator 2
+ 393 002a 7B68     		ldr	r3, [r7, #4]
+ 394 002c 5B68     		ldr	r3, [r3, #4]
+ 395 002e 042B     		cmp	r3, #4
+ARM GAS  /tmp/ccrGn01r.s 			page 10
+
+
+ 396 0030 05D1     		bne	.L13
+ 124:Drivers/BSP/Components/Servo/PPM.c ****     __HAL_TIM_SET_COMPARE(PPM_Channel->htimx, PPM_Channel->TIM_Channel, CompareTicks);
+ 397              		.loc 1 124 5 is_stmt 0 discriminator 3
+ 398 0032 7B68     		ldr	r3, [r7, #4]
+ 399 0034 1B68     		ldr	r3, [r3]
+ 400 0036 1A68     		ldr	r2, [r3]
+ 401 0038 FB68     		ldr	r3, [r7, #12]
+ 402 003a 9363     		str	r3, [r2, #56]
+ 403              		.loc 1 126 1 is_stmt 1 discriminator 3
+ 404 003c 0EE0     		b	.L17
+ 405              	.L13:
+ 124:Drivers/BSP/Components/Servo/PPM.c ****     __HAL_TIM_SET_COMPARE(PPM_Channel->htimx, PPM_Channel->TIM_Channel, CompareTicks);
+ 406              		.loc 1 124 5 discriminator 4
+ 407 003e 7B68     		ldr	r3, [r7, #4]
+ 408 0040 5B68     		ldr	r3, [r3, #4]
+ 409 0042 082B     		cmp	r3, #8
+ 410 0044 05D1     		bne	.L15
+ 124:Drivers/BSP/Components/Servo/PPM.c ****     __HAL_TIM_SET_COMPARE(PPM_Channel->htimx, PPM_Channel->TIM_Channel, CompareTicks);
+ 411              		.loc 1 124 5 is_stmt 0 discriminator 6
+ 412 0046 7B68     		ldr	r3, [r7, #4]
+ 413 0048 1B68     		ldr	r3, [r3]
+ 414 004a 1A68     		ldr	r2, [r3]
+ 415 004c FB68     		ldr	r3, [r7, #12]
+ 416 004e D363     		str	r3, [r2, #60]
+ 417              		.loc 1 126 1 is_stmt 1 discriminator 6
+ 418 0050 04E0     		b	.L17
+ 419              	.L15:
+ 124:Drivers/BSP/Components/Servo/PPM.c ****     __HAL_TIM_SET_COMPARE(PPM_Channel->htimx, PPM_Channel->TIM_Channel, CompareTicks);
+ 420              		.loc 1 124 5 discriminator 7
+ 421 0052 7B68     		ldr	r3, [r7, #4]
+ 422 0054 1B68     		ldr	r3, [r3]
+ 423 0056 1A68     		ldr	r2, [r3]
+ 424 0058 FB68     		ldr	r3, [r7, #12]
+ 425 005a 1364     		str	r3, [r2, #64]
+ 426              	.L17:
+ 427              		.loc 1 126 1
+ 428 005c 00BF     		nop
+ 429 005e 1037     		adds	r7, r7, #16
+ 430              	.LCFI23:
+ 431              		.cfi_def_cfa_offset 8
+ 432 0060 BD46     		mov	sp, r7
+ 433              	.LCFI24:
+ 434              		.cfi_def_cfa_register 13
+ 435              		@ sp needed
+ 436 0062 80BD     		pop	{r7, pc}
+ 437              		.cfi_endproc
+ 438              	.LFE243:
+ 440              		.section	.text.PPM_MillisecondsToTicks,"ax",%progbits
+ 441              		.align	1
+ 442              		.global	PPM_MillisecondsToTicks
+ 443              		.syntax unified
+ 444              		.thumb
+ 445              		.thumb_func
+ 447              	PPM_MillisecondsToTicks:
+ 448              	.LFB244:
+ 127:Drivers/BSP/Components/Servo/PPM.c **** 
+ 128:Drivers/BSP/Components/Servo/PPM.c **** /**
+ARM GAS  /tmp/ccrGn01r.s 			page 11
+
+
+ 129:Drivers/BSP/Components/Servo/PPM.c ****  * @brief Convert Milliseconds to number of ticks for PPM timer 
+ 130:Drivers/BSP/Components/Servo/PPM.c ****  * 
+ 131:Drivers/BSP/Components/Servo/PPM.c ****  * @param Milliseconds: desired Pulse Width 
+ 132:Drivers/BSP/Components/Servo/PPM.c ****  * @return uint32_t: number of ticks 
+ 133:Drivers/BSP/Components/Servo/PPM.c ****  */
+ 134:Drivers/BSP/Components/Servo/PPM.c **** uint32_t PPM_MillisecondsToTicks(float Milliseconds)
+ 135:Drivers/BSP/Components/Servo/PPM.c **** {
+ 449              		.loc 1 135 1
+ 450              		.cfi_startproc
+ 451              		@ args = 0, pretend = 0, frame = 8
+ 452              		@ frame_needed = 1, uses_anonymous_args = 0
+ 453              		@ link register save eliminated.
+ 454 0000 80B4     		push	{r7}
+ 455              	.LCFI25:
+ 456              		.cfi_def_cfa_offset 4
+ 457              		.cfi_offset 7, -4
+ 458 0002 83B0     		sub	sp, sp, #12
+ 459              	.LCFI26:
+ 460              		.cfi_def_cfa_offset 16
+ 461 0004 00AF     		add	r7, sp, #0
+ 462              	.LCFI27:
+ 463              		.cfi_def_cfa_register 7
+ 464 0006 87ED010A 		vstr.32	s0, [r7, #4]
+ 136:Drivers/BSP/Components/Servo/PPM.c ****     return (uint32_t) (Milliseconds * PPM_PERIOD_TICKS / PPM_PERIOD_MS);
+ 465              		.loc 1 136 37
+ 466 000a D7ED017A 		vldr.32	s15, [r7, #4]
+ 467 000e 9FED097A 		vldr.32	s14, .L20
+ 468 0012 27EE877A 		vmul.f32	s14, s15, s14
+ 469              		.loc 1 136 56
+ 470 0016 F3EE046A 		vmov.f32	s13, #2.0e+1
+ 471 001a C7EE267A 		vdiv.f32	s15, s14, s13
+ 472              		.loc 1 136 12
+ 473 001e FCEEE77A 		vcvt.u32.f32	s15, s15
+ 474 0022 17EE903A 		vmov	r3, s15	@ int
+ 137:Drivers/BSP/Components/Servo/PPM.c **** }...
+ 475              		.loc 1 137 1
+ 476 0026 1846     		mov	r0, r3
+ 477 0028 0C37     		adds	r7, r7, #12
+ 478              	.LCFI28:
+ 479              		.cfi_def_cfa_offset 4
+ 480 002a BD46     		mov	sp, r7
+ 481              	.LCFI29:
+ 482              		.cfi_def_cfa_register 13
+ 483              		@ sp needed
+ 484 002c 5DF8047B 		ldr	r7, [sp], #4
+ 485              	.LCFI30:
+ 486              		.cfi_restore 7
+ 487              		.cfi_def_cfa_offset 0
+ 488 0030 7047     		bx	lr
+ 489              	.L21:
+ 490 0032 00BF     		.align	2
+ 491              	.L20:
+ 492 0034 00007A46 		.word	1182400512
+ 493              		.cfi_endproc
+ 494              	.LFE244:
+ 496              		.text
+ 497              	.Letext0:
+ARM GAS  /tmp/ccrGn01r.s 			page 12
+
+
+ 498              		.file 2 "/opt/st/stm32cubeclt_1.17.0/GNU-tools-for-STM32/arm-none-eabi/include/machine/_default_ty
+ 499              		.file 3 "/opt/st/stm32cubeclt_1.17.0/GNU-tools-for-STM32/arm-none-eabi/include/sys/_stdint.h"
+ 500              		.file 4 "Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f405xx.h"
+ 501              		.file 5 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_def.h"
+ 502              		.file 6 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma.h"
+ 503              		.file 7 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h"
+ 504              		.file 8 "Drivers/BSP/Components/Servo/PPM.h"
+ 505              		.file 9 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim_ex.h"
+ARM GAS  /tmp/ccrGn01r.s 			page 13
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 PPM.c
+     /tmp/ccrGn01r.s:21     .text.PPM_Init:00000000 $t
+     /tmp/ccrGn01r.s:27     .text.PPM_Init:00000000 PPM_Init
+     /tmp/ccrGn01r.s:214    .text.PPM_DeInit:00000000 $t
+     /tmp/ccrGn01r.s:220    .text.PPM_DeInit:00000000 PPM_DeInit
+     /tmp/ccrGn01r.s:257    .text.PPM_Start:00000000 $t
+     /tmp/ccrGn01r.s:263    .text.PPM_Start:00000000 PPM_Start
+     /tmp/ccrGn01r.s:303    .text.PPM_Stop:00000000 $t
+     /tmp/ccrGn01r.s:309    .text.PPM_Stop:00000000 PPM_Stop
+     /tmp/ccrGn01r.s:349    .text.PPM_SetMilliseconds:00000000 $t
+     /tmp/ccrGn01r.s:355    .text.PPM_SetMilliseconds:00000000 PPM_SetMilliseconds
+     /tmp/ccrGn01r.s:447    .text.PPM_MillisecondsToTicks:00000000 PPM_MillisecondsToTicks
+     /tmp/ccrGn01r.s:441    .text.PPM_MillisecondsToTicks:00000000 $t
+     /tmp/ccrGn01r.s:492    .text.PPM_MillisecondsToTicks:00000034 $d
+
+UNDEFINED SYMBOLS
+HAL_TIM_Base_Init
+Error_Handler
+HAL_TIM_ConfigClockSource
+HAL_TIM_PWM_Init
+HAL_TIMEx_MasterConfigSynchronization
+HAL_TIM_PWM_ConfigChannel
+HAL_TIM_MspPostInit
+HAL_TIM_PWM_DeInit
+HAL_TIM_PWM_Start
+HAL_TIM_PWM_Stop

@@ -1,24 +1,22 @@
-#ifndef __STM32F4XX_NUCLEO_H
-#define __STM32F4XX_NUCLEO_H
+#ifndef __STM32F405_SPEEDYBEE_H
+#define __STM32F405_SPEEDYBEE_H
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-
 #include "stm32f4xx_hal.h"
 #include "Servo.h"
-#include "Servo_Cfg.h"
 
-#if !defined(USE_STM32F4XX_NUCLEO)
-#define USE_STM32F4XX_NUCLEO
+#if !defined(USE_STM32F405_SPEEDYBEE)
+#define USE_STM32F405_SPEEDYBEE
 #endif
 
 extern uint32_t SystemCoreClock;          /*!< System Clock Frequency (Core Clock) */
 #define PWMCORECLOCK 160000000
 
 
-/** @defgroup STM32F4XX_NUCLEO_Exported_Types
+/** @defgroup STM32F405_SPEEDYBEE_Exported_Types
  * @{
  */
 typedef enum
@@ -45,11 +43,8 @@ typedef enum
  * @}
 */
 
-/**
- * @} 
- * 
- */
- /** @addtogroup STM32F4XX_NUCLEO_LED_Functions
+
+ /** @addtogroup STM32F405_SPEEDYBEE_LED_Functions
   * @{
   */
 void BSP_LED_Init(Led_t Led);
@@ -67,4 +62,4 @@ void BSP_LED_Toggle(Led_t Led);
 #endif
 
 
-#endif /* __STM32F4XX_NUCLEO_H */
+#endif /* __STM32F405_SPEEDYBEE_H */

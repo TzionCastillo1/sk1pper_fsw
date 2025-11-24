@@ -13,7 +13,8 @@
             "type": "cortex-debug",
             "runToEntryPoint": "main",
             "servertype": "stlink",
-            "device": "STM32F446R"
+            "device": "STM32F446R",
+            "showDevDebugOutput": "raw"
         }
 
     ]
