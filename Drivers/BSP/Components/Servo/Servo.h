@@ -5,39 +5,101 @@
 extern "C" {
 #endif
 
+#include "servo_types.h"
 #include "stdint.h"
-#include "PPM.h"
 
+extern uint32_t SystemCoreClock;
+#define SERVO_FREQUENCY             50U
+#define SERVO_PERIOD_US             (1000000 / SERVO_FREQUENCY)
+//Timer tick period (us) = prescaler * 1000000/clock frequency 
+#define SERVO_TICKS_PER_US          (7000.0F / 20000.0F)
 
-typedef struct 
-{
-    PPM_t PPMx;
-    float MinPulse;
-    float MaxPulse;
-    float rangeDegrees;
-    float offsetDegrees;
-}SERVO_t;
+/*
+ticks per microseconds = t/us
+I have clock frequency, prescaler. Timer tick frequency = clock frequency/prescaler.
+Timer tick period = prescaler/clock frequency
+Timer tick period (us) = prescaler * 1000000/clocl frequency. This is period of clock pulse, not period of pwm signal 
+Ticks = pulse (ms) * period (ticks) / period (ms)
+Ticks = pulse (us) * period (ticks) / period (us)
+*/
 
+/**
+ * @brief initialize the desired servo channel. Return an error if init unsuccesful
+ * @param servo_channel servo channel to be initialized.
+ * @return int 
+ */
+int servo_init(servo_channels_t servo_channel);
 
-void SERVO_Init(SERVO_t * const me);
+/**
+ * @brief enable the desired channel. Return an error if enable is unsuccesful
+ * @param servo_channel servo channel to be enabled
+ * @return int 
+ */
+int servo_enable(servo_channels_t servo_channel);
 
-void SERVO_DeInit(SERVO_t * const me);
+/**
+ * @brief enable all servo channels. Return an error if enable is unsuccesful
+ * 
+ * @return int 
+ */
+int servo_enable_all();
 
-void SERVO_Start(SERVO_t * const me);
+/**
+ * @brief disable the desired channel. Return an error if enable is unsuccesful
+ * @param servo_channel servo channel to be disabled
+ * @return int 
+ */
+int servo_disable(servo_channels_t servo_channel);
 
-void SERVO_Stop(SERVO_t * const me);
+/**
+ * @brief disable all servo channels. Return an error if disable is unsuccesful
+ * 
+ * @return int 
+ */
+int servo_disable_all();
 
-void SERVO_ToMin(SERVO_t * const me);
+/**
+ * @brief set the angle for the desired servo channel. Return an error if unsuccseful.
+ * 
+ * @param servo_channel servo channel to be set to desired angle 
+ * @param angle desired angle
+ * @return int 
+ */
+int servo_set_angle(servo_channels_t servo_channel, float angle);
 
-void SERVO_ToMax(SERVO_t * const me);
+/**
+ * @brief set the pulse width in microseconds for the desired servo channel. Return an error if unsuccseful.
+ * 
+ * @param servo_channel servo channel to be set to desired angle 
+ * @param microseconds desired pulse width in microseconds
+ * @return int 
+ */
+int servo_set_microseconds(servo_channels_t servo_channel, float microseconds);
 
-void SERVO_ToCenter(SERVO_t * const me);
+/**
+ * @brief update the command to the channel with the most recent value. Return an error if 
+ * unsuccesful
+ * 
+ * @param servo_channel 
+ * @return int 
+ */
+int servo_update(servo_channels_t servo_channel);
 
-void SERVO_ToAngle(SERVO_t * const me);
+/**
+ * @brief update the command to all enabled channels with the most recent value. Return an error if 
+ * unsuccesful
+ * 
+ * @return int 
+ */
+int servo_update_all();
 
-void SERVO_Set_Max(SERVO_t * const me);
+/**
+ * @brief test actuation on all initialized servo channels. Return an error if unsuccesful.
+ * 
+ * @return int 
+ */
+int servo_test_all();
 
-void SERVO_Set_Min(SERVO_t * const me);
 
 #ifdef __cplusplus
 }

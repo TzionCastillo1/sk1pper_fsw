@@ -7,11 +7,19 @@ extern "C" {
 
 #include "Servo.h"
 
-extern SERVO_t SERVO_0;
-extern SERVO_t SERVO_1;
-extern SERVO_t SERVO_2;
-extern SERVO_t SERVO_3;
+extern TIM_HandleTypeDef htim4;
+extern TIM_HandleTypeDef htim3;
+extern TIM_HandleTypeDef htim8;
 
+
+#define SERVO_DEFAULT_MIN_MICROSECONDS 1000U
+#define SERVO_DEFAULT_MAX_MICROSECONDS 4000U
+#define SERVO_DEFAULT_MICROSECONDS 2500U
+#define SERVO_DEFAULT_MAX_ANGLE 180U
+#define SERVO_DEFAULT_LIM_MAX_ANGLE SERVO_DEFAULT_MAX_ANGLE
+#define SERVO_DEFAULT_LIM_MIN_ANGLE 0U
+
+extern servo_t servo_channels[SERVO_MAX_CHANNELS];
 
 #ifdef __cplusplus
 }

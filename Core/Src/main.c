@@ -21,7 +21,7 @@
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
-
+#include "Servo.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -48,7 +48,8 @@ SPI_HandleTypeDef hspi1;
 
 TIM_HandleTypeDef htim1;
 TIM_HandleTypeDef htim2;
-//TIM_HandleTypeDef htim3;
+TIM_HandleTypeDef htim3;
+TIM_HandleTypeDef htim4;
 TIM_HandleTypeDef htim8;
 
 UART_HandleTypeDef huart4;
@@ -122,8 +123,8 @@ int main(void)
   MX_SPI1_Init();
   MX_TIM1_Init();
   MX_TIM2_Init();
-  //MX_TIM3_Init();
-  //MX_TIM4_Init();
+  MX_TIM3_Init();
+  MX_TIM4_Init();
   MX_TIM8_Init();
   MX_UART4_Init();
   MX_UART5_Init();
@@ -133,14 +134,6 @@ int main(void)
   MX_USART6_UART_Init();
   /* USER CODE BEGIN 2 */
   BSP_LED_Init(LED2);
-  //SERVO_Init(&SERVO_0); 
-  //SERVO_Start(&SERVO_0);
-  SERVO_Init(&SERVO_1); 
-  SERVO_Start(&SERVO_1);
-  SERVO_Init(&SERVO_2); 
-  SERVO_Start(&SERVO_2);
-  SERVO_Init(&SERVO_3); 
-  SERVO_Start(&SERVO_3);
   
 
   /* USER CODE END 2 */
@@ -149,15 +142,13 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+    //BSP_LED_Toggle(LED2);
     /* USER CODE END WHILE */
-    BSP_LED_Toggle(LED2);
-    SERVO_Test();
+    servo_test_all();
     /* USER CODE BEGIN 3 */
   }
   /* USER CODE END 3 */
 }
-
-
 
 /**
   * @brief System Clock Configuration
@@ -480,26 +471,24 @@ static void MX_TIM2_Init(void)
   * @param None
   * @retval None
   */
-
-/*
 static void MX_TIM3_Init(void)
 {
 
-  // /* USER CODE BEGIN TIM3_Init 0 
+  /* USER CODE BEGIN TIM3_Init 0 */
 
-  // /* USER CODE END TIM3_Init 0 
+  /* USER CODE END TIM3_Init 0 */
 
   TIM_ClockConfigTypeDef sClockSourceConfig = {0};
   TIM_MasterConfigTypeDef sMasterConfig = {0};
   TIM_OC_InitTypeDef sConfigOC = {0};
 
-  // /* USER CODE BEGIN TIM3_Init 1 
+  /* USER CODE BEGIN TIM3_Init 1 */
 
-  // /* USER CODE END TIM3_Init 1 
+  /* USER CODE END TIM3_Init 1 */
   htim3.Instance = TIM3;
-  htim3.Init.Prescaler = 0;
+  htim3.Init.Prescaler = 240;
   htim3.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim3.Init.Period = 65535;
+  htim3.Init.Period = 7000;
   htim3.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim3.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_Base_Init(&htim3) != HAL_OK)
@@ -533,38 +522,36 @@ static void MX_TIM3_Init(void)
   {
     Error_Handler();
   }
-  // /* USER CODE BEGIN TIM3_Init 2 
+  /* USER CODE BEGIN TIM3_Init 2 */
 
-  // /* USER CODE END TIM3_Init 2 
+  /* USER CODE END TIM3_Init 2 */
   HAL_TIM_MspPostInit(&htim3);
 
 }
-*/
 
 /**
   * @brief TIM4 Initialization Function
   * @param None
   * @retval None
   */
- /*
 static void MX_TIM4_Init(void)
 {
 
-  ///* USER CODE BEGIN TIM4_Init 0 
+  /* USER CODE BEGIN TIM4_Init 0 */
 
-  ///* USER CODE END TIM4_Init 0 
+  /* USER CODE END TIM4_Init 0 */
 
   TIM_ClockConfigTypeDef sClockSourceConfig = {0};
   TIM_MasterConfigTypeDef sMasterConfig = {0};
   TIM_OC_InitTypeDef sConfigOC = {0};
 
-  //* USER CODE BEGIN TIM4_Init 1 
+  /* USER CODE BEGIN TIM4_Init 1 */
 
-  //* USER CODE END TIM4_Init 1 
+  /* USER CODE END TIM4_Init 1 */
   htim4.Instance = TIM4;
-  htim4.Init.Prescaler = 0;
+  htim4.Init.Prescaler = 240;
   htim4.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim4.Init.Period = 65535;
+  htim4.Init.Period = 7000;
   htim4.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
   htim4.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
   if (HAL_TIM_Base_Init(&htim4) != HAL_OK)
@@ -598,13 +585,12 @@ static void MX_TIM4_Init(void)
   {
     Error_Handler();
   }
-  //* USER CODE BEGIN TIM4_Init 2 
+  /* USER CODE BEGIN TIM4_Init 2 */
 
-  //* USER CODE END TIM4_Init 2 
+  /* USER CODE END TIM4_Init 2 */
   HAL_TIM_MspPostInit(&htim4);
 
 }
-*/
 
 /**
   * @brief TIM8 Initialization Function
@@ -924,29 +910,11 @@ static void MX_GPIO_Init(void)
 
 int SERVO_Test()
 {
-    SERVO_ToMax(&SERVO_0);
+    servo_set_angle(SERVO_CHANNEL_1, 0);
     HAL_Delay(500);
-    SERVO_ToMin(&SERVO_0);
+    servo_set_angle(SERVO_CHANNEL_1, 180);
     HAL_Delay(500);
-    SERVO_ToCenter(&SERVO_0);
-
-    SERVO_ToMax(&SERVO_1);
-    HAL_Delay(500);
-    SERVO_ToMin(&SERVO_1);
-    HAL_Delay(500);
-    SERVO_ToCenter(&SERVO_1);
-
-    SERVO_ToMax(&SERVO_2);
-    HAL_Delay(500);
-    SERVO_ToMin(&SERVO_2);
-    HAL_Delay(500);
-    SERVO_ToCenter(&SERVO_2);
-
-    SERVO_ToMax(&SERVO_3);
-    HAL_Delay(500);
-    SERVO_ToMin(&SERVO_3);
-    HAL_Delay(500);
-    SERVO_ToCenter(&SERVO_3);
+    servo_set_angle(SERVO_CHANNEL_1, 90);
 }
 
 /**
