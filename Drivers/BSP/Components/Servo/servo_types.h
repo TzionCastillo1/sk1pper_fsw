@@ -34,6 +34,7 @@ typedef struct servo_cal_t
 {
     uint16_t min_microseconds;
     uint16_t max_microseconds;
+    uint16_t trim_microseconds;
     uint16_t abs_max_angle;
     float lim_min_angle;
     float lim_max_angle;

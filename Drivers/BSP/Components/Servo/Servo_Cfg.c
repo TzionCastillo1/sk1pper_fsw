@@ -32,6 +32,7 @@ static const servo_cal_t servo_cal_default =
 {
     .min_microseconds = SERVO_DEFAULT_MIN_MICROSECONDS,
     .max_microseconds = SERVO_DEFAULT_MAX_MICROSECONDS,
+    .trim_microseconds = SERVO_DEFAULT_MICROSECONDS,
     .abs_max_angle = SERVO_DEFAULT_MAX_ANGLE,
     .lim_min_angle = SERVO_DEFAULT_LIM_MIN_ANGLE,
     .lim_max_angle = SERVO_DEFAULT_LIM_MAX_ANGLE
