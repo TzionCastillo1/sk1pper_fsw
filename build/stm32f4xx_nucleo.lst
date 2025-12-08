@@ -1,0 +1,492 @@
+ARM GAS  /tmp/ccXk2HKr.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 6
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"stm32f4xx_nucleo.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.file 1 "Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c"
+  20              		.global	GPIO_PORT
+  21              		.section	.data.GPIO_PORT,"aw"
+  22              		.align	2
+  25              	GPIO_PORT:
+  26 0000 00000240 		.word	1073872896
+  27              		.global	GPIO_PIN
+  28              		.section	.rodata.GPIO_PIN,"a"
+  29              		.align	2
+  32              	GPIO_PIN:
+  33 0000 2000     		.short	32
+  34              		.section	.text.BSP_LED_Init,"ax",%progbits
+  35              		.align	1
+  36              		.global	BSP_LED_Init
+  37              		.syntax unified
+  38              		.thumb
+  39              		.thumb_func
+  41              	BSP_LED_Init:
+  42              	.LFB239:
+   1:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c **** #include "stm32f4xx_nucleo.h"
+   2:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c **** 
+   3:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c **** /**
+   4:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  * @defgroup STM32F4XX_NUCLEO_Private_Variables
+   5:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  * @{ 
+   6:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  * 
+   7:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  */
+   8:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c **** 
+   9:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c **** GPIO_TypeDef *GPIO_PORT[LEDn] = {LED2_GPIO_PORT};
+  10:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c **** const uint16_t GPIO_PIN[LEDn] = {LED2_PIN};
+  11:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c **** /**
+  12:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  * @} 
+  13:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  * 
+  14:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  */
+  15:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c **** 
+  16:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c **** /** @defgroup LED Functions
+  17:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  * @{
+  18:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  */
+  19:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c **** 
+  20:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c **** /**
+ARM GAS  /tmp/ccXk2HKr.s 			page 2
+
+
+  21:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  * @brief Configure LED GPIO
+  22:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  * @param Led: LED to be configured.
+  23:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  *        This parameter can be one of the follwoing values:
+  24:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  *          @arg LED2 or LED4 on Nucleo-64 with extermal SMPS
+  25:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  * @retval None
+  26:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  * 
+  27:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  */
+  28:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c **** void BSP_LED_Init(Led_t Led)
+  29:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c **** {
+  43              		.loc 1 29 1
+  44              		.cfi_startproc
+  45              		@ args = 0, pretend = 0, frame = 32
+  46              		@ frame_needed = 1, uses_anonymous_args = 0
+  47 0000 80B5     		push	{r7, lr}
+  48              	.LCFI0:
+  49              		.cfi_def_cfa_offset 8
+  50              		.cfi_offset 7, -8
+  51              		.cfi_offset 14, -4
+  52 0002 88B0     		sub	sp, sp, #32
+  53              	.LCFI1:
+  54              		.cfi_def_cfa_offset 40
+  55 0004 00AF     		add	r7, sp, #0
+  56              	.LCFI2:
+  57              		.cfi_def_cfa_register 7
+  58 0006 0346     		mov	r3, r0
+  59 0008 FB71     		strb	r3, [r7, #7]
+  30:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****     GPIO_InitTypeDef GPIO_InitStruct = {0};
+  60              		.loc 1 30 22
+  61 000a 07F10C03 		add	r3, r7, #12
+  62 000e 0022     		movs	r2, #0
+  63 0010 1A60     		str	r2, [r3]
+  64 0012 5A60     		str	r2, [r3, #4]
+  65 0014 9A60     		str	r2, [r3, #8]
+  66 0016 DA60     		str	r2, [r3, #12]
+  67 0018 1A61     		str	r2, [r3, #16]
+  68              	.LBB2:
+  31:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c **** 
+  32:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****     /* Enable the GPIO_LED CLock */
+  33:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****     LED2_GPIO_CLK_ENABLE();
+  69              		.loc 1 33 5
+  70 001a 0023     		movs	r3, #0
+  71 001c BB60     		str	r3, [r7, #8]
+  72 001e 114B     		ldr	r3, .L2
+  73 0020 1B6B     		ldr	r3, [r3, #48]
+  74 0022 104A     		ldr	r2, .L2
+  75 0024 43F00103 		orr	r3, r3, #1
+  76 0028 1363     		str	r3, [r2, #48]
+  77 002a 0E4B     		ldr	r3, .L2
+  78 002c 1B6B     		ldr	r3, [r3, #48]
+  79 002e 03F00103 		and	r3, r3, #1
+  80 0032 BB60     		str	r3, [r7, #8]
+  81 0034 BB68     		ldr	r3, [r7, #8]
+  82              	.LBE2:
+  34:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c **** 
+  35:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****     /* COnfigure the GPIO_LED pin*/
+  36:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****     GPIO_InitStruct.Pin     = GPIO_PIN[Led];
+  83              		.loc 1 36 39
+ARM GAS  /tmp/ccXk2HKr.s 			page 3
+
+
+  84 0036 2023     		movs	r3, #32
+  85              		.loc 1 36 29
+  86 0038 FB60     		str	r3, [r7, #12]
+  37:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****     GPIO_InitStruct.Mode    = GPIO_MODE_OUTPUT_PP;
+  87              		.loc 1 37 29
+  88 003a 0123     		movs	r3, #1
+  89 003c 3B61     		str	r3, [r7, #16]
+  38:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****     GPIO_InitStruct.Pull    = GPIO_NOPULL;
+  90              		.loc 1 38 29
+  91 003e 0023     		movs	r3, #0
+  92 0040 7B61     		str	r3, [r7, #20]
+  39:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****     GPIO_InitStruct.Speed   = GPIO_SPEED_FREQ_HIGH;
+  93              		.loc 1 39 29
+  94 0042 0223     		movs	r3, #2
+  95 0044 BB61     		str	r3, [r7, #24]
+  40:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****     HAL_GPIO_Init(GPIO_PORT[Led], &GPIO_InitStruct);
+  96              		.loc 1 40 5
+  97 0046 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+  98 0048 074A     		ldr	r2, .L2+4
+  99 004a 52F82330 		ldr	r3, [r2, r3, lsl #2]
+ 100 004e 07F10C02 		add	r2, r7, #12
+ 101 0052 1146     		mov	r1, r2
+ 102 0054 1846     		mov	r0, r3
+ 103 0056 FFF7FEFF 		bl	HAL_GPIO_Init
+  41:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c **** }
+ 104              		.loc 1 41 1
+ 105 005a 00BF     		nop
+ 106 005c 2037     		adds	r7, r7, #32
+ 107              	.LCFI3:
+ 108              		.cfi_def_cfa_offset 8
+ 109 005e BD46     		mov	sp, r7
+ 110              	.LCFI4:
+ 111              		.cfi_def_cfa_register 13
+ 112              		@ sp needed
+ 113 0060 80BD     		pop	{r7, pc}
+ 114              	.L3:
+ 115 0062 00BF     		.align	2
+ 116              	.L2:
+ 117 0064 00380240 		.word	1073887232
+ 118 0068 00000000 		.word	GPIO_PORT
+ 119              		.cfi_endproc
+ 120              	.LFE239:
+ 122              		.section	.text.BSP_Led_DeInit,"ax",%progbits
+ 123              		.align	1
+ 124              		.global	BSP_Led_DeInit
+ 125              		.syntax unified
+ 126              		.thumb
+ 127              		.thumb_func
+ 129              	BSP_Led_DeInit:
+ 130              	.LFB240:
+  42:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c **** 
+  43:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c **** /**
+  44:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  * @brief Deinitialize LED GPIO.
+  45:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  * @param LED: LED to be deinitialized.
+  46:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  *      This parameter can be one of the following values:
+  47:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  *          @arg LED2 or LED4 on Nucleo-64 with external SMPS
+  48:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  * @note BSP_LED_Deinit() does not disable the GPIO clock
+ARM GAS  /tmp/ccXk2HKr.s 			page 4
+
+
+  49:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  * @retval None 
+  50:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  */
+  51:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c **** void BSP_Led_DeInit(Led_t Led)
+  52:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c **** {
+ 131              		.loc 1 52 1
+ 132              		.cfi_startproc
+ 133              		@ args = 0, pretend = 0, frame = 32
+ 134              		@ frame_needed = 1, uses_anonymous_args = 0
+ 135 0000 80B5     		push	{r7, lr}
+ 136              	.LCFI5:
+ 137              		.cfi_def_cfa_offset 8
+ 138              		.cfi_offset 7, -8
+ 139              		.cfi_offset 14, -4
+ 140 0002 88B0     		sub	sp, sp, #32
+ 141              	.LCFI6:
+ 142              		.cfi_def_cfa_offset 40
+ 143 0004 00AF     		add	r7, sp, #0
+ 144              	.LCFI7:
+ 145              		.cfi_def_cfa_register 7
+ 146 0006 0346     		mov	r3, r0
+ 147 0008 FB71     		strb	r3, [r7, #7]
+  53:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****     GPIO_InitTypeDef GPIO_InitStruct;
+  54:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c **** 
+  55:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****     /* Turn off LED */
+  56:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****     HAL_GPIO_WritePin(GPIO_PORT[Led], GPIO_PIN[Led], GPIO_PIN_RESET);
+ 148              		.loc 1 56 5
+ 149 000a FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 150 000c 0B4A     		ldr	r2, .L5
+ 151 000e 52F82330 		ldr	r3, [r2, r3, lsl #2]
+ 152              		.loc 1 56 47
+ 153 0012 2021     		movs	r1, #32
+ 154              		.loc 1 56 5
+ 155 0014 0022     		movs	r2, #0
+ 156 0016 1846     		mov	r0, r3
+ 157 0018 FFF7FEFF 		bl	HAL_GPIO_WritePin
+  57:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****     /* DeInit the GPIO_LED pin */
+  58:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****     GPIO_InitStruct.Pin = GPIO_PIN[Led];
+ 158              		.loc 1 58 35
+ 159 001c 2023     		movs	r3, #32
+ 160              		.loc 1 58 25
+ 161 001e FB60     		str	r3, [r7, #12]
+  59:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****     HAL_GPIO_DeInit(GPIO_PORT[Led], GPIO_InitStruct.Pin);
+ 162              		.loc 1 59 5
+ 163 0020 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 164 0022 064A     		ldr	r2, .L5
+ 165 0024 52F82330 		ldr	r3, [r2, r3, lsl #2]
+ 166 0028 FA68     		ldr	r2, [r7, #12]
+ 167 002a 1146     		mov	r1, r2
+ 168 002c 1846     		mov	r0, r3
+ 169 002e FFF7FEFF 		bl	HAL_GPIO_DeInit
+  60:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c **** }
+ 170              		.loc 1 60 1
+ 171 0032 00BF     		nop
+ 172 0034 2037     		adds	r7, r7, #32
+ 173              	.LCFI8:
+ 174              		.cfi_def_cfa_offset 8
+ 175 0036 BD46     		mov	sp, r7
+ARM GAS  /tmp/ccXk2HKr.s 			page 5
+
+
+ 176              	.LCFI9:
+ 177              		.cfi_def_cfa_register 13
+ 178              		@ sp needed
+ 179 0038 80BD     		pop	{r7, pc}
+ 180              	.L6:
+ 181 003a 00BF     		.align	2
+ 182              	.L5:
+ 183 003c 00000000 		.word	GPIO_PORT
+ 184              		.cfi_endproc
+ 185              	.LFE240:
+ 187              		.section	.text.BSP_LED_On,"ax",%progbits
+ 188              		.align	1
+ 189              		.global	BSP_LED_On
+ 190              		.syntax unified
+ 191              		.thumb
+ 192              		.thumb_func
+ 194              	BSP_LED_On:
+ 195              	.LFB241:
+  61:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c **** 
+  62:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c **** 
+  63:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c **** /**
+  64:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  * @brief Turn selected LED on.
+  65:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  * @param Led: Specifies the Led to be set on.
+  66:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  *  This parameter can be one of the follwoing parameters:
+  67:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  *  @arg LED2 or LED4 on Nucleo-64 with external SMPS
+  68:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  * 
+  69:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  * @retval None
+  70:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  */
+  71:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c **** void BSP_LED_On(Led_t Led)
+  72:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c **** {
+ 196              		.loc 1 72 1
+ 197              		.cfi_startproc
+ 198              		@ args = 0, pretend = 0, frame = 8
+ 199              		@ frame_needed = 1, uses_anonymous_args = 0
+ 200 0000 80B5     		push	{r7, lr}
+ 201              	.LCFI10:
+ 202              		.cfi_def_cfa_offset 8
+ 203              		.cfi_offset 7, -8
+ 204              		.cfi_offset 14, -4
+ 205 0002 82B0     		sub	sp, sp, #8
+ 206              	.LCFI11:
+ 207              		.cfi_def_cfa_offset 16
+ 208 0004 00AF     		add	r7, sp, #0
+ 209              	.LCFI12:
+ 210              		.cfi_def_cfa_register 7
+ 211 0006 0346     		mov	r3, r0
+ 212 0008 FB71     		strb	r3, [r7, #7]
+  73:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****     HAL_GPIO_WritePin(GPIO_PORT[Led], GPIO_PIN[Led], GPIO_PIN_SET);
+ 213              		.loc 1 73 5
+ 214 000a FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 215 000c 054A     		ldr	r2, .L8
+ 216 000e 52F82330 		ldr	r3, [r2, r3, lsl #2]
+ 217              		.loc 1 73 47
+ 218 0012 2021     		movs	r1, #32
+ 219              		.loc 1 73 5
+ 220 0014 0122     		movs	r2, #1
+ 221 0016 1846     		mov	r0, r3
+ARM GAS  /tmp/ccXk2HKr.s 			page 6
+
+
+ 222 0018 FFF7FEFF 		bl	HAL_GPIO_WritePin
+  74:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c **** }
+ 223              		.loc 1 74 1
+ 224 001c 00BF     		nop
+ 225 001e 0837     		adds	r7, r7, #8
+ 226              	.LCFI13:
+ 227              		.cfi_def_cfa_offset 8
+ 228 0020 BD46     		mov	sp, r7
+ 229              	.LCFI14:
+ 230              		.cfi_def_cfa_register 13
+ 231              		@ sp needed
+ 232 0022 80BD     		pop	{r7, pc}
+ 233              	.L9:
+ 234              		.align	2
+ 235              	.L8:
+ 236 0024 00000000 		.word	GPIO_PORT
+ 237              		.cfi_endproc
+ 238              	.LFE241:
+ 240              		.section	.text.BSP_LED_Off,"ax",%progbits
+ 241              		.align	1
+ 242              		.global	BSP_LED_Off
+ 243              		.syntax unified
+ 244              		.thumb
+ 245              		.thumb_func
+ 247              	BSP_LED_Off:
+ 248              	.LFB242:
+  75:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c **** 
+  76:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c **** /**
+  77:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  * @brief Turn selected LED Off.
+  78:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  * @param Led: Specifies the Led to be set off.
+  79:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  *  This parameter can be one of the following parameters:
+  80:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  *  @arg LED2 or LED4 on Nucleo-64 with external SMPS
+  81:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  * 
+  82:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  * @retval None
+  83:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  */
+  84:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c **** void BSP_LED_Off(Led_t Led)
+  85:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c **** {
+ 249              		.loc 1 85 1
+ 250              		.cfi_startproc
+ 251              		@ args = 0, pretend = 0, frame = 8
+ 252              		@ frame_needed = 1, uses_anonymous_args = 0
+ 253 0000 80B5     		push	{r7, lr}
+ 254              	.LCFI15:
+ 255              		.cfi_def_cfa_offset 8
+ 256              		.cfi_offset 7, -8
+ 257              		.cfi_offset 14, -4
+ 258 0002 82B0     		sub	sp, sp, #8
+ 259              	.LCFI16:
+ 260              		.cfi_def_cfa_offset 16
+ 261 0004 00AF     		add	r7, sp, #0
+ 262              	.LCFI17:
+ 263              		.cfi_def_cfa_register 7
+ 264 0006 0346     		mov	r3, r0
+ 265 0008 FB71     		strb	r3, [r7, #7]
+  86:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****     HAL_GPIO_WritePin(GPIO_PORT[Led], GPIO_PIN[Led], GPIO_PIN_RESET);
+ 266              		.loc 1 86 5
+ 267 000a FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ARM GAS  /tmp/ccXk2HKr.s 			page 7
+
+
+ 268 000c 054A     		ldr	r2, .L11
+ 269 000e 52F82330 		ldr	r3, [r2, r3, lsl #2]
+ 270              		.loc 1 86 47
+ 271 0012 2021     		movs	r1, #32
+ 272              		.loc 1 86 5
+ 273 0014 0022     		movs	r2, #0
+ 274 0016 1846     		mov	r0, r3
+ 275 0018 FFF7FEFF 		bl	HAL_GPIO_WritePin
+  87:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c **** }
+ 276              		.loc 1 87 1
+ 277 001c 00BF     		nop
+ 278 001e 0837     		adds	r7, r7, #8
+ 279              	.LCFI18:
+ 280              		.cfi_def_cfa_offset 8
+ 281 0020 BD46     		mov	sp, r7
+ 282              	.LCFI19:
+ 283              		.cfi_def_cfa_register 13
+ 284              		@ sp needed
+ 285 0022 80BD     		pop	{r7, pc}
+ 286              	.L12:
+ 287              		.align	2
+ 288              	.L11:
+ 289 0024 00000000 		.word	GPIO_PORT
+ 290              		.cfi_endproc
+ 291              	.LFE242:
+ 293              		.section	.text.BSP_LED_Toggle,"ax",%progbits
+ 294              		.align	1
+ 295              		.global	BSP_LED_Toggle
+ 296              		.syntax unified
+ 297              		.thumb
+ 298              		.thumb_func
+ 300              	BSP_LED_Toggle:
+ 301              	.LFB243:
+  88:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c **** 
+  89:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c **** /**
+  90:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  * @brief Toggle the selected LED.
+  91:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  * @param Led: Specifies the Led to be toggled.
+  92:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  *  This parameter can be one of the follwoing parameters:
+  93:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  *      @arg LED2 or LED4 on Nucleo-64 with external SMPS
+  94:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  * @retval None
+  95:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****  */
+  96:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c **** void BSP_LED_Toggle(Led_t Led)
+  97:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c **** {
+ 302              		.loc 1 97 1
+ 303              		.cfi_startproc
+ 304              		@ args = 0, pretend = 0, frame = 8
+ 305              		@ frame_needed = 1, uses_anonymous_args = 0
+ 306 0000 80B5     		push	{r7, lr}
+ 307              	.LCFI20:
+ 308              		.cfi_def_cfa_offset 8
+ 309              		.cfi_offset 7, -8
+ 310              		.cfi_offset 14, -4
+ 311 0002 82B0     		sub	sp, sp, #8
+ 312              	.LCFI21:
+ 313              		.cfi_def_cfa_offset 16
+ 314 0004 00AF     		add	r7, sp, #0
+ 315              	.LCFI22:
+ARM GAS  /tmp/ccXk2HKr.s 			page 8
+
+
+ 316              		.cfi_def_cfa_register 7
+ 317 0006 0346     		mov	r3, r0
+ 318 0008 FB71     		strb	r3, [r7, #7]
+  98:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c ****     HAL_GPIO_TogglePin(GPIO_PORT[Led], GPIO_PIN[Led]);
+ 319              		.loc 1 98 5
+ 320 000a FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 321 000c 054A     		ldr	r2, .L14
+ 322 000e 52F82330 		ldr	r3, [r2, r3, lsl #2]
+ 323              		.loc 1 98 48
+ 324 0012 2022     		movs	r2, #32
+ 325              		.loc 1 98 5
+ 326 0014 1146     		mov	r1, r2
+ 327 0016 1846     		mov	r0, r3
+ 328 0018 FFF7FEFF 		bl	HAL_GPIO_TogglePin
+  99:Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.c **** }
+ 329              		.loc 1 99 1
+ 330 001c 00BF     		nop
+ 331 001e 0837     		adds	r7, r7, #8
+ 332              	.LCFI23:
+ 333              		.cfi_def_cfa_offset 8
+ 334 0020 BD46     		mov	sp, r7
+ 335              	.LCFI24:
+ 336              		.cfi_def_cfa_register 13
+ 337              		@ sp needed
+ 338 0022 80BD     		pop	{r7, pc}
+ 339              	.L15:
+ 340              		.align	2
+ 341              	.L14:
+ 342 0024 00000000 		.word	GPIO_PORT
+ 343              		.cfi_endproc
+ 344              	.LFE243:
+ 346              		.text
+ 347              	.Letext0:
+ 348              		.file 2 "/opt/st/stm32cubeclt_1.17.0/GNU-tools-for-STM32/arm-none-eabi/include/machine/_default_ty
+ 349              		.file 3 "/opt/st/stm32cubeclt_1.17.0/GNU-tools-for-STM32/arm-none-eabi/include/sys/_stdint.h"
+ 350              		.file 4 "Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f405xx.h"
+ 351              		.file 5 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_gpio.h"
+ 352              		.file 6 "Drivers/BSP/STM32f446_Nucleo/stm32f4xx_nucleo.h"
+ 353              		.file 7 "Drivers/BSP/Components/Servo/servo_types.h"
+ARM GAS  /tmp/ccXk2HKr.s 			page 9
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 stm32f4xx_nucleo.c
+     /tmp/ccXk2HKr.s:25     .data.GPIO_PORT:00000000 GPIO_PORT
+     /tmp/ccXk2HKr.s:22     .data.GPIO_PORT:00000000 $d
+     /tmp/ccXk2HKr.s:32     .rodata.GPIO_PIN:00000000 GPIO_PIN
+     /tmp/ccXk2HKr.s:29     .rodata.GPIO_PIN:00000000 $d
+     /tmp/ccXk2HKr.s:35     .text.BSP_LED_Init:00000000 $t
+     /tmp/ccXk2HKr.s:41     .text.BSP_LED_Init:00000000 BSP_LED_Init
+     /tmp/ccXk2HKr.s:117    .text.BSP_LED_Init:00000064 $d
+     /tmp/ccXk2HKr.s:123    .text.BSP_Led_DeInit:00000000 $t
+     /tmp/ccXk2HKr.s:129    .text.BSP_Led_DeInit:00000000 BSP_Led_DeInit
+     /tmp/ccXk2HKr.s:183    .text.BSP_Led_DeInit:0000003c $d
+     /tmp/ccXk2HKr.s:188    .text.BSP_LED_On:00000000 $t
+     /tmp/ccXk2HKr.s:194    .text.BSP_LED_On:00000000 BSP_LED_On
+     /tmp/ccXk2HKr.s:236    .text.BSP_LED_On:00000024 $d
+     /tmp/ccXk2HKr.s:241    .text.BSP_LED_Off:00000000 $t
+     /tmp/ccXk2HKr.s:247    .text.BSP_LED_Off:00000000 BSP_LED_Off
+     /tmp/ccXk2HKr.s:289    .text.BSP_LED_Off:00000024 $d
+     /tmp/ccXk2HKr.s:294    .text.BSP_LED_Toggle:00000000 $t
+     /tmp/ccXk2HKr.s:300    .text.BSP_LED_Toggle:00000000 BSP_LED_Toggle
+     /tmp/ccXk2HKr.s:342    .text.BSP_LED_Toggle:00000024 $d
+
+UNDEFINED SYMBOLS
+HAL_GPIO_Init
+HAL_GPIO_WritePin
+HAL_GPIO_DeInit
+HAL_GPIO_TogglePin

@@ -1,0 +1,1285 @@
+ARM GAS  /tmp/ccBuAgyM.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 6
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"Servo.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.file 1 "Drivers/BSP/Components/Servo/Servo.c"
+  20              		.section	.text.servo_init,"ax",%progbits
+  21              		.align	1
+  22              		.global	servo_init
+  23              		.syntax unified
+  24              		.thumb
+  25              		.thumb_func
+  27              	servo_init:
+  28              	.LFB239:
+   1:Drivers/BSP/Components/Servo/Servo.c **** #include "Servo.h"
+   2:Drivers/BSP/Components/Servo/Servo.c **** #include "Servo_Cfg.h"
+   3:Drivers/BSP/Components/Servo/Servo.c **** 
+   4:Drivers/BSP/Components/Servo/Servo.c **** uint32_t servo_microseconds_to_ticks(int32_t microseconds);
+   5:Drivers/BSP/Components/Servo/Servo.c **** float servo_angle_to_microseconds(servo_channels_t servo, float angle);
+   6:Drivers/BSP/Components/Servo/Servo.c **** 
+   7:Drivers/BSP/Components/Servo/Servo.c **** int servo_init(servo_channels_t servo_channel)
+   8:Drivers/BSP/Components/Servo/Servo.c **** {
+  29              		.loc 1 8 1
+  30              		.cfi_startproc
+  31              		@ args = 0, pretend = 0, frame = 8
+  32              		@ frame_needed = 1, uses_anonymous_args = 0
+  33              		@ link register save eliminated.
+  34 0000 80B4     		push	{r7}
+  35              	.LCFI0:
+  36              		.cfi_def_cfa_offset 4
+  37              		.cfi_offset 7, -4
+  38 0002 83B0     		sub	sp, sp, #12
+  39              	.LCFI1:
+  40              		.cfi_def_cfa_offset 16
+  41 0004 00AF     		add	r7, sp, #0
+  42              	.LCFI2:
+  43              		.cfi_def_cfa_register 7
+  44 0006 0346     		mov	r3, r0
+  45 0008 FB71     		strb	r3, [r7, #7]
+   9:Drivers/BSP/Components/Servo/Servo.c ****     servo_channels[servo_channel].servo_state.is_initialized = true;
+  46              		.loc 1 9 46
+  47 000a FA79     		ldrb	r2, [r7, #7]	@ zero_extendqisi2
+  48              		.loc 1 9 62
+  49 000c 0749     		ldr	r1, .L3
+ARM GAS  /tmp/ccBuAgyM.s 			page 2
+
+
+  50 000e 1346     		mov	r3, r2
+  51 0010 9B00     		lsls	r3, r3, #2
+  52 0012 1344     		add	r3, r3, r2
+  53 0014 DB00     		lsls	r3, r3, #3
+  54 0016 0B44     		add	r3, r3, r1
+  55 0018 2033     		adds	r3, r3, #32
+  56 001a 0122     		movs	r2, #1
+  57 001c 1A70     		strb	r2, [r3]
+  10:Drivers/BSP/Components/Servo/Servo.c ****     return 0;
+  58              		.loc 1 10 12
+  59 001e 0023     		movs	r3, #0
+  11:Drivers/BSP/Components/Servo/Servo.c **** }
+  60              		.loc 1 11 1
+  61 0020 1846     		mov	r0, r3
+  62 0022 0C37     		adds	r7, r7, #12
+  63              	.LCFI3:
+  64              		.cfi_def_cfa_offset 4
+  65 0024 BD46     		mov	sp, r7
+  66              	.LCFI4:
+  67              		.cfi_def_cfa_register 13
+  68              		@ sp needed
+  69 0026 5DF8047B 		ldr	r7, [sp], #4
+  70              	.LCFI5:
+  71              		.cfi_restore 7
+  72              		.cfi_def_cfa_offset 0
+  73 002a 7047     		bx	lr
+  74              	.L4:
+  75              		.align	2
+  76              	.L3:
+  77 002c 00000000 		.word	servo_channels
+  78              		.cfi_endproc
+  79              	.LFE239:
+  81              		.section	.text.servo_enable,"ax",%progbits
+  82              		.align	1
+  83              		.global	servo_enable
+  84              		.syntax unified
+  85              		.thumb
+  86              		.thumb_func
+  88              	servo_enable:
+  89              	.LFB240:
+  12:Drivers/BSP/Components/Servo/Servo.c **** 
+  13:Drivers/BSP/Components/Servo/Servo.c **** int servo_enable(servo_channels_t servo_channel)
+  14:Drivers/BSP/Components/Servo/Servo.c **** {
+  90              		.loc 1 14 1
+  91              		.cfi_startproc
+  92              		@ args = 0, pretend = 0, frame = 8
+  93              		@ frame_needed = 1, uses_anonymous_args = 0
+  94 0000 80B5     		push	{r7, lr}
+  95              	.LCFI6:
+  96              		.cfi_def_cfa_offset 8
+  97              		.cfi_offset 7, -8
+  98              		.cfi_offset 14, -4
+  99 0002 82B0     		sub	sp, sp, #8
+ 100              	.LCFI7:
+ 101              		.cfi_def_cfa_offset 16
+ 102 0004 00AF     		add	r7, sp, #0
+ 103              	.LCFI8:
+ARM GAS  /tmp/ccBuAgyM.s 			page 3
+
+
+ 104              		.cfi_def_cfa_register 7
+ 105 0006 0346     		mov	r3, r0
+ 106 0008 FB71     		strb	r3, [r7, #7]
+  15:Drivers/BSP/Components/Servo/Servo.c ****     servo_channels[servo_channel].servo_state.is_enabled = true;
+ 107              		.loc 1 15 46
+ 108 000a FA79     		ldrb	r2, [r7, #7]	@ zero_extendqisi2
+ 109              		.loc 1 15 58
+ 110 000c 1649     		ldr	r1, .L6
+ 111 000e 1346     		mov	r3, r2
+ 112 0010 9B00     		lsls	r3, r3, #2
+ 113 0012 1344     		add	r3, r3, r2
+ 114 0014 DB00     		lsls	r3, r3, #3
+ 115 0016 0B44     		add	r3, r3, r1
+ 116 0018 2133     		adds	r3, r3, #33
+ 117 001a 0122     		movs	r2, #1
+ 118 001c 1A70     		strb	r2, [r3]
+  16:Drivers/BSP/Components/Servo/Servo.c ****     HAL_TIM_Base_Start(servo_channels[servo_channel].servo_hw_config.htimx);
+ 119              		.loc 1 16 5
+ 120 001e FA79     		ldrb	r2, [r7, #7]	@ zero_extendqisi2
+ 121 0020 1149     		ldr	r1, .L6
+ 122 0022 1346     		mov	r3, r2
+ 123 0024 9B00     		lsls	r3, r3, #2
+ 124 0026 1344     		add	r3, r3, r2
+ 125 0028 DB00     		lsls	r3, r3, #3
+ 126 002a 0B44     		add	r3, r3, r1
+ 127 002c 1B68     		ldr	r3, [r3]
+ 128 002e 1846     		mov	r0, r3
+ 129 0030 FFF7FEFF 		bl	HAL_TIM_Base_Start
+  17:Drivers/BSP/Components/Servo/Servo.c ****     HAL_TIM_PWM_Start(servo_channels[servo_channel].servo_hw_config.htimx, servo_channels[servo_cha
+ 130              		.loc 1 17 5
+ 131 0034 FA79     		ldrb	r2, [r7, #7]	@ zero_extendqisi2
+ 132 0036 0C49     		ldr	r1, .L6
+ 133 0038 1346     		mov	r3, r2
+ 134 003a 9B00     		lsls	r3, r3, #2
+ 135 003c 1344     		add	r3, r3, r2
+ 136 003e DB00     		lsls	r3, r3, #3
+ 137 0040 0B44     		add	r3, r3, r1
+ 138 0042 1868     		ldr	r0, [r3]
+ 139 0044 FA79     		ldrb	r2, [r7, #7]	@ zero_extendqisi2
+ 140 0046 0849     		ldr	r1, .L6
+ 141 0048 1346     		mov	r3, r2
+ 142 004a 9B00     		lsls	r3, r3, #2
+ 143 004c 1344     		add	r3, r3, r2
+ 144 004e DB00     		lsls	r3, r3, #3
+ 145 0050 0B44     		add	r3, r3, r1
+ 146 0052 0433     		adds	r3, r3, #4
+ 147 0054 1B68     		ldr	r3, [r3]
+ 148 0056 1946     		mov	r1, r3
+ 149 0058 FFF7FEFF 		bl	HAL_TIM_PWM_Start
+  18:Drivers/BSP/Components/Servo/Servo.c **** }
+ 150              		.loc 1 18 1
+ 151 005c 00BF     		nop
+ 152 005e 1846     		mov	r0, r3
+ 153 0060 0837     		adds	r7, r7, #8
+ 154              	.LCFI9:
+ 155              		.cfi_def_cfa_offset 8
+ 156 0062 BD46     		mov	sp, r7
+ARM GAS  /tmp/ccBuAgyM.s 			page 4
+
+
+ 157              	.LCFI10:
+ 158              		.cfi_def_cfa_register 13
+ 159              		@ sp needed
+ 160 0064 80BD     		pop	{r7, pc}
+ 161              	.L7:
+ 162 0066 00BF     		.align	2
+ 163              	.L6:
+ 164 0068 00000000 		.word	servo_channels
+ 165              		.cfi_endproc
+ 166              	.LFE240:
+ 168              		.section	.text.servo_enable_all,"ax",%progbits
+ 169              		.align	1
+ 170              		.global	servo_enable_all
+ 171              		.syntax unified
+ 172              		.thumb
+ 173              		.thumb_func
+ 175              	servo_enable_all:
+ 176              	.LFB241:
+  19:Drivers/BSP/Components/Servo/Servo.c **** 
+  20:Drivers/BSP/Components/Servo/Servo.c **** int servo_enable_all()
+  21:Drivers/BSP/Components/Servo/Servo.c **** {
+ 177              		.loc 1 21 1
+ 178              		.cfi_startproc
+ 179              		@ args = 0, pretend = 0, frame = 8
+ 180              		@ frame_needed = 1, uses_anonymous_args = 0
+ 181 0000 80B5     		push	{r7, lr}
+ 182              	.LCFI11:
+ 183              		.cfi_def_cfa_offset 8
+ 184              		.cfi_offset 7, -8
+ 185              		.cfi_offset 14, -4
+ 186 0002 82B0     		sub	sp, sp, #8
+ 187              	.LCFI12:
+ 188              		.cfi_def_cfa_offset 16
+ 189 0004 00AF     		add	r7, sp, #0
+ 190              	.LCFI13:
+ 191              		.cfi_def_cfa_register 7
+ 192              	.LBB2:
+  22:Drivers/BSP/Components/Servo/Servo.c ****     for (int servo_channel = SERVO_CHANNEL_1; servo_channel < SERVO_MAX_CHANNELS; servo_channel++)
+ 193              		.loc 1 22 14
+ 194 0006 0023     		movs	r3, #0
+ 195 0008 7B60     		str	r3, [r7, #4]
+ 196              		.loc 1 22 5
+ 197 000a 07E0     		b	.L9
+ 198              	.L10:
+  23:Drivers/BSP/Components/Servo/Servo.c ****     {
+  24:Drivers/BSP/Components/Servo/Servo.c ****         servo_enable(servo_channel);
+ 199              		.loc 1 24 9 discriminator 3
+ 200 000c 7B68     		ldr	r3, [r7, #4]
+ 201 000e DBB2     		uxtb	r3, r3
+ 202 0010 1846     		mov	r0, r3
+ 203 0012 FFF7FEFF 		bl	servo_enable
+  22:Drivers/BSP/Components/Servo/Servo.c ****     for (int servo_channel = SERVO_CHANNEL_1; servo_channel < SERVO_MAX_CHANNELS; servo_channel++)
+ 204              		.loc 1 22 96 discriminator 3
+ 205 0016 7B68     		ldr	r3, [r7, #4]
+ 206 0018 0133     		adds	r3, r3, #1
+ 207 001a 7B60     		str	r3, [r7, #4]
+ 208              	.L9:
+ARM GAS  /tmp/ccBuAgyM.s 			page 5
+
+
+  22:Drivers/BSP/Components/Servo/Servo.c ****     for (int servo_channel = SERVO_CHANNEL_1; servo_channel < SERVO_MAX_CHANNELS; servo_channel++)
+ 209              		.loc 1 22 61 discriminator 1
+ 210 001c 7B68     		ldr	r3, [r7, #4]
+ 211 001e 032B     		cmp	r3, #3
+ 212 0020 F4DD     		ble	.L10
+ 213              	.LBE2:
+  25:Drivers/BSP/Components/Servo/Servo.c ****     }
+  26:Drivers/BSP/Components/Servo/Servo.c ****     return 0;
+ 214              		.loc 1 26 12
+ 215 0022 0023     		movs	r3, #0
+  27:Drivers/BSP/Components/Servo/Servo.c **** }
+ 216              		.loc 1 27 1
+ 217 0024 1846     		mov	r0, r3
+ 218 0026 0837     		adds	r7, r7, #8
+ 219              	.LCFI14:
+ 220              		.cfi_def_cfa_offset 8
+ 221 0028 BD46     		mov	sp, r7
+ 222              	.LCFI15:
+ 223              		.cfi_def_cfa_register 13
+ 224              		@ sp needed
+ 225 002a 80BD     		pop	{r7, pc}
+ 226              		.cfi_endproc
+ 227              	.LFE241:
+ 229              		.section	.text.servo_disable,"ax",%progbits
+ 230              		.align	1
+ 231              		.global	servo_disable
+ 232              		.syntax unified
+ 233              		.thumb
+ 234              		.thumb_func
+ 236              	servo_disable:
+ 237              	.LFB242:
+  28:Drivers/BSP/Components/Servo/Servo.c **** 
+  29:Drivers/BSP/Components/Servo/Servo.c **** int servo_disable(servo_channels_t servo_channel)
+  30:Drivers/BSP/Components/Servo/Servo.c **** {
+ 238              		.loc 1 30 1
+ 239              		.cfi_startproc
+ 240              		@ args = 0, pretend = 0, frame = 8
+ 241              		@ frame_needed = 1, uses_anonymous_args = 0
+ 242 0000 80B5     		push	{r7, lr}
+ 243              	.LCFI16:
+ 244              		.cfi_def_cfa_offset 8
+ 245              		.cfi_offset 7, -8
+ 246              		.cfi_offset 14, -4
+ 247 0002 82B0     		sub	sp, sp, #8
+ 248              	.LCFI17:
+ 249              		.cfi_def_cfa_offset 16
+ 250 0004 00AF     		add	r7, sp, #0
+ 251              	.LCFI18:
+ 252              		.cfi_def_cfa_register 7
+ 253 0006 0346     		mov	r3, r0
+ 254 0008 FB71     		strb	r3, [r7, #7]
+  31:Drivers/BSP/Components/Servo/Servo.c ****     HAL_TIM_PWM_Stop(servo_channels[servo_channel].servo_hw_config.htimx, servo_channels[servo_chan
+ 255              		.loc 1 31 5
+ 256 000a FA79     		ldrb	r2, [r7, #7]	@ zero_extendqisi2
+ 257 000c 1049     		ldr	r1, .L14
+ 258 000e 1346     		mov	r3, r2
+ 259 0010 9B00     		lsls	r3, r3, #2
+ARM GAS  /tmp/ccBuAgyM.s 			page 6
+
+
+ 260 0012 1344     		add	r3, r3, r2
+ 261 0014 DB00     		lsls	r3, r3, #3
+ 262 0016 0B44     		add	r3, r3, r1
+ 263 0018 1868     		ldr	r0, [r3]
+ 264 001a FA79     		ldrb	r2, [r7, #7]	@ zero_extendqisi2
+ 265 001c 0C49     		ldr	r1, .L14
+ 266 001e 1346     		mov	r3, r2
+ 267 0020 9B00     		lsls	r3, r3, #2
+ 268 0022 1344     		add	r3, r3, r2
+ 269 0024 DB00     		lsls	r3, r3, #3
+ 270 0026 0B44     		add	r3, r3, r1
+ 271 0028 0433     		adds	r3, r3, #4
+ 272 002a 1B68     		ldr	r3, [r3]
+ 273 002c 1946     		mov	r1, r3
+ 274 002e FFF7FEFF 		bl	HAL_TIM_PWM_Stop
+  32:Drivers/BSP/Components/Servo/Servo.c ****     servo_channels[servo_channel].servo_state.is_enabled = false;
+ 275              		.loc 1 32 46
+ 276 0032 FA79     		ldrb	r2, [r7, #7]	@ zero_extendqisi2
+ 277              		.loc 1 32 58
+ 278 0034 0649     		ldr	r1, .L14
+ 279 0036 1346     		mov	r3, r2
+ 280 0038 9B00     		lsls	r3, r3, #2
+ 281 003a 1344     		add	r3, r3, r2
+ 282 003c DB00     		lsls	r3, r3, #3
+ 283 003e 0B44     		add	r3, r3, r1
+ 284 0040 2133     		adds	r3, r3, #33
+ 285 0042 0022     		movs	r2, #0
+ 286 0044 1A70     		strb	r2, [r3]
+  33:Drivers/BSP/Components/Servo/Servo.c ****     return 0;
+ 287              		.loc 1 33 12
+ 288 0046 0023     		movs	r3, #0
+  34:Drivers/BSP/Components/Servo/Servo.c **** }
+ 289              		.loc 1 34 1
+ 290 0048 1846     		mov	r0, r3
+ 291 004a 0837     		adds	r7, r7, #8
+ 292              	.LCFI19:
+ 293              		.cfi_def_cfa_offset 8
+ 294 004c BD46     		mov	sp, r7
+ 295              	.LCFI20:
+ 296              		.cfi_def_cfa_register 13
+ 297              		@ sp needed
+ 298 004e 80BD     		pop	{r7, pc}
+ 299              	.L15:
+ 300              		.align	2
+ 301              	.L14:
+ 302 0050 00000000 		.word	servo_channels
+ 303              		.cfi_endproc
+ 304              	.LFE242:
+ 306              		.section	.text.servo_disable_all,"ax",%progbits
+ 307              		.align	1
+ 308              		.global	servo_disable_all
+ 309              		.syntax unified
+ 310              		.thumb
+ 311              		.thumb_func
+ 313              	servo_disable_all:
+ 314              	.LFB243:
+  35:Drivers/BSP/Components/Servo/Servo.c **** 
+ARM GAS  /tmp/ccBuAgyM.s 			page 7
+
+
+  36:Drivers/BSP/Components/Servo/Servo.c **** int servo_disable_all()
+  37:Drivers/BSP/Components/Servo/Servo.c **** {
+ 315              		.loc 1 37 1
+ 316              		.cfi_startproc
+ 317              		@ args = 0, pretend = 0, frame = 8
+ 318              		@ frame_needed = 1, uses_anonymous_args = 0
+ 319 0000 80B5     		push	{r7, lr}
+ 320              	.LCFI21:
+ 321              		.cfi_def_cfa_offset 8
+ 322              		.cfi_offset 7, -8
+ 323              		.cfi_offset 14, -4
+ 324 0002 82B0     		sub	sp, sp, #8
+ 325              	.LCFI22:
+ 326              		.cfi_def_cfa_offset 16
+ 327 0004 00AF     		add	r7, sp, #0
+ 328              	.LCFI23:
+ 329              		.cfi_def_cfa_register 7
+ 330              	.LBB3:
+  38:Drivers/BSP/Components/Servo/Servo.c ****     for (int servo_channel = SERVO_CHANNEL_1; servo_channel < SERVO_MAX_CHANNELS; servo_channel++)
+ 331              		.loc 1 38 14
+ 332 0006 0023     		movs	r3, #0
+ 333 0008 7B60     		str	r3, [r7, #4]
+ 334              		.loc 1 38 5
+ 335 000a 07E0     		b	.L17
+ 336              	.L18:
+  39:Drivers/BSP/Components/Servo/Servo.c ****     {
+  40:Drivers/BSP/Components/Servo/Servo.c ****         servo_disable(servo_channel);
+ 337              		.loc 1 40 9 discriminator 3
+ 338 000c 7B68     		ldr	r3, [r7, #4]
+ 339 000e DBB2     		uxtb	r3, r3
+ 340 0010 1846     		mov	r0, r3
+ 341 0012 FFF7FEFF 		bl	servo_disable
+  38:Drivers/BSP/Components/Servo/Servo.c ****     for (int servo_channel = SERVO_CHANNEL_1; servo_channel < SERVO_MAX_CHANNELS; servo_channel++)
+ 342              		.loc 1 38 96 discriminator 3
+ 343 0016 7B68     		ldr	r3, [r7, #4]
+ 344 0018 0133     		adds	r3, r3, #1
+ 345 001a 7B60     		str	r3, [r7, #4]
+ 346              	.L17:
+  38:Drivers/BSP/Components/Servo/Servo.c ****     for (int servo_channel = SERVO_CHANNEL_1; servo_channel < SERVO_MAX_CHANNELS; servo_channel++)
+ 347              		.loc 1 38 61 discriminator 1
+ 348 001c 7B68     		ldr	r3, [r7, #4]
+ 349 001e 032B     		cmp	r3, #3
+ 350 0020 F4DD     		ble	.L18
+ 351              	.LBE3:
+  41:Drivers/BSP/Components/Servo/Servo.c ****     }
+  42:Drivers/BSP/Components/Servo/Servo.c ****     return 0;
+ 352              		.loc 1 42 12
+ 353 0022 0023     		movs	r3, #0
+  43:Drivers/BSP/Components/Servo/Servo.c **** }
+ 354              		.loc 1 43 1
+ 355 0024 1846     		mov	r0, r3
+ 356 0026 0837     		adds	r7, r7, #8
+ 357              	.LCFI24:
+ 358              		.cfi_def_cfa_offset 8
+ 359 0028 BD46     		mov	sp, r7
+ 360              	.LCFI25:
+ 361              		.cfi_def_cfa_register 13
+ARM GAS  /tmp/ccBuAgyM.s 			page 8
+
+
+ 362              		@ sp needed
+ 363 002a 80BD     		pop	{r7, pc}
+ 364              		.cfi_endproc
+ 365              	.LFE243:
+ 367              		.section	.text.servo_set_angle,"ax",%progbits
+ 368              		.align	1
+ 369              		.global	servo_set_angle
+ 370              		.syntax unified
+ 371              		.thumb
+ 372              		.thumb_func
+ 374              	servo_set_angle:
+ 375              	.LFB244:
+  44:Drivers/BSP/Components/Servo/Servo.c **** 
+  45:Drivers/BSP/Components/Servo/Servo.c **** int servo_set_angle(servo_channels_t servo_channel, float angle)
+  46:Drivers/BSP/Components/Servo/Servo.c **** {
+ 376              		.loc 1 46 1
+ 377              		.cfi_startproc
+ 378              		@ args = 0, pretend = 0, frame = 16
+ 379              		@ frame_needed = 1, uses_anonymous_args = 0
+ 380 0000 80B5     		push	{r7, lr}
+ 381              	.LCFI26:
+ 382              		.cfi_def_cfa_offset 8
+ 383              		.cfi_offset 7, -8
+ 384              		.cfi_offset 14, -4
+ 385 0002 84B0     		sub	sp, sp, #16
+ 386              	.LCFI27:
+ 387              		.cfi_def_cfa_offset 24
+ 388 0004 00AF     		add	r7, sp, #0
+ 389              	.LCFI28:
+ 390              		.cfi_def_cfa_register 7
+ 391 0006 0346     		mov	r3, r0
+ 392 0008 87ED000A 		vstr.32	s0, [r7]
+ 393 000c FB71     		strb	r3, [r7, #7]
+  47:Drivers/BSP/Components/Servo/Servo.c ****     float microseconds = servo_angle_to_microseconds(servo_channel, angle);
+ 394              		.loc 1 47 26
+ 395 000e FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 396 0010 97ED000A 		vldr.32	s0, [r7]
+ 397 0014 1846     		mov	r0, r3
+ 398 0016 FFF7FEFF 		bl	servo_angle_to_microseconds
+ 399 001a 87ED030A 		vstr.32	s0, [r7, #12]
+  48:Drivers/BSP/Components/Servo/Servo.c ****     servo_channels[servo_channel].servo_state.next_microseconds = microseconds;
+ 400              		.loc 1 48 46
+ 401 001e FA79     		ldrb	r2, [r7, #7]	@ zero_extendqisi2
+ 402              		.loc 1 48 65
+ 403 0020 D7ED037A 		vldr.32	s15, [r7, #12]
+ 404 0024 FCEEE77A 		vcvt.u32.f32	s15, s15
+ 405 0028 17EE903A 		vmov	r3, s15	@ int
+ 406 002c 98B2     		uxth	r0, r3
+ 407 002e 0749     		ldr	r1, .L22
+ 408 0030 1346     		mov	r3, r2
+ 409 0032 9B00     		lsls	r3, r3, #2
+ 410 0034 1344     		add	r3, r3, r2
+ 411 0036 DB00     		lsls	r3, r3, #3
+ 412 0038 0B44     		add	r3, r3, r1
+ 413 003a 2433     		adds	r3, r3, #36
+ 414 003c 0246     		mov	r2, r0	@ movhi
+ 415 003e 1A80     		strh	r2, [r3]	@ movhi
+ARM GAS  /tmp/ccBuAgyM.s 			page 9
+
+
+  49:Drivers/BSP/Components/Servo/Servo.c ****     return 0;
+ 416              		.loc 1 49 12
+ 417 0040 0023     		movs	r3, #0
+  50:Drivers/BSP/Components/Servo/Servo.c **** }
+ 418              		.loc 1 50 1
+ 419 0042 1846     		mov	r0, r3
+ 420 0044 1037     		adds	r7, r7, #16
+ 421              	.LCFI29:
+ 422              		.cfi_def_cfa_offset 8
+ 423 0046 BD46     		mov	sp, r7
+ 424              	.LCFI30:
+ 425              		.cfi_def_cfa_register 13
+ 426              		@ sp needed
+ 427 0048 80BD     		pop	{r7, pc}
+ 428              	.L23:
+ 429 004a 00BF     		.align	2
+ 430              	.L22:
+ 431 004c 00000000 		.word	servo_channels
+ 432              		.cfi_endproc
+ 433              	.LFE244:
+ 435              		.section	.text.servo_set_microseconds,"ax",%progbits
+ 436              		.align	1
+ 437              		.global	servo_set_microseconds
+ 438              		.syntax unified
+ 439              		.thumb
+ 440              		.thumb_func
+ 442              	servo_set_microseconds:
+ 443              	.LFB245:
+  51:Drivers/BSP/Components/Servo/Servo.c **** 
+  52:Drivers/BSP/Components/Servo/Servo.c **** int servo_set_microseconds(servo_channels_t servo_channel, float microseconds)
+  53:Drivers/BSP/Components/Servo/Servo.c **** {
+ 444              		.loc 1 53 1
+ 445              		.cfi_startproc
+ 446              		@ args = 0, pretend = 0, frame = 8
+ 447              		@ frame_needed = 1, uses_anonymous_args = 0
+ 448              		@ link register save eliminated.
+ 449 0000 80B4     		push	{r7}
+ 450              	.LCFI31:
+ 451              		.cfi_def_cfa_offset 4
+ 452              		.cfi_offset 7, -4
+ 453 0002 83B0     		sub	sp, sp, #12
+ 454              	.LCFI32:
+ 455              		.cfi_def_cfa_offset 16
+ 456 0004 00AF     		add	r7, sp, #0
+ 457              	.LCFI33:
+ 458              		.cfi_def_cfa_register 7
+ 459 0006 0346     		mov	r3, r0
+ 460 0008 87ED000A 		vstr.32	s0, [r7]
+ 461 000c FB71     		strb	r3, [r7, #7]
+  54:Drivers/BSP/Components/Servo/Servo.c ****     servo_channels[servo_channel].servo_state.next_microseconds = microseconds;
+ 462              		.loc 1 54 46
+ 463 000e FA79     		ldrb	r2, [r7, #7]	@ zero_extendqisi2
+ 464              		.loc 1 54 65
+ 465 0010 D7ED007A 		vldr.32	s15, [r7]
+ 466 0014 FCEEE77A 		vcvt.u32.f32	s15, s15
+ 467 0018 17EE903A 		vmov	r3, s15	@ int
+ 468 001c 98B2     		uxth	r0, r3
+ARM GAS  /tmp/ccBuAgyM.s 			page 10
+
+
+ 469 001e 0849     		ldr	r1, .L26
+ 470 0020 1346     		mov	r3, r2
+ 471 0022 9B00     		lsls	r3, r3, #2
+ 472 0024 1344     		add	r3, r3, r2
+ 473 0026 DB00     		lsls	r3, r3, #3
+ 474 0028 0B44     		add	r3, r3, r1
+ 475 002a 2433     		adds	r3, r3, #36
+ 476 002c 0246     		mov	r2, r0	@ movhi
+ 477 002e 1A80     		strh	r2, [r3]	@ movhi
+  55:Drivers/BSP/Components/Servo/Servo.c ****     return 0;
+ 478              		.loc 1 55 12
+ 479 0030 0023     		movs	r3, #0
+  56:Drivers/BSP/Components/Servo/Servo.c **** }
+ 480              		.loc 1 56 1
+ 481 0032 1846     		mov	r0, r3
+ 482 0034 0C37     		adds	r7, r7, #12
+ 483              	.LCFI34:
+ 484              		.cfi_def_cfa_offset 4
+ 485 0036 BD46     		mov	sp, r7
+ 486              	.LCFI35:
+ 487              		.cfi_def_cfa_register 13
+ 488              		@ sp needed
+ 489 0038 5DF8047B 		ldr	r7, [sp], #4
+ 490              	.LCFI36:
+ 491              		.cfi_restore 7
+ 492              		.cfi_def_cfa_offset 0
+ 493 003c 7047     		bx	lr
+ 494              	.L27:
+ 495 003e 00BF     		.align	2
+ 496              	.L26:
+ 497 0040 00000000 		.word	servo_channels
+ 498              		.cfi_endproc
+ 499              	.LFE245:
+ 501              		.section	.text.servo_update,"ax",%progbits
+ 502              		.align	1
+ 503              		.global	servo_update
+ 504              		.syntax unified
+ 505              		.thumb
+ 506              		.thumb_func
+ 508              	servo_update:
+ 509              	.LFB246:
+  57:Drivers/BSP/Components/Servo/Servo.c **** 
+  58:Drivers/BSP/Components/Servo/Servo.c **** int servo_update(servo_channels_t servo_channel)
+  59:Drivers/BSP/Components/Servo/Servo.c **** {
+ 510              		.loc 1 59 1
+ 511              		.cfi_startproc
+ 512              		@ args = 0, pretend = 0, frame = 16
+ 513              		@ frame_needed = 1, uses_anonymous_args = 0
+ 514 0000 80B5     		push	{r7, lr}
+ 515              	.LCFI37:
+ 516              		.cfi_def_cfa_offset 8
+ 517              		.cfi_offset 7, -8
+ 518              		.cfi_offset 14, -4
+ 519 0002 84B0     		sub	sp, sp, #16
+ 520              	.LCFI38:
+ 521              		.cfi_def_cfa_offset 24
+ 522 0004 00AF     		add	r7, sp, #0
+ARM GAS  /tmp/ccBuAgyM.s 			page 11
+
+
+ 523              	.LCFI39:
+ 524              		.cfi_def_cfa_register 7
+ 525 0006 0346     		mov	r3, r0
+ 526 0008 FB71     		strb	r3, [r7, #7]
+  60:Drivers/BSP/Components/Servo/Servo.c ****     if(servo_channels[servo_channel].servo_state.is_initialized && servo_channels[servo_channel].se
+ 527              		.loc 1 60 49
+ 528 000a FA79     		ldrb	r2, [r7, #7]	@ zero_extendqisi2
+ 529 000c 4949     		ldr	r1, .L37
+ 530 000e 1346     		mov	r3, r2
+ 531 0010 9B00     		lsls	r3, r3, #2
+ 532 0012 1344     		add	r3, r3, r2
+ 533 0014 DB00     		lsls	r3, r3, #3
+ 534 0016 0B44     		add	r3, r3, r1
+ 535 0018 2033     		adds	r3, r3, #32
+ 536 001a 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 537              		.loc 1 60 7
+ 538 001c 002B     		cmp	r3, #0
+ 539 001e 00F08480 		beq	.L29
+ 540              		.loc 1 60 109 discriminator 1
+ 541 0022 FA79     		ldrb	r2, [r7, #7]	@ zero_extendqisi2
+ 542 0024 4349     		ldr	r1, .L37
+ 543 0026 1346     		mov	r3, r2
+ 544 0028 9B00     		lsls	r3, r3, #2
+ 545 002a 1344     		add	r3, r3, r2
+ 546 002c DB00     		lsls	r3, r3, #3
+ 547 002e 0B44     		add	r3, r3, r1
+ 548 0030 2133     		adds	r3, r3, #33
+ 549 0032 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 550              		.loc 1 60 65 discriminator 1
+ 551 0034 002B     		cmp	r3, #0
+ 552 0036 78D0     		beq	.L29
+ 553              	.LBB4:
+  61:Drivers/BSP/Components/Servo/Servo.c ****     {
+  62:Drivers/BSP/Components/Servo/Servo.c ****         uint32_t compare_ticks = servo_microseconds_to_ticks(servo_channels[servo_channel].servo_st
+ 554              		.loc 1 62 103
+ 555 0038 FA79     		ldrb	r2, [r7, #7]	@ zero_extendqisi2
+ 556 003a 3E49     		ldr	r1, .L37
+ 557 003c 1346     		mov	r3, r2
+ 558 003e 9B00     		lsls	r3, r3, #2
+ 559 0040 1344     		add	r3, r3, r2
+ 560 0042 DB00     		lsls	r3, r3, #3
+ 561 0044 0B44     		add	r3, r3, r1
+ 562 0046 2433     		adds	r3, r3, #36
+ 563 0048 1B88     		ldrh	r3, [r3]
+ 564              		.loc 1 62 34
+ 565 004a 1846     		mov	r0, r3
+ 566 004c FFF7FEFF 		bl	servo_microseconds_to_ticks
+ 567 0050 F860     		str	r0, [r7, #12]
+  63:Drivers/BSP/Components/Servo/Servo.c ****         TIM_HandleTypeDef *htimex = servo_channels[servo_channel].servo_hw_config.htimx;
+ 568              		.loc 1 63 82
+ 569 0052 FA79     		ldrb	r2, [r7, #7]	@ zero_extendqisi2
+ 570              		.loc 1 63 28
+ 571 0054 3749     		ldr	r1, .L37
+ 572 0056 1346     		mov	r3, r2
+ 573 0058 9B00     		lsls	r3, r3, #2
+ 574 005a 1344     		add	r3, r3, r2
+ 575 005c DB00     		lsls	r3, r3, #3
+ARM GAS  /tmp/ccBuAgyM.s 			page 12
+
+
+ 576 005e 0B44     		add	r3, r3, r1
+ 577 0060 1B68     		ldr	r3, [r3]
+ 578 0062 BB60     		str	r3, [r7, #8]
+  64:Drivers/BSP/Components/Servo/Servo.c ****         __HAL_TIM_SET_COMPARE(servo_channels[servo_channel].servo_hw_config.htimx, 
+ 579              		.loc 1 64 9
+ 580 0064 FA79     		ldrb	r2, [r7, #7]	@ zero_extendqisi2
+ 581 0066 3349     		ldr	r1, .L37
+ 582 0068 1346     		mov	r3, r2
+ 583 006a 9B00     		lsls	r3, r3, #2
+ 584 006c 1344     		add	r3, r3, r2
+ 585 006e DB00     		lsls	r3, r3, #3
+ 586 0070 0B44     		add	r3, r3, r1
+ 587 0072 0433     		adds	r3, r3, #4
+ 588 0074 1B68     		ldr	r3, [r3]
+ 589 0076 002B     		cmp	r3, #0
+ 590 0078 0BD1     		bne	.L30
+ 591              		.loc 1 64 9 is_stmt 0 discriminator 1
+ 592 007a FA79     		ldrb	r2, [r7, #7]	@ zero_extendqisi2
+ 593 007c 2D49     		ldr	r1, .L37
+ 594 007e 1346     		mov	r3, r2
+ 595 0080 9B00     		lsls	r3, r3, #2
+ 596 0082 1344     		add	r3, r3, r2
+ 597 0084 DB00     		lsls	r3, r3, #3
+ 598 0086 0B44     		add	r3, r3, r1
+ 599 0088 1B68     		ldr	r3, [r3]
+ 600 008a 1B68     		ldr	r3, [r3]
+ 601 008c FA68     		ldr	r2, [r7, #12]
+ 602 008e 5A63     		str	r2, [r3, #52]
+ 603 0090 38E0     		b	.L31
+ 604              	.L30:
+ 605              		.loc 1 64 9 discriminator 2
+ 606 0092 FA79     		ldrb	r2, [r7, #7]	@ zero_extendqisi2
+ 607 0094 2749     		ldr	r1, .L37
+ 608 0096 1346     		mov	r3, r2
+ 609 0098 9B00     		lsls	r3, r3, #2
+ 610 009a 1344     		add	r3, r3, r2
+ 611 009c DB00     		lsls	r3, r3, #3
+ 612 009e 0B44     		add	r3, r3, r1
+ 613 00a0 0433     		adds	r3, r3, #4
+ 614 00a2 1B68     		ldr	r3, [r3]
+ 615 00a4 042B     		cmp	r3, #4
+ 616 00a6 0BD1     		bne	.L32
+ 617              		.loc 1 64 9 discriminator 3
+ 618 00a8 FA79     		ldrb	r2, [r7, #7]	@ zero_extendqisi2
+ 619 00aa 2249     		ldr	r1, .L37
+ 620 00ac 1346     		mov	r3, r2
+ 621 00ae 9B00     		lsls	r3, r3, #2
+ 622 00b0 1344     		add	r3, r3, r2
+ 623 00b2 DB00     		lsls	r3, r3, #3
+ 624 00b4 0B44     		add	r3, r3, r1
+ 625 00b6 1B68     		ldr	r3, [r3]
+ 626 00b8 1A68     		ldr	r2, [r3]
+ 627 00ba FB68     		ldr	r3, [r7, #12]
+ 628 00bc 9363     		str	r3, [r2, #56]
+ 629 00be 21E0     		b	.L31
+ 630              	.L32:
+ 631              		.loc 1 64 9 discriminator 4
+ARM GAS  /tmp/ccBuAgyM.s 			page 13
+
+
+ 632 00c0 FA79     		ldrb	r2, [r7, #7]	@ zero_extendqisi2
+ 633 00c2 1C49     		ldr	r1, .L37
+ 634 00c4 1346     		mov	r3, r2
+ 635 00c6 9B00     		lsls	r3, r3, #2
+ 636 00c8 1344     		add	r3, r3, r2
+ 637 00ca DB00     		lsls	r3, r3, #3
+ 638 00cc 0B44     		add	r3, r3, r1
+ 639 00ce 0433     		adds	r3, r3, #4
+ 640 00d0 1B68     		ldr	r3, [r3]
+ 641 00d2 082B     		cmp	r3, #8
+ 642 00d4 0BD1     		bne	.L34
+ 643              		.loc 1 64 9 discriminator 6
+ 644 00d6 FA79     		ldrb	r2, [r7, #7]	@ zero_extendqisi2
+ 645 00d8 1649     		ldr	r1, .L37
+ 646 00da 1346     		mov	r3, r2
+ 647 00dc 9B00     		lsls	r3, r3, #2
+ 648 00de 1344     		add	r3, r3, r2
+ 649 00e0 DB00     		lsls	r3, r3, #3
+ 650 00e2 0B44     		add	r3, r3, r1
+ 651 00e4 1B68     		ldr	r3, [r3]
+ 652 00e6 1A68     		ldr	r2, [r3]
+ 653 00e8 FB68     		ldr	r3, [r7, #12]
+ 654 00ea D363     		str	r3, [r2, #60]
+ 655 00ec 0AE0     		b	.L31
+ 656              	.L34:
+ 657              		.loc 1 64 9 discriminator 7
+ 658 00ee FA79     		ldrb	r2, [r7, #7]	@ zero_extendqisi2
+ 659 00f0 1049     		ldr	r1, .L37
+ 660 00f2 1346     		mov	r3, r2
+ 661 00f4 9B00     		lsls	r3, r3, #2
+ 662 00f6 1344     		add	r3, r3, r2
+ 663 00f8 DB00     		lsls	r3, r3, #3
+ 664 00fa 0B44     		add	r3, r3, r1
+ 665 00fc 1B68     		ldr	r3, [r3]
+ 666 00fe 1A68     		ldr	r2, [r3]
+ 667 0100 FB68     		ldr	r3, [r7, #12]
+ 668 0102 1364     		str	r3, [r2, #64]
+ 669              	.L31:
+  65:Drivers/BSP/Components/Servo/Servo.c ****                             servo_channels[servo_channel].servo_hw_config.tim_channel, 
+  66:Drivers/BSP/Components/Servo/Servo.c ****                             compare_ticks);
+  67:Drivers/BSP/Components/Servo/Servo.c ****         servo_channels[servo_channel].servo_state.current_microseconds = servo_channels[servo_chann
+ 670              		.loc 1 67 115 is_stmt 1
+ 671 0104 F979     		ldrb	r1, [r7, #7]	@ zero_extendqisi2
+ 672              		.loc 1 67 50
+ 673 0106 FA79     		ldrb	r2, [r7, #7]	@ zero_extendqisi2
+ 674              		.loc 1 67 115
+ 675 0108 0A48     		ldr	r0, .L37
+ 676 010a 0B46     		mov	r3, r1
+ 677 010c 9B00     		lsls	r3, r3, #2
+ 678 010e 0B44     		add	r3, r3, r1
+ 679 0110 DB00     		lsls	r3, r3, #3
+ 680 0112 0344     		add	r3, r3, r0
+ 681 0114 2433     		adds	r3, r3, #36
+ 682 0116 1888     		ldrh	r0, [r3]
+ 683              		.loc 1 67 72
+ 684 0118 0649     		ldr	r1, .L37
+ 685 011a 1346     		mov	r3, r2
+ARM GAS  /tmp/ccBuAgyM.s 			page 14
+
+
+ 686 011c 9B00     		lsls	r3, r3, #2
+ 687 011e 1344     		add	r3, r3, r2
+ 688 0120 DB00     		lsls	r3, r3, #3
+ 689 0122 0B44     		add	r3, r3, r1
+ 690 0124 2233     		adds	r3, r3, #34
+ 691 0126 0246     		mov	r2, r0	@ movhi
+ 692 0128 1A80     		strh	r2, [r3]	@ movhi
+ 693              	.L29:
+ 694              	.LBE4:
+  68:Drivers/BSP/Components/Servo/Servo.c ****     }
+  69:Drivers/BSP/Components/Servo/Servo.c **** 
+  70:Drivers/BSP/Components/Servo/Servo.c ****     return 0;
+ 695              		.loc 1 70 12
+ 696 012a 0023     		movs	r3, #0
+  71:Drivers/BSP/Components/Servo/Servo.c **** }
+ 697              		.loc 1 71 1
+ 698 012c 1846     		mov	r0, r3
+ 699 012e 1037     		adds	r7, r7, #16
+ 700              	.LCFI40:
+ 701              		.cfi_def_cfa_offset 8
+ 702 0130 BD46     		mov	sp, r7
+ 703              	.LCFI41:
+ 704              		.cfi_def_cfa_register 13
+ 705              		@ sp needed
+ 706 0132 80BD     		pop	{r7, pc}
+ 707              	.L38:
+ 708              		.align	2
+ 709              	.L37:
+ 710 0134 00000000 		.word	servo_channels
+ 711              		.cfi_endproc
+ 712              	.LFE246:
+ 714              		.section	.text.servo_update_all,"ax",%progbits
+ 715              		.align	1
+ 716              		.global	servo_update_all
+ 717              		.syntax unified
+ 718              		.thumb
+ 719              		.thumb_func
+ 721              	servo_update_all:
+ 722              	.LFB247:
+  72:Drivers/BSP/Components/Servo/Servo.c **** 
+  73:Drivers/BSP/Components/Servo/Servo.c **** int servo_update_all()
+  74:Drivers/BSP/Components/Servo/Servo.c **** {
+ 723              		.loc 1 74 1
+ 724              		.cfi_startproc
+ 725              		@ args = 0, pretend = 0, frame = 0
+ 726              		@ frame_needed = 1, uses_anonymous_args = 0
+ 727              		@ link register save eliminated.
+ 728 0000 80B4     		push	{r7}
+ 729              	.LCFI42:
+ 730              		.cfi_def_cfa_offset 4
+ 731              		.cfi_offset 7, -4
+ 732 0002 00AF     		add	r7, sp, #0
+ 733              	.LCFI43:
+ 734              		.cfi_def_cfa_register 7
+  75:Drivers/BSP/Components/Servo/Servo.c ****     return 0;
+ 735              		.loc 1 75 12
+ 736 0004 0023     		movs	r3, #0
+ARM GAS  /tmp/ccBuAgyM.s 			page 15
+
+
+  76:Drivers/BSP/Components/Servo/Servo.c **** }
+ 737              		.loc 1 76 1
+ 738 0006 1846     		mov	r0, r3
+ 739 0008 BD46     		mov	sp, r7
+ 740              	.LCFI44:
+ 741              		.cfi_def_cfa_register 13
+ 742              		@ sp needed
+ 743 000a 5DF8047B 		ldr	r7, [sp], #4
+ 744              	.LCFI45:
+ 745              		.cfi_restore 7
+ 746              		.cfi_def_cfa_offset 0
+ 747 000e 7047     		bx	lr
+ 748              		.cfi_endproc
+ 749              	.LFE247:
+ 751              		.section	.text.servo_test,"ax",%progbits
+ 752              		.align	1
+ 753              		.global	servo_test
+ 754              		.syntax unified
+ 755              		.thumb
+ 756              		.thumb_func
+ 758              	servo_test:
+ 759              	.LFB248:
+  77:Drivers/BSP/Components/Servo/Servo.c **** 
+  78:Drivers/BSP/Components/Servo/Servo.c **** int servo_test(servo_channels_t servo_channel)
+  79:Drivers/BSP/Components/Servo/Servo.c **** {
+ 760              		.loc 1 79 1
+ 761              		.cfi_startproc
+ 762              		@ args = 0, pretend = 0, frame = 8
+ 763              		@ frame_needed = 1, uses_anonymous_args = 0
+ 764 0000 80B5     		push	{r7, lr}
+ 765              	.LCFI46:
+ 766              		.cfi_def_cfa_offset 8
+ 767              		.cfi_offset 7, -8
+ 768              		.cfi_offset 14, -4
+ 769 0002 82B0     		sub	sp, sp, #8
+ 770              	.LCFI47:
+ 771              		.cfi_def_cfa_offset 16
+ 772 0004 00AF     		add	r7, sp, #0
+ 773              	.LCFI48:
+ 774              		.cfi_def_cfa_register 7
+ 775 0006 0346     		mov	r3, r0
+ 776 0008 FB71     		strb	r3, [r7, #7]
+  80:Drivers/BSP/Components/Servo/Servo.c ****     servo_init(servo_channel);
+ 777              		.loc 1 80 5
+ 778 000a FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 779 000c 1846     		mov	r0, r3
+ 780 000e FFF7FEFF 		bl	servo_init
+  81:Drivers/BSP/Components/Servo/Servo.c ****     servo_enable(servo_channel);
+ 781              		.loc 1 81 5
+ 782 0012 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 783 0014 1846     		mov	r0, r3
+ 784 0016 FFF7FEFF 		bl	servo_enable
+  82:Drivers/BSP/Components/Servo/Servo.c ****     servo_set_microseconds(servo_channel, SERVO_DEFAULT_MIN_MICROSECONDS);
+ 785              		.loc 1 82 5
+ 786 001a FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 787 001c 9FED180A 		vldr.32	s0, .L42
+ 788 0020 1846     		mov	r0, r3
+ARM GAS  /tmp/ccBuAgyM.s 			page 16
+
+
+ 789 0022 FFF7FEFF 		bl	servo_set_microseconds
+  83:Drivers/BSP/Components/Servo/Servo.c ****     servo_update(servo_channel);
+ 790              		.loc 1 83 5
+ 791 0026 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 792 0028 1846     		mov	r0, r3
+ 793 002a FFF7FEFF 		bl	servo_update
+  84:Drivers/BSP/Components/Servo/Servo.c ****     HAL_Delay(500);
+ 794              		.loc 1 84 5
+ 795 002e 4FF4FA70 		mov	r0, #500
+ 796 0032 FFF7FEFF 		bl	HAL_Delay
+  85:Drivers/BSP/Components/Servo/Servo.c ****     servo_set_microseconds(servo_channel, SERVO_DEFAULT_MAX_MICROSECONDS);
+ 797              		.loc 1 85 5
+ 798 0036 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 799 0038 9FED120A 		vldr.32	s0, .L42+4
+ 800 003c 1846     		mov	r0, r3
+ 801 003e FFF7FEFF 		bl	servo_set_microseconds
+  86:Drivers/BSP/Components/Servo/Servo.c ****     servo_update(servo_channel);
+ 802              		.loc 1 86 5
+ 803 0042 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 804 0044 1846     		mov	r0, r3
+ 805 0046 FFF7FEFF 		bl	servo_update
+  87:Drivers/BSP/Components/Servo/Servo.c ****     HAL_Delay(500);
+ 806              		.loc 1 87 5
+ 807 004a 4FF4FA70 		mov	r0, #500
+ 808 004e FFF7FEFF 		bl	HAL_Delay
+  88:Drivers/BSP/Components/Servo/Servo.c ****     servo_set_microseconds(servo_channel, SERVO_DEFAULT_MICROSECONDS);
+ 809              		.loc 1 88 5
+ 810 0052 FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 811 0054 9FED0C0A 		vldr.32	s0, .L42+8
+ 812 0058 1846     		mov	r0, r3
+ 813 005a FFF7FEFF 		bl	servo_set_microseconds
+  89:Drivers/BSP/Components/Servo/Servo.c ****     servo_update(servo_channel);
+ 814              		.loc 1 89 5
+ 815 005e FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 816 0060 1846     		mov	r0, r3
+ 817 0062 FFF7FEFF 		bl	servo_update
+  90:Drivers/BSP/Components/Servo/Servo.c ****     HAL_Delay(500);
+ 818              		.loc 1 90 5
+ 819 0066 4FF4FA70 		mov	r0, #500
+ 820 006a FFF7FEFF 		bl	HAL_Delay
+  91:Drivers/BSP/Components/Servo/Servo.c ****     servo_disable(servo_channel);
+ 821              		.loc 1 91 5
+ 822 006e FB79     		ldrb	r3, [r7, #7]	@ zero_extendqisi2
+ 823 0070 1846     		mov	r0, r3
+ 824 0072 FFF7FEFF 		bl	servo_disable
+  92:Drivers/BSP/Components/Servo/Servo.c **** }
+ 825              		.loc 1 92 1
+ 826 0076 00BF     		nop
+ 827 0078 1846     		mov	r0, r3
+ 828 007a 0837     		adds	r7, r7, #8
+ 829              	.LCFI49:
+ 830              		.cfi_def_cfa_offset 8
+ 831 007c BD46     		mov	sp, r7
+ 832              	.LCFI50:
+ 833              		.cfi_def_cfa_register 13
+ 834              		@ sp needed
+ 835 007e 80BD     		pop	{r7, pc}
+ARM GAS  /tmp/ccBuAgyM.s 			page 17
+
+
+ 836              	.L43:
+ 837              		.align	2
+ 838              	.L42:
+ 839 0080 00007A44 		.word	1148846080
+ 840 0084 00007A45 		.word	1165623296
+ 841 0088 00401C45 		.word	1159479296
+ 842              		.cfi_endproc
+ 843              	.LFE248:
+ 845              		.section	.text.servo_test_all,"ax",%progbits
+ 846              		.align	1
+ 847              		.global	servo_test_all
+ 848              		.syntax unified
+ 849              		.thumb
+ 850              		.thumb_func
+ 852              	servo_test_all:
+ 853              	.LFB249:
+  93:Drivers/BSP/Components/Servo/Servo.c **** 
+  94:Drivers/BSP/Components/Servo/Servo.c **** int servo_test_all()
+  95:Drivers/BSP/Components/Servo/Servo.c **** {
+ 854              		.loc 1 95 1
+ 855              		.cfi_startproc
+ 856              		@ args = 0, pretend = 0, frame = 8
+ 857              		@ frame_needed = 1, uses_anonymous_args = 0
+ 858 0000 80B5     		push	{r7, lr}
+ 859              	.LCFI51:
+ 860              		.cfi_def_cfa_offset 8
+ 861              		.cfi_offset 7, -8
+ 862              		.cfi_offset 14, -4
+ 863 0002 82B0     		sub	sp, sp, #8
+ 864              	.LCFI52:
+ 865              		.cfi_def_cfa_offset 16
+ 866 0004 00AF     		add	r7, sp, #0
+ 867              	.LCFI53:
+ 868              		.cfi_def_cfa_register 7
+ 869              	.LBB5:
+  96:Drivers/BSP/Components/Servo/Servo.c ****     for (int servo_channel = SERVO_CHANNEL_1; servo_channel < SERVO_MAX_CHANNELS; servo_channel++)
+ 870              		.loc 1 96 14
+ 871 0006 0023     		movs	r3, #0
+ 872 0008 7B60     		str	r3, [r7, #4]
+ 873              		.loc 1 96 5
+ 874 000a 07E0     		b	.L45
+ 875              	.L46:
+  97:Drivers/BSP/Components/Servo/Servo.c ****     {
+  98:Drivers/BSP/Components/Servo/Servo.c ****         servo_test(servo_channel);
+ 876              		.loc 1 98 9 discriminator 3
+ 877 000c 7B68     		ldr	r3, [r7, #4]
+ 878 000e DBB2     		uxtb	r3, r3
+ 879 0010 1846     		mov	r0, r3
+ 880 0012 FFF7FEFF 		bl	servo_test
+  96:Drivers/BSP/Components/Servo/Servo.c ****     for (int servo_channel = SERVO_CHANNEL_1; servo_channel < SERVO_MAX_CHANNELS; servo_channel++)
+ 881              		.loc 1 96 96 discriminator 3
+ 882 0016 7B68     		ldr	r3, [r7, #4]
+ 883 0018 0133     		adds	r3, r3, #1
+ 884 001a 7B60     		str	r3, [r7, #4]
+ 885              	.L45:
+  96:Drivers/BSP/Components/Servo/Servo.c ****     for (int servo_channel = SERVO_CHANNEL_1; servo_channel < SERVO_MAX_CHANNELS; servo_channel++)
+ 886              		.loc 1 96 61 discriminator 1
+ARM GAS  /tmp/ccBuAgyM.s 			page 18
+
+
+ 887 001c 7B68     		ldr	r3, [r7, #4]
+ 888 001e 032B     		cmp	r3, #3
+ 889 0020 F4DD     		ble	.L46
+ 890              	.LBE5:
+  99:Drivers/BSP/Components/Servo/Servo.c ****     }
+ 100:Drivers/BSP/Components/Servo/Servo.c **** }
+ 891              		.loc 1 100 1
+ 892 0022 00BF     		nop
+ 893 0024 1846     		mov	r0, r3
+ 894 0026 0837     		adds	r7, r7, #8
+ 895              	.LCFI54:
+ 896              		.cfi_def_cfa_offset 8
+ 897 0028 BD46     		mov	sp, r7
+ 898              	.LCFI55:
+ 899              		.cfi_def_cfa_register 13
+ 900              		@ sp needed
+ 901 002a 80BD     		pop	{r7, pc}
+ 902              		.cfi_endproc
+ 903              	.LFE249:
+ 905              		.section	.text.servo_microseconds_to_ticks,"ax",%progbits
+ 906              		.align	1
+ 907              		.global	servo_microseconds_to_ticks
+ 908              		.syntax unified
+ 909              		.thumb
+ 910              		.thumb_func
+ 912              	servo_microseconds_to_ticks:
+ 913              	.LFB250:
+ 101:Drivers/BSP/Components/Servo/Servo.c **** 
+ 102:Drivers/BSP/Components/Servo/Servo.c **** uint32_t servo_microseconds_to_ticks(int32_t microseconds)
+ 103:Drivers/BSP/Components/Servo/Servo.c **** {
+ 914              		.loc 1 103 1
+ 915              		.cfi_startproc
+ 916              		@ args = 0, pretend = 0, frame = 8
+ 917              		@ frame_needed = 1, uses_anonymous_args = 0
+ 918              		@ link register save eliminated.
+ 919 0000 80B4     		push	{r7}
+ 920              	.LCFI56:
+ 921              		.cfi_def_cfa_offset 4
+ 922              		.cfi_offset 7, -4
+ 923 0002 83B0     		sub	sp, sp, #12
+ 924              	.LCFI57:
+ 925              		.cfi_def_cfa_offset 16
+ 926 0004 00AF     		add	r7, sp, #0
+ 927              	.LCFI58:
+ 928              		.cfi_def_cfa_register 7
+ 929 0006 7860     		str	r0, [r7, #4]
+ 104:Drivers/BSP/Components/Servo/Servo.c ****     return (uint32_t) microseconds * SERVO_TICKS_PER_US;
+ 930              		.loc 1 104 12
+ 931 0008 7B68     		ldr	r3, [r7, #4]
+ 932              		.loc 1 104 36
+ 933 000a 07EE903A 		vmov	s15, r3	@ int
+ 934 000e F8EE677A 		vcvt.f32.u32	s15, s15
+ 935 0012 9FED077A 		vldr.32	s14, .L49
+ 936 0016 67EE877A 		vmul.f32	s15, s15, s14
+ 937 001a FCEEE77A 		vcvt.u32.f32	s15, s15
+ 938 001e 17EE903A 		vmov	r3, s15	@ int
+ 105:Drivers/BSP/Components/Servo/Servo.c **** }
+ARM GAS  /tmp/ccBuAgyM.s 			page 19
+
+
+ 939              		.loc 1 105 1
+ 940 0022 1846     		mov	r0, r3
+ 941 0024 0C37     		adds	r7, r7, #12
+ 942              	.LCFI59:
+ 943              		.cfi_def_cfa_offset 4
+ 944 0026 BD46     		mov	sp, r7
+ 945              	.LCFI60:
+ 946              		.cfi_def_cfa_register 13
+ 947              		@ sp needed
+ 948 0028 5DF8047B 		ldr	r7, [sp], #4
+ 949              	.LCFI61:
+ 950              		.cfi_restore 7
+ 951              		.cfi_def_cfa_offset 0
+ 952 002c 7047     		bx	lr
+ 953              	.L50:
+ 954 002e 00BF     		.align	2
+ 955              	.L49:
+ 956 0030 3333B33E 		.word	1051931443
+ 957              		.cfi_endproc
+ 958              	.LFE250:
+ 960              		.section	.text.servo_angle_to_microseconds,"ax",%progbits
+ 961              		.align	1
+ 962              		.global	servo_angle_to_microseconds
+ 963              		.syntax unified
+ 964              		.thumb
+ 965              		.thumb_func
+ 967              	servo_angle_to_microseconds:
+ 968              	.LFB251:
+ 106:Drivers/BSP/Components/Servo/Servo.c **** 
+ 107:Drivers/BSP/Components/Servo/Servo.c **** float servo_angle_to_microseconds(servo_channels_t servo_channel, float angle)
+ 108:Drivers/BSP/Components/Servo/Servo.c **** {
+ 969              		.loc 1 108 1
+ 970              		.cfi_startproc
+ 971              		@ args = 0, pretend = 0, frame = 16
+ 972              		@ frame_needed = 1, uses_anonymous_args = 0
+ 973              		@ link register save eliminated.
+ 974 0000 80B4     		push	{r7}
+ 975              	.LCFI62:
+ 976              		.cfi_def_cfa_offset 4
+ 977              		.cfi_offset 7, -4
+ 978 0002 85B0     		sub	sp, sp, #20
+ 979              	.LCFI63:
+ 980              		.cfi_def_cfa_offset 24
+ 981 0004 00AF     		add	r7, sp, #0
+ 982              	.LCFI64:
+ 983              		.cfi_def_cfa_register 7
+ 984 0006 0346     		mov	r3, r0
+ 985 0008 87ED000A 		vstr.32	s0, [r7]
+ 986 000c FB71     		strb	r3, [r7, #7]
+ 109:Drivers/BSP/Components/Servo/Servo.c ****    /** trying to map from degrees to microseconds.
+ 110:Drivers/BSP/Components/Servo/Servo.c ****     * 0 degrees corresponds with min microseconds,
+ 111:Drivers/BSP/Components/Servo/Servo.c ****     * max degrees corresponds with max microseconds.
+ 112:Drivers/BSP/Components/Servo/Servo.c ****     * y = mx + b, microseconds = degrees * microseconds/degree + min microseconds 
+ 113:Drivers/BSP/Components/Servo/Servo.c ****     * microseconds per degree = 1000/max degrees
+ 114:Drivers/BSP/Components/Servo/Servo.c ****     * */
+ 115:Drivers/BSP/Components/Servo/Servo.c ****     float microseconds = (angle * (servo_channels[servo_channel].servo_cal.max_microseconds - servo
+ 987              		.loc 1 115 75
+ARM GAS  /tmp/ccBuAgyM.s 			page 20
+
+
+ 988 000e FA79     		ldrb	r2, [r7, #7]	@ zero_extendqisi2
+ 989 0010 2149     		ldr	r1, .L52
+ 990 0012 1346     		mov	r3, r2
+ 991 0014 9B00     		lsls	r3, r3, #2
+ 992 0016 1344     		add	r3, r3, r2
+ 993 0018 DB00     		lsls	r3, r3, #3
+ 994 001a 0B44     		add	r3, r3, r1
+ 995 001c 1233     		adds	r3, r3, #18
+ 996 001e 1B88     		ldrh	r3, [r3]
+ 997 0020 1846     		mov	r0, r3
+ 998              		.loc 1 115 134
+ 999 0022 FA79     		ldrb	r2, [r7, #7]	@ zero_extendqisi2
+ 1000 0024 1C49     		ldr	r1, .L52
+ 1001 0026 1346     		mov	r3, r2
+ 1002 0028 9B00     		lsls	r3, r3, #2
+ 1003 002a 1344     		add	r3, r3, r2
+ 1004 002c DB00     		lsls	r3, r3, #3
+ 1005 002e 0B44     		add	r3, r3, r1
+ 1006 0030 1033     		adds	r3, r3, #16
+ 1007 0032 1B88     		ldrh	r3, [r3]
+ 1008              		.loc 1 115 93
+ 1009 0034 C31A     		subs	r3, r0, r3
+ 1010              		.loc 1 115 33
+ 1011 0036 07EE903A 		vmov	s15, r3	@ int
+ 1012 003a B8EEE77A 		vcvt.f32.s32	s14, s15
+ 1013 003e D7ED007A 		vldr.32	s15, [r7]
+ 1014 0042 67EE276A 		vmul.f32	s13, s14, s15
+ 116:Drivers/BSP/Components/Servo/Servo.c ****                          / servo_channels[servo_channel].servo_cal.abs_max_angle) + servo_channels[
+ 1015              		.loc 1 116 67
+ 1016 0046 FA79     		ldrb	r2, [r7, #7]	@ zero_extendqisi2
+ 1017 0048 1349     		ldr	r1, .L52
+ 1018 004a 1346     		mov	r3, r2
+ 1019 004c 9B00     		lsls	r3, r3, #2
+ 1020 004e 1344     		add	r3, r3, r2
+ 1021 0050 DB00     		lsls	r3, r3, #3
+ 1022 0052 0B44     		add	r3, r3, r1
+ 1023 0054 1433     		adds	r3, r3, #20
+ 1024 0056 1B88     		ldrh	r3, [r3]
+ 1025 0058 07EE903A 		vmov	s15, r3	@ int
+ 1026              		.loc 1 116 26
+ 1027 005c F8EEE77A 		vcvt.f32.s32	s15, s15
+ 1028 0060 86EEA77A 		vdiv.f32	s14, s13, s15
+ 1029              		.loc 1 116 124
+ 1030 0064 FA79     		ldrb	r2, [r7, #7]	@ zero_extendqisi2
+ 1031 0066 0C49     		ldr	r1, .L52
+ 1032 0068 1346     		mov	r3, r2
+ 1033 006a 9B00     		lsls	r3, r3, #2
+ 1034 006c 1344     		add	r3, r3, r2
+ 1035 006e DB00     		lsls	r3, r3, #3
+ 1036 0070 0B44     		add	r3, r3, r1
+ 1037 0072 1033     		adds	r3, r3, #16
+ 1038 0074 1B88     		ldrh	r3, [r3]
+ 1039 0076 07EE903A 		vmov	s15, r3	@ int
+ 1040              		.loc 1 116 83
+ 1041 007a F8EEE77A 		vcvt.f32.s32	s15, s15
+ 115:Drivers/BSP/Components/Servo/Servo.c ****                          / servo_channels[servo_channel].servo_cal.abs_max_angle) + servo_channels[
+ 1042              		.loc 1 115 11
+ARM GAS  /tmp/ccBuAgyM.s 			page 21
+
+
+ 1043 007e 77EE277A 		vadd.f32	s15, s14, s15
+ 1044 0082 C7ED037A 		vstr.32	s15, [r7, #12]
+ 117:Drivers/BSP/Components/Servo/Servo.c **** }...
+ 1045              		.loc 1 117 1
+ 1046 0086 00BF     		nop
+ 1047 0088 B0EE670A 		vmov.f32	s0, s15
+ 1048 008c 1437     		adds	r7, r7, #20
+ 1049              	.LCFI65:
+ 1050              		.cfi_def_cfa_offset 4
+ 1051 008e BD46     		mov	sp, r7
+ 1052              	.LCFI66:
+ 1053              		.cfi_def_cfa_register 13
+ 1054              		@ sp needed
+ 1055 0090 5DF8047B 		ldr	r7, [sp], #4
+ 1056              	.LCFI67:
+ 1057              		.cfi_restore 7
+ 1058              		.cfi_def_cfa_offset 0
+ 1059 0094 7047     		bx	lr
+ 1060              	.L53:
+ 1061 0096 00BF     		.align	2
+ 1062              	.L52:
+ 1063 0098 00000000 		.word	servo_channels
+ 1064              		.cfi_endproc
+ 1065              	.LFE251:
+ 1067              		.text
+ 1068              	.Letext0:
+ 1069              		.file 2 "/opt/st/stm32cubeclt_1.17.0/GNU-tools-for-STM32/arm-none-eabi/include/machine/_default_ty
+ 1070              		.file 3 "/opt/st/stm32cubeclt_1.17.0/GNU-tools-for-STM32/arm-none-eabi/include/sys/_stdint.h"
+ 1071              		.file 4 "Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f405xx.h"
+ 1072              		.file 5 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_def.h"
+ 1073              		.file 6 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma.h"
+ 1074              		.file 7 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h"
+ 1075              		.file 8 "Drivers/BSP/Components/Servo/servo_types.h"
+ 1076              		.file 9 "Drivers/BSP/Components/Servo/Servo_Cfg.h"
+ 1077              		.file 10 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal.h"
+ARM GAS  /tmp/ccBuAgyM.s 			page 22
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 Servo.c
+     /tmp/ccBuAgyM.s:21     .text.servo_init:00000000 $t
+     /tmp/ccBuAgyM.s:27     .text.servo_init:00000000 servo_init
+     /tmp/ccBuAgyM.s:77     .text.servo_init:0000002c $d
+     /tmp/ccBuAgyM.s:82     .text.servo_enable:00000000 $t
+     /tmp/ccBuAgyM.s:88     .text.servo_enable:00000000 servo_enable
+     /tmp/ccBuAgyM.s:164    .text.servo_enable:00000068 $d
+     /tmp/ccBuAgyM.s:169    .text.servo_enable_all:00000000 $t
+     /tmp/ccBuAgyM.s:175    .text.servo_enable_all:00000000 servo_enable_all
+     /tmp/ccBuAgyM.s:230    .text.servo_disable:00000000 $t
+     /tmp/ccBuAgyM.s:236    .text.servo_disable:00000000 servo_disable
+     /tmp/ccBuAgyM.s:302    .text.servo_disable:00000050 $d
+     /tmp/ccBuAgyM.s:307    .text.servo_disable_all:00000000 $t
+     /tmp/ccBuAgyM.s:313    .text.servo_disable_all:00000000 servo_disable_all
+     /tmp/ccBuAgyM.s:368    .text.servo_set_angle:00000000 $t
+     /tmp/ccBuAgyM.s:374    .text.servo_set_angle:00000000 servo_set_angle
+     /tmp/ccBuAgyM.s:967    .text.servo_angle_to_microseconds:00000000 servo_angle_to_microseconds
+     /tmp/ccBuAgyM.s:431    .text.servo_set_angle:0000004c $d
+     /tmp/ccBuAgyM.s:436    .text.servo_set_microseconds:00000000 $t
+     /tmp/ccBuAgyM.s:442    .text.servo_set_microseconds:00000000 servo_set_microseconds
+     /tmp/ccBuAgyM.s:497    .text.servo_set_microseconds:00000040 $d
+     /tmp/ccBuAgyM.s:502    .text.servo_update:00000000 $t
+     /tmp/ccBuAgyM.s:508    .text.servo_update:00000000 servo_update
+     /tmp/ccBuAgyM.s:912    .text.servo_microseconds_to_ticks:00000000 servo_microseconds_to_ticks
+     /tmp/ccBuAgyM.s:710    .text.servo_update:00000134 $d
+     /tmp/ccBuAgyM.s:715    .text.servo_update_all:00000000 $t
+     /tmp/ccBuAgyM.s:721    .text.servo_update_all:00000000 servo_update_all
+     /tmp/ccBuAgyM.s:752    .text.servo_test:00000000 $t
+     /tmp/ccBuAgyM.s:758    .text.servo_test:00000000 servo_test
+     /tmp/ccBuAgyM.s:839    .text.servo_test:00000080 $d
+     /tmp/ccBuAgyM.s:846    .text.servo_test_all:00000000 $t
+     /tmp/ccBuAgyM.s:852    .text.servo_test_all:00000000 servo_test_all
+     /tmp/ccBuAgyM.s:906    .text.servo_microseconds_to_ticks:00000000 $t
+     /tmp/ccBuAgyM.s:956    .text.servo_microseconds_to_ticks:00000030 $d
+     /tmp/ccBuAgyM.s:961    .text.servo_angle_to_microseconds:00000000 $t
+     /tmp/ccBuAgyM.s:1063   .text.servo_angle_to_microseconds:00000098 $d
+
+UNDEFINED SYMBOLS
+servo_channels
+HAL_TIM_Base_Start
+HAL_TIM_PWM_Start
+HAL_TIM_PWM_Stop
+HAL_Delay

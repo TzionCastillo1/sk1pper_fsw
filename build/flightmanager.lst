@@ -1,0 +1,170 @@
+ARM GAS  /tmp/ccL942BW.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 1
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"flightmanager.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.file 1 "Core/Src/flightmanager.c"
+  20              		.section	.text.flightmanager_init,"ax",%progbits
+  21              		.align	1
+  22              		.global	flightmanager_init
+  23              		.syntax unified
+  24              		.thumb
+  25              		.thumb_func
+  27              	flightmanager_init:
+  28              	.LFB0:
+   1:Core/Src/flightmanager.c **** #include "flightmanager.h"
+   2:Core/Src/flightmanager.c **** 
+   3:Core/Src/flightmanager.c **** static flight_state_t flight_state;
+   4:Core/Src/flightmanager.c **** 
+   5:Core/Src/flightmanager.c **** void flightmanager_init()
+   6:Core/Src/flightmanager.c **** {
+  29              		.loc 1 6 1 view -0
+  30              		.cfi_startproc
+  31              		@ args = 0, pretend = 0, frame = 0
+  32              		@ frame_needed = 0, uses_anonymous_args = 0
+  33              		@ link register save eliminated.
+   7:Core/Src/flightmanager.c ****     flight_state = FLIGHT_STATE_DISARMED;
+  34              		.loc 1 7 5 view .LVU1
+  35              		.loc 1 7 18 is_stmt 0 view .LVU2
+  36 0000 014B     		ldr	r3, .L2
+  37 0002 0022     		movs	r2, #0
+  38 0004 1A70     		strb	r2, [r3]
+   8:Core/Src/flightmanager.c **** }
+  39              		.loc 1 8 1 view .LVU3
+  40 0006 7047     		bx	lr
+  41              	.L3:
+  42              		.align	2
+  43              	.L2:
+  44 0008 00000000 		.word	flight_state
+  45              		.cfi_endproc
+  46              	.LFE0:
+  48              		.section	.text.flightmanager_start,"ax",%progbits
+  49              		.align	1
+  50              		.global	flightmanager_start
+  51              		.syntax unified
+ARM GAS  /tmp/ccL942BW.s 			page 2
+
+
+  52              		.thumb
+  53              		.thumb_func
+  55              	flightmanager_start:
+  56              	.LFB1:
+   9:Core/Src/flightmanager.c **** 
+  10:Core/Src/flightmanager.c **** void flightmanager_start()
+  11:Core/Src/flightmanager.c **** {
+  57              		.loc 1 11 1 is_stmt 1 view -0
+  58              		.cfi_startproc
+  59              		@ args = 0, pretend = 0, frame = 0
+  60              		@ frame_needed = 0, uses_anonymous_args = 0
+  61              		@ link register save eliminated.
+  12:Core/Src/flightmanager.c **** 
+  13:Core/Src/flightmanager.c **** }
+  62              		.loc 1 13 1 view .LVU5
+  63 0000 7047     		bx	lr
+  64              		.cfi_endproc
+  65              	.LFE1:
+  67              		.section	.text.flightmanager_get_state,"ax",%progbits
+  68              		.align	1
+  69              		.global	flightmanager_get_state
+  70              		.syntax unified
+  71              		.thumb
+  72              		.thumb_func
+  74              	flightmanager_get_state:
+  75              	.LFB2:
+  14:Core/Src/flightmanager.c **** 
+  15:Core/Src/flightmanager.c **** flight_state_t flightmanager_get_state()
+  16:Core/Src/flightmanager.c **** {
+  76              		.loc 1 16 1 view -0
+  77              		.cfi_startproc
+  78              		@ args = 0, pretend = 0, frame = 0
+  79              		@ frame_needed = 0, uses_anonymous_args = 0
+  80              		@ link register save eliminated.
+  17:Core/Src/flightmanager.c ****     return flight_state;
+  81              		.loc 1 17 5 view .LVU7
+  18:Core/Src/flightmanager.c **** }
+  82              		.loc 1 18 1 is_stmt 0 view .LVU8
+  83 0000 014B     		ldr	r3, .L6
+  84 0002 1878     		ldrb	r0, [r3]	@ zero_extendqisi2
+  85 0004 7047     		bx	lr
+  86              	.L7:
+  87 0006 00BF     		.align	2
+  88              	.L6:
+  89 0008 00000000 		.word	flight_state
+  90              		.cfi_endproc
+  91              	.LFE2:
+  93              		.section	.text.flightmanager_push_event,"ax",%progbits
+  94              		.align	1
+  95              		.global	flightmanager_push_event
+  96              		.syntax unified
+  97              		.thumb
+  98              		.thumb_func
+ 100              	flightmanager_push_event:
+ 101              	.LFB3:
+  19:Core/Src/flightmanager.c **** 
+  20:Core/Src/flightmanager.c **** void flightmanager_push_event()
+ARM GAS  /tmp/ccL942BW.s 			page 3
+
+
+  21:Core/Src/flightmanager.c **** {
+ 102              		.loc 1 21 1 is_stmt 1 view -0
+ 103              		.cfi_startproc
+ 104              		@ args = 0, pretend = 0, frame = 0
+ 105              		@ frame_needed = 0, uses_anonymous_args = 0
+ 106              		@ link register save eliminated.
+  22:Core/Src/flightmanager.c ****     flight_state = FLIGHT_STATE_DISARMED;
+ 107              		.loc 1 22 5 view .LVU10
+ 108              		.loc 1 22 18 is_stmt 0 view .LVU11
+ 109 0000 014B     		ldr	r3, .L9
+ 110 0002 0022     		movs	r2, #0
+ 111 0004 1A70     		strb	r2, [r3]
+  23:Core/Src/flightmanager.c **** }
+ 112              		.loc 1 23 1 view .LVU12
+ 113 0006 7047     		bx	lr
+ 114              	.L10:
+ 115              		.align	2
+ 116              	.L9:
+ 117 0008 00000000 		.word	flight_state
+ 118              		.cfi_endproc
+ 119              	.LFE3:
+ 121              		.section	.bss.flight_state,"aw",%nobits
+ 124              	flight_state:
+ 125 0000 00       		.space	1
+ 126              		.text
+ 127              	.Letext0:
+ 128              		.file 2 "Core/Inc/flightmanager.h"
+ARM GAS  /tmp/ccL942BW.s 			page 4
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 flightmanager.c
+     /tmp/ccL942BW.s:21     .text.flightmanager_init:00000000 $t
+     /tmp/ccL942BW.s:27     .text.flightmanager_init:00000000 flightmanager_init
+     /tmp/ccL942BW.s:44     .text.flightmanager_init:00000008 $d
+     /tmp/ccL942BW.s:124    .bss.flight_state:00000000 flight_state
+     /tmp/ccL942BW.s:49     .text.flightmanager_start:00000000 $t
+     /tmp/ccL942BW.s:55     .text.flightmanager_start:00000000 flightmanager_start
+     /tmp/ccL942BW.s:68     .text.flightmanager_get_state:00000000 $t
+     /tmp/ccL942BW.s:74     .text.flightmanager_get_state:00000000 flightmanager_get_state
+     /tmp/ccL942BW.s:89     .text.flightmanager_get_state:00000008 $d
+     /tmp/ccL942BW.s:94     .text.flightmanager_push_event:00000000 $t
+     /tmp/ccL942BW.s:100    .text.flightmanager_push_event:00000000 flightmanager_push_event
+     /tmp/ccL942BW.s:117    .text.flightmanager_push_event:00000008 $d
+     /tmp/ccL942BW.s:125    .bss.flight_state:00000000 $d
+
+NO UNDEFINED SYMBOLS

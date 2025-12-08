@@ -1,0 +1,125 @@
+ARM GAS  /tmp/cck6Uls3.s 			page 1
+
+
+   1              		.cpu cortex-m4
+   2              		.arch armv7e-m
+   3              		.fpu fpv4-sp-d16
+   4              		.eabi_attribute 27, 1
+   5              		.eabi_attribute 28, 1
+   6              		.eabi_attribute 20, 1
+   7              		.eabi_attribute 21, 1
+   8              		.eabi_attribute 23, 3
+   9              		.eabi_attribute 24, 1
+  10              		.eabi_attribute 25, 1
+  11              		.eabi_attribute 26, 1
+  12              		.eabi_attribute 30, 6
+  13              		.eabi_attribute 34, 1
+  14              		.eabi_attribute 18, 4
+  15              		.file	"Servo_Cfg.c"
+  16              		.text
+  17              	.Ltext0:
+  18              		.cfi_sections	.debug_frame
+  19              		.file 1 "Drivers/BSP/Components/Servo/Servo_Cfg.c"
+  20              		.section	.rodata.servo_cal_default,"a"
+  21              		.align	2
+  24              	servo_cal_default:
+  25 0000 E803     		.short	1000
+  26 0002 A00F     		.short	4000
+  27 0004 B400     		.short	180
+  28 0006 0000     		.space	2
+  29 0008 00000000 		.word	0
+  30 000c 00003443 		.word	1127481344
+  31              		.global	servo_channels
+  32              		.section	.data.servo_channels,"aw"
+  33              		.align	2
+  36              	servo_channels:
+  37 0000 00000000 		.word	htim4
+  38 0004 04000000 		.word	4
+  39 0008 00040240 		.word	1073873920
+  40 000c 4000     		.short	64
+  41 000e 0000     		.space	2
+  42 0010 E803     		.short	1000
+  43 0012 A00F     		.short	4000
+  44 0014 B400     		.short	180
+  45 0016 0000     		.space	2
+  46 0018 00000000 		.word	0
+  47 001c 00003443 		.word	1127481344
+  48 0020 00       		.byte	0
+  49 0021 00       		.byte	0
+  50 0022 C409     		.short	2500
+  51 0024 C409     		.short	2500
+  52 0026 0000     		.space	2
+  53 0028 00000000 		.word	htim4
+  54 002c 00000000 		.word	0
+  55 0030 00040240 		.word	1073873920
+  56 0034 8000     		.short	128
+  57 0036 0000     		.space	2
+  58 0038 E803     		.short	1000
+  59 003a A00F     		.short	4000
+  60 003c B400     		.short	180
+  61 003e 0000     		.space	2
+ARM GAS  /tmp/cck6Uls3.s 			page 2
+
+
+  62 0040 00000000 		.word	0
+  63 0044 00003443 		.word	1127481344
+  64 0048 00       		.byte	0
+  65 0049 00       		.byte	0
+  66 004a C409     		.short	2500
+  67 004c C409     		.short	2500
+  68 004e 0000     		.space	2
+  69 0050 00000000 		.word	htim3
+  70 0054 08000000 		.word	8
+  71 0058 00040240 		.word	1073873920
+  72 005c 0100     		.short	1
+  73 005e 0000     		.space	2
+  74 0060 E803     		.short	1000
+  75 0062 A00F     		.short	4000
+  76 0064 B400     		.short	180
+  77 0066 0000     		.space	2
+  78 0068 00000000 		.word	0
+  79 006c 00003443 		.word	1127481344
+  80 0070 00       		.byte	0
+  81 0071 00       		.byte	0
+  82 0072 C409     		.short	2500
+  83 0074 C409     		.short	2500
+  84 0076 0000     		.space	2
+  85 0078 00000000 		.word	htim3
+  86 007c 0C000000 		.word	12
+  87 0080 00040240 		.word	1073873920
+  88 0084 0200     		.short	2
+  89 0086 0000     		.space	2
+  90 0088 E803     		.short	1000
+  91 008a A00F     		.short	4000
+  92 008c B400     		.short	180
+  93 008e 0000     		.space	2
+  94 0090 00000000 		.word	0
+  95 0094 00003443 		.word	1127481344
+  96 0098 00       		.byte	0
+  97 0099 00       		.byte	0
+  98 009a C409     		.short	2500
+  99 009c C409     		.short	2500
+ 100 009e 0000     		.space	2
+ 101              		.text
+ 102              	.Letext0:
+ 103              		.file 2 "/opt/st/stm32cubeclt_1.17.0/GNU-tools-for-STM32/arm-none-eabi/include/machine/_default_ty
+ 104              		.file 3 "/opt/st/stm32cubeclt_1.17.0/GNU-tools-for-STM32/arm-none-eabi/include/sys/_stdint.h"
+ 105              		.file 4 "Drivers/CMSIS/Device/ST/STM32F4xx/Include/stm32f405xx.h"
+ 106              		.file 5 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_def.h"
+ 107              		.file 6 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_dma.h"
+ 108              		.file 7 "Drivers/STM32F4xx_HAL_Driver/Inc/stm32f4xx_hal_tim.h"
+ 109              		.file 8 "Drivers/BSP/Components/Servo/servo_types.h"
+ 110              		.file 9 "Drivers/BSP/Components/Servo/Servo_Cfg.h"
+ARM GAS  /tmp/cck6Uls3.s 			page 3
+
+
+DEFINED SYMBOLS
+                            *ABS*:00000000 Servo_Cfg.c
+     /tmp/cck6Uls3.s:21     .rodata.servo_cal_default:00000000 $d
+     /tmp/cck6Uls3.s:24     .rodata.servo_cal_default:00000000 servo_cal_default
+     /tmp/cck6Uls3.s:36     .data.servo_channels:00000000 servo_channels
+     /tmp/cck6Uls3.s:33     .data.servo_channels:00000000 $d
+
+UNDEFINED SYMBOLS
+htim4
+htim3
