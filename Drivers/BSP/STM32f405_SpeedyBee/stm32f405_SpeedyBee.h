@@ -6,6 +6,7 @@ extern "C" {
 #endif
 
 #include "stm32f4xx_hal.h"
+
 #include "Servo.h"
 
 #if !defined(USE_STM32F405_SPEEDYBEE)
@@ -29,11 +30,24 @@ typedef enum
  /** @}
  */
 
+void MX_GPIO_Init(void);
+
+
+void SystemClock_Config(void);
+
+
+/** @defgroup Error Handling
+ * {
+ */
+void Error_Handler(void);
+/** @}
+*/
+
 /** @defgroup LED
  * {
  */
 
-#define LED2_PIN                    GPIO_PIN_5
+#define LED2_PIN                    GPIO_PIN_13
 #define LED2_GPIO_PORT              GPIOA
 #define LED2_GPIO_CLK_ENABLE()      __HAL_RCC_GPIOA_CLK_ENABLE()
 #define LED2_GPIO_CLK_DISABLE()     __HAL_RCC_GPIOA_CLK_DISABLE()
@@ -56,6 +70,15 @@ void BSP_LED_Toggle(Led_t Led);
  * @} 
  */
 
+/** @addtogroup STM32F405_SPEEDYBEE_TIM_Functions
+ *  @{
+ */
+void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
+void MX_TIM3_Init(void);
+void MX_TIM4_Init(void);
+/**
+* @} 
+*/
 
 #ifdef __cplusplus
 }

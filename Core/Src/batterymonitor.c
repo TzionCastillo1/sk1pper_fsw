@@ -1,10 +1,13 @@
 #include "batterymonitor.h"
+#include "stm32f405_SpeedyBee.h"
+
 
 static float battery_voltage;
 
 error_t battery_monitor_init()
 {
     battery_voltage = -1;
+    MX_ADC1_Init();
 }
 
 error_t battery_monitor_enable()
