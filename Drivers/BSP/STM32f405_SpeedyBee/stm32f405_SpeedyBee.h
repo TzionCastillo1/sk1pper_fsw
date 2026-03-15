@@ -56,22 +56,7 @@ void Error_Handler(void);
 /** @}
 */
 
-/** @defgroup LED
- * {
- */
-
-#define LED2_PIN                    GPIO_PIN_13
-#define LED2_GPIO_PORT              GPIOA
-#define LED2_GPIO_CLK_ENABLE()      __HAL_RCC_GPIOA_CLK_ENABLE()
-#define LED2_GPIO_CLK_DISABLE()     __HAL_RCC_GPIOA_CLK_DISABLE()
-
-
- /**
- * @}
-*/
-
-
- /** @addtogroup STM32F405_SPEEDYBEE_LED_Functions
+/** @addtogroup STM32F405_SPEEDYBEE_LED_Functions
   * @{
   */
 void BSP_LED_Init(Led_t Led);

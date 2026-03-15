@@ -1,5 +1,6 @@
 #include "stm32f405_SpeedyBee.h"
 #include "printf/printf.h"
+#include "hw_config.h"
 
 
 

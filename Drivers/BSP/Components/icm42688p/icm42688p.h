@@ -1,5 +1,9 @@
-//INCLUDE LIBRARIES AND GUARDS LATER WHEN YOU UNDERSTAND THEM BETTER
+#ifndef ICM42688P_H
+#define ICM42688P_H
 
+#include "stdint.h"
+#include "stdbool.h"
+#include "stm32f4xx_hal_spi.h"
 
 //REGISTER DEFINITIONS 
 
@@ -47,3 +51,28 @@
 #define ICM42688P_INT_STATUS_WAKE 0x37 //BIT 3 DETECTS SIGNIFICANT MOTION, BITS 2:1:0 ALL DETECT MOTION ON Z:Y:X AXES RESPECTIVELY
 
 #define ICM42688P_SIGNAL_PATH_RESET 0x4B //
+
+
+/* =============== Public Types =============*/
+typedef struct icm42688p_Handle_t icm42688p_Handle_t;
+
+typedef enum 
+{
+
+}
+
+typedef struct 
+{
+    SPI_HandleTypeDef spi;
+} icm42688p_Config_t;
+
+typedef struct 
+{
+    uint8_t chip_select;
+}
+
+/* =============== Public Functions ============*/
+
+
+#endif /* ICM42688P_H */
+
