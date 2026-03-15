@@ -16,6 +16,19 @@ extern "C" {
 extern uint32_t SystemCoreClock;          /*!< System Clock Frequency (Core Clock) */
 #define PWMCORECLOCK 160000000
 
+#define PRINTF_UART_TIMEOUT_MS 10
+
+/** @defgroup STM32F405_SPEEDYBEE_Public_Variables
+ * @{
+ */
+
+extern UART_HandleTypeDef huart1;
+
+/**
+ * @} 
+ * 
+ */
+
 
 /** @defgroup STM32F405_SPEEDYBEE_Exported_Types
  * @{
@@ -79,6 +92,14 @@ void MX_TIM4_Init(void);
 /**
 * @} 
 */
+
+
+/** 
+ * @defgroup STM32F405_SPEEDYBEE_UART_Functions
+ */
+void MX_USART1_UART_Init(void);
+
+
 
 #ifdef __cplusplus
 }
