@@ -23,6 +23,7 @@ extern uint32_t SystemCoreClock;          /*!< System Clock Frequency (Core Cloc
  */
 
 extern UART_HandleTypeDef huart1;
+extern SPI_HandleTypeDef hspi1;
 
 /**
  * @} 
@@ -74,6 +75,14 @@ void BSP_LED_Toggle(Led_t Led);
 void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
 void MX_TIM3_Init(void);
 void MX_TIM4_Init(void);
+/**
+* @} 
+*/
+
+/** @addtogroup STM32F405_SPEEDYBEE_SPI_Functions 
+ * @{
+*/
+void MX_SPI1_Init(void);
 /**
 * @} 
 */

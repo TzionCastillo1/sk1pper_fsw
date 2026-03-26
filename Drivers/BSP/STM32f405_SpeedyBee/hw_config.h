@@ -6,10 +6,15 @@
 // Rotation: ROLL_180 and YAW_270 Relative to flight axes
 // INT1 pin routing unconfirmed - schematic not available.
 
-#define IMU_SPI_Handle  hspi1
+#define IMU_SPI_HANDLE  hspi1
 #define IMU_CS_PORT     GPIOA
 #define IMU_CS_PIN      GPIO_PIN_4
 #define IMU_CLOCK_HZ    8000000UL
+
+/* ============== BARO Config ============== */
+// BARO - SPL06 on I2C1
+#define BARO_I2C_HANDLE hi2c1
+#define BARO_I2C_ADDRESS 0x76
 
 /* ============== LED Config ============= */
 // LED2 - Green LED on A13

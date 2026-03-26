@@ -88,6 +88,7 @@ Drivers/STM32F4xx_HAL_Driver/Src/stm32f4xx_hal_uart.c \
 Drivers/BSP/STM32f405_SpeedyBee/stm32f405_SpeedyBee.c \
 Drivers/BSP/Components/Servo/Servo.c \
 Drivers/BSP/Components/Servo/Servo_Cfg.c \
+Drivers/BSP/Components/icm42688p/icm42688p.c \
 Drivers/printf/src/printf/printf.c \
 Core/Src/system_stm32f4xx.c \
 Core/Src/sysmem.c \
@@ -171,6 +172,7 @@ C_INCLUDES =  \
 -IDrivers/CMSIS/Include \
 -IDrivers/BSP/STM32f405_SpeedyBee \
 -IDrivers/BSP/Components/Servo \
+-IDrivers/BSP/Components/icm42688p \
 -Ic_library_v2 \
 -Ic_library_v2/common \
 -Ic_library_v2/minimal \
