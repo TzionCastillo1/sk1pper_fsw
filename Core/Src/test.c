@@ -11,13 +11,13 @@ File for running hardware tests outside of Unity/Ceedling unit testing
 #include <mavlink.h>
 #include "Servo.h"
 #include "icm42688p.h"
+#include "spl06.h"
 #include "printf/printf.h"
 
 #define USE_FULL_ASSERT
 
 ADC_HandleTypeDef hadc1;
 
-I2C_HandleTypeDef hi2c1;
 
 //SPI_HandleTypeDef hspi1;
 
@@ -71,7 +71,28 @@ void test_sdcard()
 
 void test_baro()
 {
+    HAL_Init();
+    SystemClock_Config();
+    MX_GPIO_Init();
+    MX_USART1_UART_Init();
+    MX_I2C1_Init();
 
+    spl06_Handle_t hspl06 = 
+    {
+        .hi2c = &hi2c1,
+        .addr = BARO_I2C_ADDRESS << 1
+    };
+    
+    printf_("Running Baro Test!\n");
+
+    spl06_init(&hspl06);
+
+    uint8_t id;
+    spl06_read_id(&hspl06, &id);
+    printf_("ID: %x\n", id);
+
+    printf_("Calibration Parameters: c0: %d,c1: %d,c00: %d,c10: %d,C01: %d,C11: %d,C20: %d,C21: %d,C30: %d", hspl06.c0, hspl06.c1, hspl06.c00, hspl06.c10,
+                    hspl06.c01, hspl06.c11, hspl06.c20, hspl06.c21, hspl06.c30);
 }
 
 void test_assert()

@@ -89,6 +89,7 @@ Drivers/BSP/STM32f405_SpeedyBee/stm32f405_SpeedyBee.c \
 Drivers/BSP/Components/Servo/Servo.c \
 Drivers/BSP/Components/Servo/Servo_Cfg.c \
 Drivers/BSP/Components/icm42688p/icm42688p.c \
+Drivers/BSP/Components/spl06/spl06.c \
 Drivers/printf/src/printf/printf.c \
 Core/Src/system_stm32f4xx.c \
 Core/Src/sysmem.c \
@@ -173,6 +174,7 @@ C_INCLUDES =  \
 -IDrivers/BSP/STM32f405_SpeedyBee \
 -IDrivers/BSP/Components/Servo \
 -IDrivers/BSP/Components/icm42688p \
+-IDrivers/BSP/Components/spl06 \
 -Ic_library_v2 \
 -Ic_library_v2/common \
 -Ic_library_v2/minimal \

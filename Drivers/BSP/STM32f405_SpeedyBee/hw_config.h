@@ -23,9 +23,6 @@
 #define LED2_GPIO_CLK_ENABLE()      __HAL_RCC_GPIOA_CLK_ENABLE()
 #define LED2_GPIO_CLK_DISABLE()     __HAL_RCC_GPIOA_CLK_DISABLE()
 
-/* ============== Baro Config ============= */
-
-
 /* ============== SD Card Config ===========*/
 
 /* ============= Battery Monitor Config ==== */

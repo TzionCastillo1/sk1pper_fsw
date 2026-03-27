@@ -16,7 +16,6 @@ icm42688P_Status_t icm42688p_init(icm42688p_Handle_t *hicm42688p)
 {
     /** 
     * TODO:
-    * config scaling
     * config filter 
     */
 

@@ -7,6 +7,7 @@ extern "C" {
 
 #include "stm32f4xx_hal.h"
 
+#include "hw_config.h"
 #include "Servo.h"
 
 #if !defined(USE_STM32F405_SPEEDYBEE)
@@ -24,6 +25,7 @@ extern uint32_t SystemCoreClock;          /*!< System Clock Frequency (Core Cloc
 
 extern UART_HandleTypeDef huart1;
 extern SPI_HandleTypeDef hspi1;
+extern I2C_HandleTypeDef hi2c1;
 
 /**
  * @} 
@@ -87,6 +89,13 @@ void MX_SPI1_Init(void);
 * @} 
 */
 
+/** @addtogroup STM32F405_SPEEDYBEE_I2C_Functions 
+ * @{
+*/
+void MX_I2C1_Init(void);
+/**
+* @} 
+*/
 
 /** 
  * @defgroup STM32F405_SPEEDYBEE_UART_Functions
