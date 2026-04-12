@@ -93,6 +93,31 @@ void test_baro()
 
     printf_("Calibration Parameters: c0: %d,c1: %d,c00: %d,c10: %d,C01: %d,C11: %d,C20: %d,C21: %d,C30: %d", hspl06.c0, hspl06.c1, hspl06.c00, hspl06.c10,
                     hspl06.c01, hspl06.c11, hspl06.c20, hspl06.c21, hspl06.c30);
+
+    spl06_start(&hspl06);
+
+    printf_("Sensor readings:\n");
+    for (int i = 0; i < 5; i++)
+    {
+        int32_t raw_pres;
+        int32_t raw_temp;
+        float sc_pres;
+        float sc_temp;
+        float comp_pres;
+        float comp_temp;
+
+        spl06_read_raw_temp(&hspl06, &raw_temp);
+        spl06_read_raw_pres(&hspl06, &raw_pres);
+        spl06_read_scaled_pres(&hspl06, &sc_pres);
+        spl06_read_scaled_temp(&hspl06, &sc_temp);
+        spl06_read_comp_pres(&hspl06, &comp_pres);
+        spl06_read_comp_temp(&hspl06, &comp_temp);
+        printf_("raw pres: %ld, raw_temp: %ld \n", raw_pres, raw_temp);
+        printf_("scaled pres: %f, scaled_temp: %f \n", sc_pres, sc_temp);
+        printf_("comp pres: %f, comp_temp: %f \n", comp_pres, comp_temp);
+        HAL_Delay(100);
+    }
+
 }
 
 void test_assert()
