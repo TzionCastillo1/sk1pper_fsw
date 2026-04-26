@@ -24,7 +24,9 @@
 #define LED2_GPIO_CLK_DISABLE()     __HAL_RCC_GPIOA_CLK_DISABLE()
 
 /* ============== SD Card Config ===========*/
-
+#define SD_SPI_HANDLE hspi3
+#define SD_CS_GPIO_Port GPIOC
+#define SD_CS_Pin GPIO_PIN_14
 /* ============= Battery Monitor Config ==== */
 
 /* ============= Telemetry Config ========== */

@@ -13,28 +13,167 @@ File for running hardware tests outside of Unity/Ceedling unit testing
 #include "icm42688p.h"
 #include "spl06.h"
 #include "printf/printf.h"
+#include "fatfs.h"
+#include <stdio.h>
+#include <string.h>
+#include <stdarg.h> //for va_list var arg functions
 
 #define USE_FULL_ASSERT
 
-ADC_HandleTypeDef hadc1;
-
-
-//SPI_HandleTypeDef hspi1;
-
-TIM_HandleTypeDef htim1;
-TIM_HandleTypeDef htim2;
-TIM_HandleTypeDef htim8;
-
-UART_HandleTypeDef huart4;
-UART_HandleTypeDef huart5;
-//UART_HandleTypeDef huart1;
-UART_HandleTypeDef huart2;
-UART_HandleTypeDef huart3;
-UART_HandleTypeDef huart6;
-DMA_HandleTypeDef hdma_uart5_rx;
-DMA_HandleTypeDef hdma_uart5_tx;
-
 uint8_t rxbuff[2*MAVLINK_MAX_PACKET_LEN];
+
+
+/**
+  * @brief  This function is executed in case of error occurrence.
+  * @retval None
+  */
+void Error_Handler(void)
+{
+  /* USER CODE BEGIN Error_Handler_Debug */
+  /* User can add his own implementation to report the HAL error return state */
+  __disable_irq();
+  while (1)
+  {
+  }
+  /* USER CODE END Error_Handler_Debug */
+}
+
+/**
+  * @brief System Clock Configuration
+  * @retval None
+  */
+void SystemClock_Config(void)
+{
+  RCC_OscInitTypeDef RCC_OscInitStruct = {0};
+  RCC_ClkInitTypeDef RCC_ClkInitStruct = {0};
+
+  /** Configure the main internal regulator output voltage
+  */
+  __HAL_RCC_PWR_CLK_ENABLE();
+  __HAL_PWR_VOLTAGESCALING_CONFIG(PWR_REGULATOR_VOLTAGE_SCALE1);
+
+  /** Initializes the RCC Oscillators according to the specified parameters
+  * in the RCC_OscInitTypeDef structure.
+  */
+  RCC_OscInitStruct.OscillatorType = RCC_OSCILLATORTYPE_HSI;
+  RCC_OscInitStruct.HSIState = RCC_HSI_ON;
+  RCC_OscInitStruct.HSICalibrationValue = RCC_HSICALIBRATION_DEFAULT;
+  RCC_OscInitStruct.PLL.PLLState = RCC_PLL_ON;
+  RCC_OscInitStruct.PLL.PLLSource = RCC_PLLSOURCE_HSI;
+  RCC_OscInitStruct.PLL.PLLM = 8;
+  RCC_OscInitStruct.PLL.PLLN = 168;
+  RCC_OscInitStruct.PLL.PLLP = RCC_PLLP_DIV2;
+  RCC_OscInitStruct.PLL.PLLQ = 4;
+  if (HAL_RCC_OscConfig(&RCC_OscInitStruct) != HAL_OK)
+  {
+    Error_Handler();
+  }
+
+  /** Initializes the CPU, AHB and APB buses clocks
+  */
+  RCC_ClkInitStruct.ClockType = RCC_CLOCKTYPE_HCLK|RCC_CLOCKTYPE_SYSCLK
+                              |RCC_CLOCKTYPE_PCLK1|RCC_CLOCKTYPE_PCLK2;
+  RCC_ClkInitStruct.SYSCLKSource = RCC_SYSCLKSOURCE_PLLCLK;
+  RCC_ClkInitStruct.AHBCLKDivider = RCC_SYSCLK_DIV1;
+  RCC_ClkInitStruct.APB1CLKDivider = RCC_HCLK_DIV4;
+  RCC_ClkInitStruct.APB2CLKDivider = RCC_HCLK_DIV2;
+
+  if (HAL_RCC_ClockConfig(&RCC_ClkInitStruct, FLASH_LATENCY_5) != HAL_OK)
+  {
+    Error_Handler();
+  }
+}
+
+void test_sd_card()
+{
+    /**Init system and peripherals */
+    HAL_Init();
+    SystemClock_Config();
+    MX_GPIO_Init();
+    MX_USART1_UART_Init();
+    MX_SPI3_Init();
+    MX_FATFS_Init();
+
+    HAL_Delay(1000);
+    printf_("\r\n SD Card Test, pulled from kiwih \r\n\r\n");
+
+    FATFS FatFs;
+    FIL fil;
+    FRESULT fres;
+
+    fres = f_mount(&FatFs, "", 1);
+    if (fres != FR_OK)
+    {
+        printf_("f_mount error (%i)\r\n", fres);
+        while(1);
+    }
+
+    printf_("1");
+    //Let's get some statistics from the SD card
+    DWORD free_clusters, free_sectors, total_sectors;
+
+    FATFS* getFreeFs;
+
+    fres = f_getfree("", &free_clusters, &getFreeFs);
+    if (fres != FR_OK) {
+        printf_("f_getfree error (%i)\r\n", fres);
+        while(1);
+    }
+
+    printf_("2");
+    //Formula comes from ChaN's documentation
+    total_sectors = (getFreeFs->n_fatent - 2) * getFreeFs->csize;
+    free_sectors = free_clusters * getFreeFs->csize;
+
+    printf_("SD card stats:\r\n%10lu KiB total drive space.\r\n%10lu KiB available.\r\n", total_sectors / 2, free_sectors / 2);
+
+    //Now let's try to open file "test.txt"
+    fres = f_open(&fil, "test.txt", FA_READ);
+    if (fres != FR_OK) {
+        printf_("f_open error (%i)\r\n");
+        while(1);
+    }
+    printf_("I was able to open 'test.txt' for reading!\r\n");
+
+    //Read 30 bytes from "test.txt" on the SD card
+    BYTE readBuf[30];
+
+    //We can either use f_read OR f_gets to get data out of files
+    //f_gets is a wrapper on f_read that does some string formatting for us
+    TCHAR* rres = f_gets((TCHAR*)readBuf, 30, &fil);
+    if(rres != 0) {
+        printf_("Read string from 'test.txt' contents: %s\r\n", readBuf);
+    } else {
+        printf_("f_gets error (%i)\r\n", fres);
+    }
+
+    //Be a tidy kiwi - don't forget to close your file!
+    f_close(&fil);
+
+    //Now let's try and write a file "write.txt"
+    fres = f_open(&fil, "write.txt", FA_WRITE | FA_OPEN_ALWAYS | FA_CREATE_ALWAYS);
+    if(fres == FR_OK) {
+        printf_("I was able to open 'write.txt' for writing\r\n");
+    } else {
+        printf_("f_open error (%i)\r\n", fres);
+    }
+
+    //Copy in a string
+    strncpy((char*)readBuf, "a new file is made!", 19);
+    UINT bytesWrote;
+    fres = f_write(&fil, readBuf, 19, &bytesWrote);
+    if(fres == FR_OK) {
+        printf_("Wrote %i bytes to 'write.txt'!\r\n", bytesWrote);
+    } else {
+        printf_("f_write error (%i)\r\n");
+    }
+
+    //Be a tidy kiwi - don't forget to close your file!
+    f_close(&fil);
+
+    //We're done, so de-mount the drive
+    f_mount(NULL, "", 0);
+}
 
 void test_debug_uart()
 {
@@ -60,11 +199,6 @@ void test_adc()
 }
 
 void test_comms()
-{
-
-}
-
-void test_sdcard()
 {
 
 }

@@ -9,6 +9,13 @@ extern "C" {
 
 #include "hw_config.h"
 #include "Servo.h"
+#include "i2c.h"
+#include "usart.h"
+#include "spi.h"
+#include "gpio.h"
+#include "tim.h"
+#include "adc.h"
+#include "dma.h"
 
 #if !defined(USE_STM32F405_SPEEDYBEE)
 #define USE_STM32F405_SPEEDYBEE
@@ -18,20 +25,6 @@ extern uint32_t SystemCoreClock;          /*!< System Clock Frequency (Core Cloc
 #define PWMCORECLOCK 160000000
 
 #define PRINTF_UART_TIMEOUT_MS 10
-
-/** @defgroup STM32F405_SPEEDYBEE_Public_Variables
- * @{
- */
-
-extern UART_HandleTypeDef huart1;
-extern SPI_HandleTypeDef hspi1;
-extern I2C_HandleTypeDef hi2c1;
-
-/**
- * @} 
- * 
- */
-
 
 /** @defgroup STM32F405_SPEEDYBEE_Exported_Types
  * @{
@@ -46,61 +39,8 @@ typedef enum
  /** @}
  */
 
-void MX_GPIO_Init(void);
 
-
-void SystemClock_Config(void);
-
-
-/** @defgroup Error Handling
- * {
- */
-void Error_Handler(void);
-/** @}
-*/
-
-/** @addtogroup STM32F405_SPEEDYBEE_LED_Functions
-  * @{
-  */
-void BSP_LED_Init(Led_t Led);
-void BSP_LED_DeInit(Led_t Led);
-void BSP_LED_On(Led_t Led);
-void BSP_LED_Off(Led_t Led);
-void BSP_LED_Toggle(Led_t Led);
- /**
- * @} 
- */
-
-/** @addtogroup STM32F405_SPEEDYBEE_TIM_Functions
- *  @{
- */
-void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
-void MX_TIM3_Init(void);
-void MX_TIM4_Init(void);
-/**
-* @} 
-*/
-
-/** @addtogroup STM32F405_SPEEDYBEE_SPI_Functions 
- * @{
-*/
-void MX_SPI1_Init(void);
-/**
-* @} 
-*/
-
-/** @addtogroup STM32F405_SPEEDYBEE_I2C_Functions 
- * @{
-*/
-void MX_I2C1_Init(void);
-/**
-* @} 
-*/
-
-/** 
- * @defgroup STM32F405_SPEEDYBEE_UART_Functions
- */
-void MX_USART1_UART_Init(void);
+extern void putchar_(char c);
 
 
 

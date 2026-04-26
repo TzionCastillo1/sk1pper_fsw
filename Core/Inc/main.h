@@ -33,7 +33,7 @@ extern "C" {
 /* USER CODE BEGIN Includes */
 #include "stm32f405_SpeedyBee.h"
 //#include "stm32f4xx_nucleo.h"
-#include "stm32_assert.h"
+//#include "stm32_assert.h"
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/
@@ -51,8 +51,6 @@ extern "C" {
 
 /* USER CODE END EM */
 
-
-
 /* Exported functions prototypes ---------------------------------------------*/
 void Error_Handler(void);
 
@@ -61,6 +59,8 @@ void Error_Handler(void);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
+#define SDCARD_CS_Pin GPIO_PIN_14
+#define SDCARD_CS_GPIO_Port GPIOC
 
 /* USER CODE BEGIN Private defines */
 
