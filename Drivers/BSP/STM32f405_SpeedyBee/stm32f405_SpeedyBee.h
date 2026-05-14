@@ -8,7 +8,7 @@ extern "C" {
 #include "stm32f4xx_hal.h"
 
 #include "hw_config.h"
-#include "Servo.h"
+#include "servo.h"
 #include "i2c.h"
 #include "usart.h"
 #include "spi.h"

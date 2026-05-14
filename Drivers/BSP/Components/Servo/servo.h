@@ -28,14 +28,14 @@ Ticks = pulse (us) * period (ticks) / period (us)
  * @param servo_channel servo channel to be initialized.
  * @return int 
  */
-int servo_init(servo_channels_t servo_channel);
+int servo_init(servo_t *servo);
 
 /**
  * @brief enable the desired channel. Return an error if enable is unsuccesful
  * @param servo_channel servo channel to be enabled
  * @return int 
  */
-int servo_enable(servo_channels_t servo_channel);
+int servo_enable(servo_t *servo);
 
 /**
  * @brief enable all servo channels. Return an error if enable is unsuccesful
@@ -49,7 +49,7 @@ int servo_enable_all();
  * @param servo_channel servo channel to be disabled
  * @return int 
  */
-int servo_disable(servo_channels_t servo_channel);
+int servo_disable(servo_t *servo);
 
 /**
  * @brief disable all servo channels. Return an error if disable is unsuccesful
@@ -65,7 +65,7 @@ int servo_disable_all();
  * @param angle desired angle
  * @return int 
  */
-int servo_set_angle(servo_channels_t servo_channel, float angle);
+int servo_set_angle(servo_t *servo, float angle);
 
 /**
  * @brief set the pulse width in microseconds for the desired servo channel. Return an error if unsuccseful.
@@ -74,7 +74,7 @@ int servo_set_angle(servo_channels_t servo_channel, float angle);
  * @param microseconds desired pulse width in microseconds
  * @return int 
  */
-int servo_set_microseconds(servo_channels_t servo_channel, float microseconds);
+int servo_set_microseconds(servo_t *servo, float microseconds);
 
 /**
  * @brief update the command to the channel with the most recent value. Return an error if 
@@ -83,7 +83,7 @@ int servo_set_microseconds(servo_channels_t servo_channel, float microseconds);
  * @param servo_channel 
  * @return int 
  */
-int servo_update(servo_channels_t servo_channel);
+int servo_update(servo_t *servo);
 
 /**
  * @brief update the command to all enabled channels with the most recent value. Return an error if 
@@ -93,12 +93,6 @@ int servo_update(servo_channels_t servo_channel);
  */
 int servo_update_all();
 
-/**
- * @brief test actuation on all initialized servo channels. Return an error if unsuccesful.
- * 
- * @return int 
- */
-int servo_test_all();
 
 
 #ifdef __cplusplus

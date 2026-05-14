@@ -5,12 +5,10 @@
 extern "C" {
 #endif /** __cplusplus */
 
-#include "Servo.h"
+#include "servo.h"
+#include "ppm_cfg.h"
 
-extern TIM_HandleTypeDef htim4;
-extern TIM_HandleTypeDef htim3;
-extern TIM_HandleTypeDef htim8;
-
+extern servo_t servo_forward;
 
 #define SERVO_DEFAULT_MIN_MICROSECONDS 1000U
 #define SERVO_DEFAULT_MAX_MICROSECONDS 4000U
@@ -18,8 +16,7 @@ extern TIM_HandleTypeDef htim8;
 #define SERVO_DEFAULT_MAX_ANGLE 180U
 #define SERVO_DEFAULT_LIM_MAX_ANGLE SERVO_DEFAULT_MAX_ANGLE
 #define SERVO_DEFAULT_LIM_MIN_ANGLE 0U
-
-extern servo_t servo_channels[SERVO_MAX_CHANNELS];
+#define SERVO_DEFAULT_TRIM_ANGLE 0U
 
 #ifdef __cplusplus
 }

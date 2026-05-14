@@ -5,9 +5,17 @@
 extern "C" {
 #endif /** __cplusplus */
 
+#include "stm32f4xx_hal.h" 
 #include "errors.h"
 #include "events.h"
 #include "stdint.h"
+#include "stdbool.h"
+
+#define ADC_NUM_CHANNELS            (2U)
+#define DMA_VOLTAGE_BUFFER_IDX      (0U)
+#define DMA_CURRENT_BUFFER_IDX      (1U)
+
+extern ADC_HandleTypeDef hadc1;
 
 /**
  * define default battery setup
@@ -23,6 +31,10 @@ error_t battery_monitor_init();
 error_t battery_monitor_enable();
 
 error_t battery_monitor_disable();
+
+int16_t battery_monitor_get_voltage_raw();
+
+int16_t battery_monitor_get_current_raw();
 
 float battery_monitor_get_voltage();
 

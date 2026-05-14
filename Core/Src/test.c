@@ -9,7 +9,8 @@ File for running hardware tests outside of Unity/Ceedling unit testing
 
 #include "main.h"
 #include <mavlink.h>
-#include "Servo.h"
+#include "servo.h"
+#include "esc.h"
 #include "icm42688p.h"
 #include "spl06.h"
 #include "printf/printf.h"
@@ -21,6 +22,8 @@ File for running hardware tests outside of Unity/Ceedling unit testing
 #define USE_FULL_ASSERT
 
 uint8_t rxbuff[2*MAVLINK_MAX_PACKET_LEN];
+extern servo_t servo_forward;
+extern esc_t esc_main;
 
 
 /**
@@ -371,8 +374,58 @@ void test_servo()
     while(1)
     {
         HAL_Delay(100);
-        servo_test_all();
+        servo_test(&servo_forward);
     }
+}
+
+void test_esc()
+{
+    HAL_Init();
+    SystemClock_Config();
+    MX_GPIO_Init();
+    MX_TIM3_Init();
+    MX_TIM4_Init();
+    MX_TIM8_Init();
+    MX_USART1_UART_Init();
+
+    int16_t res = 0;
+
+    printf_("Running ESC test\r\n");
+    printf_("CAUTION - MOTOR WILL SPIN IF CONNECTED\r\n");
+    printf_("SPINNING IN:\r\n");
+
+    int ticks = 5;
+    for (int counter = ticks; counter >= 0; counter--)
+    {
+        HAL_Delay(1000);
+        printf_("%d...\r\n", counter);
+    }
+
+    printf_("SPINNING");
+
+    esc_init(&esc_main);
+    esc_enable(&esc_main);
+    HAL_Delay(5000);
+    esc_set_throttle(&esc_main, 0.25);
+    //esc_set_microseconds(&esc_main, 1000);
+    esc_update(&esc_main);
+    HAL_Delay(1000);
+    //esc_disable(&esc_main);
+    //HAL_Delay(250);
+    //esc_enable(&esc_main);
+    res = esc_set_throttle(&esc_main, 0.5);
+    printf_("result: %d", res);
+    esc_update(&esc_main);
+    HAL_Delay(1000);
+    res = esc_set_throttle(&esc_main, 0.75);
+    printf_("result: %d", res);
+    esc_update(&esc_main);
+    HAL_Delay(1000);
+    res = esc_set_throttle(&esc_main, 1.0);
+    printf_("result: %d", res);
+    esc_update(&esc_main);
+    HAL_Delay(1000);
+    esc_disable(&esc_main);
 }
 
 void test_led()
@@ -386,6 +439,30 @@ void test_led()
         BSP_LED_Toggle(LED2);
         HAL_Delay(500);
     }
+}
+
+void test_battery_monitor()
+{
+    HAL_Init();
+    SystemClock_Config();
+    MX_GPIO_Init();
+    MX_DMA_Init();
+    MX_ADC1_Init();
+    MX_USART1_UART_Init();
+
+    battery_monitor_enable();
+    uint16_t battery_voltage_raw;
+    uint16_t battery_current_raw;
+    while(1)
+    {
+        battery_voltage_raw = battery_monitor_get_voltage_raw();
+        battery_current_raw = battery_monitor_get_current_raw();
+
+        printf_("Battery Voltage Raw: %d\r\n", battery_voltage_raw);
+        printf_("Battery Current Raw: %d\r\n", battery_current_raw);
+        HAL_Delay(1000);
+    }
+
 }
 
 /**
