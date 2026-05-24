@@ -8,6 +8,7 @@ File for running hardware tests outside of Unity/Ceedling unit testing
 
 
 #include "main.h"
+
 #include <mavlink.h>
 #include "servo.h"
 #include "esc.h"
@@ -15,6 +16,8 @@ File for running hardware tests outside of Unity/Ceedling unit testing
 #include "spl06.h"
 #include "printf/printf.h"
 #include "fatfs.h"
+#include "batterymonitor.h"
+
 #include <stdio.h>
 #include <string.h>
 #include <stdarg.h> //for va_list var arg functions
@@ -193,6 +196,40 @@ void test_debug_uart()
         /** Delay for 1s between prints */
         HAL_Delay(1000);
         printf_("Hello world!\n");
+    }
+}
+
+char rx_buffer[] = " ";
+void test_echo()
+{
+    /**Init system and peripherals */
+    HAL_Init();
+    SystemClock_Config();
+    MX_GPIO_Init();
+    MX_USART1_UART_Init();
+    MX_GPIO_Init();
+
+    /** Setup interrupt */
+    HAL_UART_Receive_IT(&huart1, rx_buffer, 1);
+
+    /** Spit out data */
+    printf_("Echo Test\r\n");
+    while(1)
+    {
+        /** Delay for 1s between prints */
+        HAL_Delay(1000);
+    }
+
+}
+
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+{
+
+    //HAL_UART_Transmit(&huart1, rx_buffer, 1, 10);
+    if (huart->Instance == USART1)
+    {
+        printf_(rx_buffer);
+        HAL_UART_Receive_IT(&huart1, rx_buffer, 1);
     }
 }
 
@@ -451,15 +488,19 @@ void test_battery_monitor()
     MX_USART1_UART_Init();
 
     battery_monitor_enable();
-    uint16_t battery_voltage_raw;
-    uint16_t battery_current_raw;
     while(1)
     {
-        battery_voltage_raw = battery_monitor_get_voltage_raw();
-        battery_current_raw = battery_monitor_get_current_raw();
+        uint16_t battery_voltage_raw = battery_monitor_get_voltage_raw();
+        uint16_t battery_current_raw = battery_monitor_get_current_raw();
+        float battery_voltage_sc1 = battery_voltage_raw * 11.05 * 0.000805;
+        float battery_voltage_sc = battery_monitor_get_voltage();
+        float battery_current_sc = battery_monitor_get_current();
 
         printf_("Battery Voltage Raw: %d\r\n", battery_voltage_raw);
         printf_("Battery Current Raw: %d\r\n", battery_current_raw);
+
+        printf_("Scaled Battery Voltage: %f\r\n", battery_voltage_sc);
+        printf_("Scaled Battery Current: %f\r\n", battery_current_sc);
         HAL_Delay(1000);
     }
 
