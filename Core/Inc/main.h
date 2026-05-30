@@ -43,7 +43,7 @@ extern "C" {
 
 /* Exported constants --------------------------------------------------------*/
 /* USER CODE BEGIN EC */
-
+extern char uart1_buff[];
 /* USER CODE END EC */
 
 /* Exported macro ------------------------------------------------------------*/

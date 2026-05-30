@@ -13,14 +13,11 @@ uint8_t ringbuff_init(ringbuff_t *ringbuff, uint8_t *buff, uint32_t size)
 uint8_t ringbuff_pop(ringbuff_t *ringbuff, uint8_t *val)
 {
     uint8_t ret = 0;
-    if (ringbuff->head < ringbuff->tail)
+    if ( (ringbuff->head != ringbuff->tail) && (val != NULL) )
     {
-        ret = 1;
-        if (val != NULL)
-        {
-            *val = ringbuff->buff[ringbuff->head];
-        }
+        *val = ringbuff->buff[ringbuff->head];
         ringbuff->head = (ringbuff->head + 1) % ringbuff->size;
+        ret = 1;
     }
     return ret;
 }

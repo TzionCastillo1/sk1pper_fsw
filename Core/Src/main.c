@@ -18,6 +18,7 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
+#include "cmsis_os.h"
 #include "dma.h"
 #include "fatfs.h"
 #include "spi.h"
@@ -26,7 +27,8 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include <mavlink.h>
-#include "Servo.h"
+#include "servo.h"
+#include "cli.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -45,20 +47,33 @@
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
-
+char uart1_buff[1];
 /* USER CODE BEGIN PV */
-
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
+void MX_FREERTOS_Init(void);
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
+void main()
+{
+    HAL_Init();
+    SystemClock_Config();
+    MX_GPIO_Init();
+    MX_USART1_UART_Init();
+    MX_SPI3_Init();
+    MX_FATFS_Init();
+    osKernelInitialize();
+    MX_FREERTOS_Init();
 
+    osKernelStart();
+
+}
 /* USER CODE END 0 */
 
 /**
@@ -113,9 +128,20 @@ void SystemClock_Config(void)
 }
 
 /* USER CODE BEGIN 4 */
+void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
+{
+
+    //HAL_UART_Transmit(&huart1, rx_buffer, 1, 10);
+    if (huart->Instance == USART1)
+    {
+      cli_char_received(uart1_buff[0]);
+      HAL_UART_Receive_IT(&huart1, uart1_buff, 1);
+    }
+}
 
 // Need to keep track of position in rx buffer. How to do this? I don't really care where the DMA is,
 // I just need to start at the beginning and loop around
+/**
 void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)
 {
   mavlink_status_t status;
@@ -135,7 +161,7 @@ void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size)
   }
 
 }
-
+*/
 /** Test Functions */
 
 
@@ -153,6 +179,27 @@ int POST()
 
 /** End Test Functions */
 /* USER CODE END 4 */
+
+/**
+  * @brief  Period elapsed callback in non blocking mode
+  * @note   This function is called  when TIM6 interrupt took place, inside
+  * HAL_TIM_IRQHandler(). It makes a direct call to HAL_IncTick() to increment
+  * a global variable "uwTick" used as application time base.
+  * @param  htim : TIM handle
+  * @retval None
+  */
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+  /* USER CODE BEGIN Callback 0 */
+
+  /* USER CODE END Callback 0 */
+  if (htim->Instance == TIM6) {
+    HAL_IncTick();
+  }
+  /* USER CODE BEGIN Callback 1 */
+
+  /* USER CODE END Callback 1 */
+}
 
 /**
   * @brief  This function is executed in case of error occurrence.

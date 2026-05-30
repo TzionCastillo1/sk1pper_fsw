@@ -14,6 +14,7 @@
 #define CLI_MIN_ASCII       32
 #define CLI_MAX_ASCII       126
 
+extern char cli_uart_byte[];
 
 typedef struct cli_handle_t
 {
