@@ -10,6 +10,8 @@ void cli_cmd_set(int argc, char **argv);
 
 void cli_cmd_get(int argc, char **argv);
 
+void cli_cmd_save(int argc, char **argv);
+
 void cli_cmd_help(int argc, char **argv);
 /**
  * TODO: Add the rest of CLI cmd function definitions

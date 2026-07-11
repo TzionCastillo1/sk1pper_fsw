@@ -19,6 +19,7 @@ int curs_pos = 0;
 void cli_init()
 {
     ringbuff_init(&uart_ringbuff, uart_buff, CLI_UART_BUFF_LEN);
+    printf_("Sk1pper>\r\n");
 }
 
 void cli_char_received(char new_char)

@@ -13,7 +13,7 @@ spl06_Status_t spl06_init(spl06_Handle_t *hspl06)
 {
     uint8_t id;
     spl06_reset(hspl06);
-    HAL_Delay(SPL06_RESET_DELAY);
+    HAL_Delay(SPL06_RESET_DELAY + 100);
     spl06_read_id(hspl06, &id);
     assert_param(id == SPL06_EXPECTED_ID_VAL);
 
@@ -171,12 +171,13 @@ spl06_Status_t spl06_read_comp_pres(spl06_Handle_t *hspl06, float *comp_pres)
                     + Traw_sc * hspl06->c01 
                     + Traw_sc * Praw_sc * (hspl06->c11 + Praw_sc * hspl06->c21) );
 
-    printf_("term2 c10*Praw_sc: %f\n", Praw_sc * hspl06->c10);
+    /**printf_("term2 c10*Praw_sc: %f\n", Praw_sc * hspl06->c10);
     printf_("term3 c20*Praw_sc^2: %f\n", Praw_sc * Praw_sc * hspl06->c20);
     printf_("term4 c30*Praw_sc^3: %f\n", Praw_sc * Praw_sc * Praw_sc * hspl06->c30);
     printf_("term5 Traw_sc*c01: %f\n", Traw_sc * hspl06->c01);
     printf_("term6 Traw_sc*Praw_sc*c11: %f\n", Traw_sc * Praw_sc * hspl06->c11);
     printf_("term7 Traw_sc*Praw_sc^2*c21: %f\n", Traw_sc * Praw_sc * Praw_sc * hspl06->c21);
+    **/
 }
 
 spl06_Status_t spl06_read_comp_temp(spl06_Handle_t *hspl06, float *comp_temp)

@@ -47,8 +47,9 @@
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
-char uart1_buff[1];
+
 /* USER CODE BEGIN PV */
+char uart1_buff[1];
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/

@@ -6,14 +6,26 @@
     "configurations": [
 
         {
-            "name": "Cortex Debug",
+            "name": "sensor_mgr Debug",
             "cwd": "${workspaceFolder}",
-            "executable": "./build/nucleo/firmware.elf",
+            "executable": "./build/speedybee/test_sensor_mgr/test_sensor_mgr.elf",
             "request": "launch",
             "type": "cortex-debug",
             "runToEntryPoint": "main",
             "servertype": "stlink",
-            "device": "STM32F446R",
+            "device": "STM32F405",
+            "showDevDebugOutput": "raw"
+        },
+
+        {
+            "name": "baro Debug",
+            "cwd": "${workspaceFolder}",
+            "executable": "./build/speedybee/test_baro/test_baro.elf",
+            "request": "launch",
+            "type": "cortex-debug",
+            "runToEntryPoint": "test_baro",
+            "servertype": "stlink",
+            "device": "STM32F405",
             "showDevDebugOutput": "raw"
         }
 

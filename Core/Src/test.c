@@ -17,6 +17,8 @@ File for running hardware tests outside of Unity/Ceedling unit testing
 #include "printf/printf.h"
 #include "fatfs.h"
 #include "batterymonitor.h"
+#include "stm32f405_SpeedyBee.h"
+#include "sensor_mgr.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -98,9 +100,13 @@ void test_sd_card()
     MX_GPIO_Init();
     MX_USART1_UART_Init();
     MX_SPI3_Init();
-    MX_FATFS_Init();
 
-    HAL_Delay(1000);
+    printf_("0\r\n");
+
+    MX_FATFS_Init();
+    printf_("00\r\n");
+
+    //HAL_Delay(1000);
     printf_("\r\n SD Card Test, pulled from kiwih \r\n\r\n");
 
     FATFS FatFs;
@@ -168,6 +174,7 @@ void test_sd_card()
     strncpy((char*)readBuf, "a new file is made!", 19);
     UINT bytesWrote;
     fres = f_write(&fil, readBuf, 19, &bytesWrote);
+    fres = f_printf(&fil, "f_printf proof\r\n");
     if(fres == FR_OK) {
         printf_("Wrote %i bytes to 'write.txt'!\r\n", bytesWrote);
     } else {
@@ -294,6 +301,44 @@ void test_baro()
 
 }
 
+void test_sensor_mgr()
+{
+    HAL_Init();
+    SystemClock_Config();
+    MX_GPIO_Init();
+    MX_USART1_UART_Init();
+    MX_I2C1_Init();
+    MX_SPI1_Init();
+
+    printf_("Running sensor_mgr test\r\n");
+
+    error_t status = sensormgr_init();
+
+    if (status != ERROR_OK)
+    {
+        printf_("Error: %d\r\n", status);
+    }
+
+    float gyro[3];
+    float acc[3];
+    float pres;
+    float alt;
+
+    for (int i = 0; i < 10; i++)
+    {
+        sensormgr_read_acc(acc);
+        sensormgr_read_gyro(gyro);
+        sensormgr_read_baro_pres(&pres);
+        sensormgr_read_baro_alt(&alt);
+
+        printf_("Acc: %f, %f, %f\r\n", acc[0], acc[1], acc[2]);
+        printf_("Gyro: %f, %f, %f\r\n", gyro[0], gyro[1], gyro[2]);
+        printf_("Pres: %f, Alt: %f\r\n", pres, alt);
+        HAL_Delay(1000);
+    }
+
+}
+
 void test_assert()
 {
     HAL_Init();
@@ -411,7 +456,7 @@ void test_servo()
     while(1)
     {
         HAL_Delay(100);
-        servo_test(&servo_forward);
+        //servo_test(&servo_forward);
     }
 }
 
@@ -504,6 +549,27 @@ void test_battery_monitor()
         HAL_Delay(1000);
     }
 
+}
+
+/**
+  * @brief  Period elapsed callback in non blocking mode
+  * @note   This function is called  when TIM6 interrupt took place, inside
+  * HAL_TIM_IRQHandler(). It makes a direct call to HAL_IncTick() to increment
+  * a global variable "uwTick" used as application time base.
+  * @param  htim : TIM handle
+  * @retval None
+  */
+void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+{
+  /* USER CODE BEGIN Callback 0 */
+
+  /* USER CODE END Callback 0 */
+  if (htim->Instance == TIM6) {
+    HAL_IncTick();
+  }
+  /* USER CODE BEGIN Callback 1 */
+
+  /* USER CODE END Callback 1 */
 }
 
 /**

@@ -26,6 +26,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "cli.h"
+#include "param_mgr.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -72,6 +73,30 @@ const osThreadAttr_t cli_attributes = {
   .stack_size = sizeof(cliBuffer),
   .priority = (osPriority_t) osPriorityBelowNormal1,
 };
+/* Definitions for housekeeper */
+osThreadId_t housekeeperHandle;
+uint32_t housekeeperBuffer[ 1024 ];
+osStaticThreadDef_t housekeeperControlBlock;
+const osThreadAttr_t housekeeper_attributes = {
+  .name = "housekeeper",
+  .cb_mem = &housekeeperControlBlock,
+  .cb_size = sizeof(housekeeperControlBlock),
+  .stack_mem = &housekeeperBuffer[0],
+  .stack_size = sizeof(housekeeperBuffer),
+  .priority = (osPriority_t) osPriorityBelowNormal2,
+};
+/* Definitions for flight_mgr */
+osThreadId_t flight_mgrHandle;
+uint32_t flight_mgrBuffer[ 1024 ];
+osStaticThreadDef_t flight_mgrControlBlock;
+const osThreadAttr_t flight_mgr_attributes = {
+  .name = "flight_mgr",
+  .cb_mem = &flight_mgrControlBlock,
+  .cb_size = sizeof(flight_mgrControlBlock),
+  .stack_mem = &flight_mgrBuffer[0],
+  .stack_size = sizeof(flight_mgrBuffer),
+  .priority = (osPriority_t) osPriorityHigh,
+};
 
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN FunctionPrototypes */
@@ -80,6 +105,8 @@ const osThreadAttr_t cli_attributes = {
 
 void StartDefaultTask(void *argument);
 void start_cli(void *argument);
+void start_hk(void *argument);
+void start_fm(void *argument);
 
 void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
 
@@ -115,6 +142,12 @@ void MX_FREERTOS_Init(void) {
 
   /* creation of cli */
   cliHandle = osThreadNew(start_cli, NULL, &cli_attributes);
+
+  /* creation of housekeeper */
+  housekeeperHandle = osThreadNew(start_hk, NULL, &housekeeper_attributes);
+
+  /* creation of flight_mgr */
+  flight_mgrHandle = osThreadNew(start_fm, NULL, &flight_mgr_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
@@ -172,6 +205,46 @@ void start_cli(void *argument)
     osDelay(100);
   }
   /* USER CODE END start_cli */
+}
+
+/* USER CODE BEGIN Header_start_hk */
+/**
+* @brief Function implementing the housekeeper thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_start_hk */
+void start_hk(void *argument)
+{
+  /* USER CODE BEGIN start_hk */
+  param_mgr_init();
+  osDelay(10);
+  param_mgr_load();
+
+  /* Infinite loop */;
+  for(;;)
+  {
+    osDelay(100);
+  }
+  /* USER CODE END start_hk */
+}
+
+/* USER CODE BEGIN Header_start_fm */
+/**
+* @brief Function implementing the flight_mgr thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_start_fm */
+void start_fm(void *argument)
+{
+  /* USER CODE BEGIN start_fm */
+  /* Infinite loop */
+  for(;;)
+  {
+    osDelay(1);
+  }
+  /* USER CODE END start_fm */
 }
 
 /* Private application code --------------------------------------------------*/

@@ -42,6 +42,15 @@ typedef enum
 
 extern void putchar_(char c);
 
+void BSP_LED_Init(Led_t Led);
+
+void BSP_Led_DeInit(Led_t Led);
+
+void BSP_LED_On(Led_t Led);
+
+void BSP_LED_Off(Led_t Led);
+
+void BSP_LED_Toggle(Led_t Led);
 
 
 #ifdef __cplusplus
