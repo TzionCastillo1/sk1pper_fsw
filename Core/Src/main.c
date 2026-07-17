@@ -71,9 +71,11 @@ void main()
   MX_DMA_Init();
   MX_USART1_UART_Init();
   printf_("Debug UART Initialized\r\n");
-  MX_UART5_Init();
+  MX_UART4_Init();
   MX_SPI3_Init();
   MX_FATFS_Init();
+  BSP_LED_Init(LED_GREEN);
+  BSP_LED_Init(LED_BLUE);
   
   printf_("Starting FreeRTOS\r\n");
   

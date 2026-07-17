@@ -8,8 +8,8 @@
  * 
  */
 
-GPIO_TypeDef *GPIO_PORT[LEDn] = {LED2_GPIO_PORT};
-const uint16_t GPIO_PIN[LEDn] = {LED2_PIN};
+GPIO_TypeDef *GPIO_PORT[LEDn] = {LED2_GPIO_PORT, LED3_GPIO_PORT};
+const uint16_t GPIO_PIN[LEDn] = {LED2_PIN, LED3_PIN};
 
 
 

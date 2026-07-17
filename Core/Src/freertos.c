@@ -28,6 +28,7 @@
 #include "cli.h"
 #include "param_mgr.h"
 #include <mavlink.h>
+#include "printf/printf.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -155,16 +156,16 @@ void MX_FREERTOS_Init(void) {
   defaultTaskHandle = osThreadNew(StartDefaultTask, NULL, &defaultTask_attributes);
 
   /* creation of cli */
-  //cliHandle = osThreadNew(start_cli, NULL, &cli_attributes);
+  cliHandle = osThreadNew(start_cli, NULL, &cli_attributes);
 
   /* creation of housekeeper */
   housekeeperHandle = osThreadNew(start_hk, NULL, &housekeeper_attributes);
 
   /* creation of flight_mgr */
-  //flight_mgrHandle = osThreadNew(start_fm, NULL, &flight_mgr_attributes);
+  flight_mgrHandle = osThreadNew(start_fm, NULL, &flight_mgr_attributes);
 
   /* creation of link_mgr */
-  //link_mgrHandle = osThreadNew(start_lm, NULL, &link_mgr_attributes);
+  link_mgrHandle = osThreadNew(start_lm, NULL, &link_mgr_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
@@ -276,30 +277,50 @@ void start_lm(void *argument)
   /* USER CODE BEGIN start_lm */
   /* Infinite loop */
   const uint32_t base_period_ticks = 100;
+  const uint32_t period_ticks_5Hz = 200;
+  const uint32_t period_ticks_1Hz = 1000;
+  uint32_t slow_tick = osKernelGetTickCount();
+  uint32_t base_tick;
+  mavlink_message_t message;
+
   for(;;)
   {
-    uint32_t tick = osKernelGetTickCount();
+    base_tick = osKernelGetTickCount();
 
-    mavlink_message_t message;
-    uint8_t system_id = 42;
-    uint8_t base_mode = 0;
-    uint8_t custom_mode = 0;
-    mavlink_msg_heartbeat_pack_chan(
-      system_id,
-      MAV_COMP_ID_PERIPHERAL,
-      MAVLINK_COMM_0,
-      &message,
-      MAV_TYPE_GENERIC,
-      MAV_AUTOPILOT_GENERIC,
-      base_mode,
-      custom_mode,
-      MAV_STATE_STANDBY
-    );
-    uint8_t txbuff[MAVLINK_MAX_PACKET_LEN];
-    const int len = mavlink_msg_to_send_buffer(txbuff, &message);
-    HAL_UART_Transmit(&huart5, txbuff, len, 100);
+    /******** Insert Base-frequency code ***************/
+    BSP_LED_Toggle(LED_GREEN);   
 
-    osDelayUntil(tick + base_period_ticks);    
+    /******** Insert 5Hz code ***************/
+    if((osKernelGetTickCount() - slow_tick) % period_ticks_5Hz == 0)
+    {
+
+    }
+    
+    /******** Insert 1Hz code ***************/
+    if((osKernelGetTickCount() - slow_tick) % period_ticks_1Hz == 0)
+    {
+      //Write heartbeat message
+      uint8_t system_id = 42;
+      uint8_t base_mode = 0;
+      uint8_t custom_mode = 0;
+      mavlink_msg_heartbeat_pack_chan(
+        system_id,
+        MAV_COMP_ID_PERIPHERAL,
+        MAVLINK_COMM_0,
+        &message,
+        MAV_TYPE_GENERIC,
+        MAV_AUTOPILOT_GENERIC,
+        base_mode,
+        custom_mode,
+        MAV_STATE_STANDBY
+      );
+      uint8_t txbuff[MAVLINK_MAX_PACKET_LEN];
+      const int len = mavlink_msg_to_send_buffer(txbuff, &message);
+      int status = HAL_UART_Transmit(&huart4, txbuff, len, 100);
+
+      BSP_LED_Toggle(LED_BLUE);
+    }
+    osDelayUntil(base_tick + base_period_ticks); 
   }
   /* USER CODE END start_lm */
 }

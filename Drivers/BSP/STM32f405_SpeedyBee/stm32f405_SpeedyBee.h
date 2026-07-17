@@ -33,6 +33,7 @@ typedef enum
 {
     LED2 = 0,
     LED_GREEN = LED2,
+    LED_BLUE,
     LEDn
 } Led_t;
 
