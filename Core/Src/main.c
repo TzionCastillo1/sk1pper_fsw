@@ -29,6 +29,7 @@
 #include <mavlink.h>
 #include "servo.h"
 #include "cli.h"
+#include "printf/printf.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -63,16 +64,23 @@ void MX_FREERTOS_Init(void);
 /* USER CODE BEGIN 0 */
 void main()
 {
-    HAL_Init();
-    SystemClock_Config();
-    MX_GPIO_Init();
-    MX_USART1_UART_Init();
-    MX_SPI3_Init();
-    MX_FATFS_Init();
-    osKernelInitialize();
-    MX_FREERTOS_Init();
+  
+  HAL_Init();
+  SystemClock_Config();
+  MX_GPIO_Init();
+  MX_DMA_Init();
+  MX_USART1_UART_Init();
+  printf_("Debug UART Initialized\r\n");
+  MX_UART5_Init();
+  MX_SPI3_Init();
+  MX_FATFS_Init();
+  
+  printf_("Starting FreeRTOS\r\n");
+  
+  osKernelInitialize();
+  MX_FREERTOS_Init();
 
-    osKernelStart();
+  osKernelStart();
 
 }
 /* USER CODE END 0 */

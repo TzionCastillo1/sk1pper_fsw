@@ -27,6 +27,7 @@
 /* USER CODE BEGIN Includes */
 #include "cli.h"
 #include "param_mgr.h"
+#include <mavlink.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -97,6 +98,18 @@ const osThreadAttr_t flight_mgr_attributes = {
   .stack_size = sizeof(flight_mgrBuffer),
   .priority = (osPriority_t) osPriorityHigh,
 };
+/* Definitions for link_mgr */
+osThreadId_t link_mgrHandle;
+uint32_t link_mgrBuffer[ 1024 ];
+osStaticThreadDef_t link_mgrControlBlock;
+const osThreadAttr_t link_mgr_attributes = {
+  .name = "link_mgr",
+  .cb_mem = &link_mgrControlBlock,
+  .cb_size = sizeof(link_mgrControlBlock),
+  .stack_mem = &link_mgrBuffer[0],
+  .stack_size = sizeof(link_mgrBuffer),
+  .priority = (osPriority_t) osPriorityBelowNormal,
+};
 
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN FunctionPrototypes */
@@ -107,6 +120,7 @@ void StartDefaultTask(void *argument);
 void start_cli(void *argument);
 void start_hk(void *argument);
 void start_fm(void *argument);
+void start_lm(void *argument);
 
 void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
 
@@ -141,13 +155,16 @@ void MX_FREERTOS_Init(void) {
   defaultTaskHandle = osThreadNew(StartDefaultTask, NULL, &defaultTask_attributes);
 
   /* creation of cli */
-  cliHandle = osThreadNew(start_cli, NULL, &cli_attributes);
+  //cliHandle = osThreadNew(start_cli, NULL, &cli_attributes);
 
   /* creation of housekeeper */
   housekeeperHandle = osThreadNew(start_hk, NULL, &housekeeper_attributes);
 
   /* creation of flight_mgr */
-  flight_mgrHandle = osThreadNew(start_fm, NULL, &flight_mgr_attributes);
+  //flight_mgrHandle = osThreadNew(start_fm, NULL, &flight_mgr_attributes);
+
+  /* creation of link_mgr */
+  //link_mgrHandle = osThreadNew(start_lm, NULL, &link_mgr_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
@@ -242,9 +259,49 @@ void start_fm(void *argument)
   /* Infinite loop */
   for(;;)
   {
-    osDelay(1);
+    osDelay(100);
   }
   /* USER CODE END start_fm */
+}
+
+/* USER CODE BEGIN Header_start_lm */
+/**
+* @brief Function implementing the link_mgr thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_start_lm */
+void start_lm(void *argument)
+{
+  /* USER CODE BEGIN start_lm */
+  /* Infinite loop */
+  const uint32_t base_period_ticks = 100;
+  for(;;)
+  {
+    uint32_t tick = osKernelGetTickCount();
+
+    mavlink_message_t message;
+    uint8_t system_id = 42;
+    uint8_t base_mode = 0;
+    uint8_t custom_mode = 0;
+    mavlink_msg_heartbeat_pack_chan(
+      system_id,
+      MAV_COMP_ID_PERIPHERAL,
+      MAVLINK_COMM_0,
+      &message,
+      MAV_TYPE_GENERIC,
+      MAV_AUTOPILOT_GENERIC,
+      base_mode,
+      custom_mode,
+      MAV_STATE_STANDBY
+    );
+    uint8_t txbuff[MAVLINK_MAX_PACKET_LEN];
+    const int len = mavlink_msg_to_send_buffer(txbuff, &message);
+    HAL_UART_Transmit(&huart5, txbuff, len, 100);
+
+    osDelayUntil(tick + base_period_ticks);    
+  }
+  /* USER CODE END start_lm */
 }
 
 /* Private application code --------------------------------------------------*/
