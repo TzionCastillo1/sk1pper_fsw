@@ -27,12 +27,14 @@
 /* USER CODE BEGIN Includes */
 #include "cli.h"
 #include "param_mgr.h"
+#include "sensor_mgr.h"
 #include <mavlink.h>
 #include "printf/printf.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
 typedef StaticTask_t osStaticThreadDef_t;
+typedef StaticSemaphore_t osStaticMutexDef_t;
 /* USER CODE BEGIN PTD */
 
 /* USER CODE END PTD */
@@ -111,6 +113,14 @@ const osThreadAttr_t link_mgr_attributes = {
   .stack_size = sizeof(link_mgrBuffer),
   .priority = (osPriority_t) osPriorityBelowNormal,
 };
+/* Definitions for test_mutex */
+osMutexId_t test_mutexHandle;
+osStaticMutexDef_t test_mutexControlBlock;
+const osMutexAttr_t test_mutex_attributes = {
+  .name = "test_mutex",
+  .cb_mem = &test_mutexControlBlock,
+  .cb_size = sizeof(test_mutexControlBlock),
+};
 
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN FunctionPrototypes */
@@ -134,6 +144,9 @@ void MX_FREERTOS_Init(void) {
   /* USER CODE BEGIN Init */
 
   /* USER CODE END Init */
+  /* Create the mutex(es) */
+  /* creation of test_mutex */
+  test_mutexHandle = osMutexNew(&test_mutex_attributes);
 
   /* USER CODE BEGIN RTOS_MUTEX */
   /* add mutexes, ... */
@@ -257,10 +270,27 @@ void start_hk(void *argument)
 void start_fm(void *argument)
 {
   /* USER CODE BEGIN start_fm */
+  //Base rate of 200Hz
+  uint32_t base_period_ticks = 5;
+  uint32_t base_tick;
+
+  error_t status = sensormgr_init();
+
+  if (status != ERROR_OK)
+  {
+      printf_("Error: %d\r\n", status);
+  }
+
+  float gyro[3];
+
   /* Infinite loop */
   for(;;)
   {
-    osDelay(100);
+    base_tick = osKernelGetTickCount();
+    sensormgr_update_gyro();
+    sensormgr_update_acc();
+    sensormgr_update_baro();
+    osDelayUntil(base_tick + base_period_ticks);
   }
   /* USER CODE END start_fm */
 }
@@ -275,14 +305,17 @@ void start_fm(void *argument)
 void start_lm(void *argument)
 {
   /* USER CODE BEGIN start_lm */
-  /* Infinite loop */
+  //Base rate of 10Hz
   const uint32_t base_period_ticks = 100;
   const uint32_t period_ticks_5Hz = 200;
   const uint32_t period_ticks_1Hz = 1000;
   uint32_t slow_tick = osKernelGetTickCount();
   uint32_t base_tick;
-  mavlink_message_t message;
+  const float Gs_to_mGs = 1000;
+  const float dps_to_mrads = 1000*3.1415/180.0;  
 
+
+  /* Infinite loop */
   for(;;)
   {
     base_tick = osKernelGetTickCount();
@@ -291,18 +324,51 @@ void start_lm(void *argument)
     BSP_LED_Toggle(LED_GREEN);   
 
     /******** Insert 5Hz code ***************/
-    if((osKernelGetTickCount() - slow_tick) % period_ticks_5Hz == 0)
+    if((base_tick - slow_tick) % period_ticks_5Hz == 0)
     {
-
-    }
-    
-    /******** Insert 1Hz code ***************/
-    if((osKernelGetTickCount() - slow_tick) % period_ticks_1Hz == 0)
-    {
-      //Write heartbeat message
+      uint8_t txbuff[MAVLINK_MAX_PACKET_LEN];
       uint8_t system_id = 42;
       uint8_t base_mode = 0;
       uint8_t custom_mode = 0;
+      mavlink_message_t message;
+      sensor_data_t data;
+      sensormgr_get_all(&data);
+      float gyro[3];
+      float acc[3];
+      sensormgr_get_acc(acc);
+      sensormgr_get_gyro(gyro);
+      mavlink_msg_scaled_imu_pack_chan(
+        system_id,
+        MAV_COMP_ID_PERIPHERAL,
+        MAVLINK_COMM_0,
+        &message,
+        0,//TODO: Create system time,
+        (int16_t)(data.acc[0] * Gs_to_mGs),
+        (int16_t)(data.acc[1] * Gs_to_mGs),
+        (int16_t)(data.acc[2] * Gs_to_mGs),
+        (int16_t)(data.gyro[0] * dps_to_mrads),
+        (int16_t)(data.gyro[1] * dps_to_mrads),
+        (int16_t)(data.gyro[2] * dps_to_mrads),
+        0,
+        0,
+        0,
+        69.69420//TODO: IMU temperature
+      );
+
+      const int len = mavlink_msg_to_send_buffer(txbuff, &message);
+      //synchronous tx should prevent us from overwritting buffer mid transmission
+      int status = HAL_UART_Transmit(&huart4, txbuff, len, 100);
+    }
+    
+    /******** Insert 1Hz code ***************/
+    if((base_tick - slow_tick) % period_ticks_1Hz == 0)
+    {
+      //Write heartbeat message
+      uint8_t txbuff[MAVLINK_MAX_PACKET_LEN];
+      uint8_t system_id = 42;
+      uint8_t base_mode = 0;
+      uint8_t custom_mode = 0;
+      mavlink_message_t message;
       mavlink_msg_heartbeat_pack_chan(
         system_id,
         MAV_COMP_ID_PERIPHERAL,
@@ -314,12 +380,12 @@ void start_lm(void *argument)
         custom_mode,
         MAV_STATE_STANDBY
       );
-      uint8_t txbuff[MAVLINK_MAX_PACKET_LEN];
       const int len = mavlink_msg_to_send_buffer(txbuff, &message);
       int status = HAL_UART_Transmit(&huart4, txbuff, len, 100);
 
       BSP_LED_Toggle(LED_BLUE);
     }
+
     osDelayUntil(base_tick + base_period_ticks); 
   }
   /* USER CODE END start_lm */

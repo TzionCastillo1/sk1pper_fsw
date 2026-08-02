@@ -323,17 +323,26 @@ void test_sensor_mgr()
     float acc[3];
     float pres;
     float alt;
+    sensor_data_t sensor_data;
 
     for (int i = 0; i < 10; i++)
     {
-        sensormgr_read_acc(acc);
-        sensormgr_read_gyro(gyro);
-        sensormgr_read_baro_pres(&pres);
-        sensormgr_read_baro_alt(&alt);
+        sensormgr_update_acc();
+        sensormgr_update_gyro();
+        sensormgr_update_baro();
+        sensormgr_get_all(&sensor_data);
+        sensormgr_get_acc(acc);
+        sensormgr_get_gyro(gyro);
+        sensormgr_get_baro_pres(&pres);
+        sensormgr_get_baro_alt(&alt);
 
         printf_("Acc: %f, %f, %f\r\n", acc[0], acc[1], acc[2]);
         printf_("Gyro: %f, %f, %f\r\n", gyro[0], gyro[1], gyro[2]);
         printf_("Pres: %f, Alt: %f\r\n", pres, alt);
+        printf_("All:\r\n, Acc: %f, %f, %f\r\n, Gyro: %f, %f, %f\r\n, Pres: %f, Alt: %f\r\n",
+                sensor_data.acc[0], sensor_data.acc[1], sensor_data.acc[2],
+                sensor_data.gyro[0], sensor_data.gyro[1], sensor_data.gyro[2],
+                pres, sensor_data.alt);
         HAL_Delay(1000);
     }
 

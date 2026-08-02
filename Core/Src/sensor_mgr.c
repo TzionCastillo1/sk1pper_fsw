@@ -1,9 +1,12 @@
+#include <math.h>
+#include <string.h>
 #include "sensor_mgr.h"
-#include "math.h"
 #include "stm32f405_SpeedyBee.h"
 #include "spl06.h"
 #include "icm42688p.h"
 #include "printf/printf.h"
+#include "cmsis_os.h"
+#include "FreeRTOS.h"
 
 #define ALT_COEFF       44330U
 #define ALT_EXP         (1.0/5.255f)
@@ -11,6 +14,18 @@
 
 static spl06_Handle_t hspl06;
 static icm42688p_Handle_t hicm42688p;
+
+static sensor_data_t sensor_cache;
+
+osMutexId_t sensor_data_mutexID;
+StaticSemaphore_t sensor_data_mutex_cb;
+const osMutexAttr_t sensor_data_mutex = 
+{
+    .name = "sensor_data",
+    .attr_bits = osMutexPrioInherit | osMutexRobust,
+    .cb_mem = &sensor_data_mutex_cb,
+    .cb_size =  sizeof(sensor_data_mutex_cb),
+};
 
 static float _press_pa_to_alt(float pres);
 
@@ -87,29 +102,97 @@ error_t sensormgr_cal_baro(void)
 
 }
 
-error_t sensormgr_read_acc(float acc_val[3])
+error_t sensormgr_get_gyro(float gyro_val[3])
 {
-    icm42688p_read_scaled_acc(&hicm42688p, acc_val);
+    osMutexAcquire(sensor_data_mutexID, 0);
+    memcpy(gyro_val, sensor_cache.gyro, sizeof(sensor_cache.gyro));
+    osMutexRelease(sensor_data_mutexID);
     return ERROR_OK;
 }
 
-error_t sensormgr_read_gyro(float gyro_val[3])
+error_t sensormgr_get_acc(float acc_val[3])
 {
-    icm42688p_read_scaled_gyro(&hicm42688p, gyro_val);
+    osMutexAcquire(sensor_data_mutexID, 0);
+    memcpy(acc_val, sensor_cache.acc, sizeof(sensor_cache.acc));
+    osMutexRelease(sensor_data_mutexID);
     return ERROR_OK;
 }
 
-error_t sensormgr_read_baro_pres(float *baro_alt)
+error_t sensormgr_get_baro_pres(float *baro_pres)
 {
-    spl06_read_comp_pres(&hspl06, baro_alt);
+    osMutexAcquire(sensor_data_mutexID, 0);
+    memcpy(baro_pres, &sensor_cache.pres, sizeof(sensor_cache.pres));
+    osMutexRelease(sensor_data_mutexID);
     return ERROR_OK;
 }
 
-error_t sensormgr_read_baro_alt(float *baro_alt)
+error_t sensormgr_get_baro_alt(float *baro_alt)
 {
-    spl06_read_comp_pres(&hspl06, baro_alt);
-    //Convert into hPa from Pa
-    *baro_alt = _press_pa_to_alt(*baro_alt);
+    osMutexAcquire(sensor_data_mutexID, 0);
+    memcpy(baro_alt, &sensor_cache.alt, sizeof(sensor_cache.alt));
+    osMutexRelease(sensor_data_mutexID);
+    return ERROR_OK;
+}
+
+error_t sensormgr_get_all(sensor_data_t *data)
+{
+    error_t status;
+    if (status = sensormgr_get_acc(data->acc))
+    {
+        return status;
+    }
+    else if (status = sensormgr_get_gyro(data->gyro)) 
+    {
+        return status; 
+    }
+    else if (status = sensormgr_get_baro_alt(&data->alt)) 
+    {
+        return status;
+    }
+    else if (status = sensormgr_get_baro_pres(&data->pres))
+    {
+        return status;
+    }
+    return status;
+}
+
+error_t sensormgr_update_gyro()
+{
+    float temp_gyro_val[3];
+    icm42688p_read_scaled_gyro(&hicm42688p, temp_gyro_val);
+    //Using a temp storage array so that we don't need to hold the mutex during 
+    //the IO operation, which could be slow
+    osMutexAcquire(sensor_data_mutexID, 0);
+    memcpy(sensor_cache.gyro, temp_gyro_val, sizeof(temp_gyro_val));
+    osMutexRelease(sensor_data_mutexID);
+    return ERROR_OK;
+}
+
+error_t sensormgr_update_acc()
+{
+    float temp_acc_val[3];
+    icm42688p_read_scaled_acc(&hicm42688p, temp_acc_val);
+    //Using a temp storage array so that we don't need to hold the mutex during 
+    //the IO operation, which could be slow
+    osMutexAcquire(sensor_data_mutexID, 0);
+    memcpy(sensor_cache.acc, temp_acc_val, sizeof(temp_acc_val));
+    osMutexRelease(sensor_data_mutexID);
+    return ERROR_OK;
+}
+
+error_t sensormgr_update_baro()
+{
+    float temp_pres;
+    float temp_alt;
+    spl06_read_comp_pres(&hspl06, &temp_pres);
+    //Convert into m from Pa
+    temp_alt = _press_pa_to_alt(temp_pres);
+    //Using a temp storage array so that we don't need to hold the mutex during 
+    //the IO operation, which could be slow
+    osMutexAcquire(sensor_data_mutexID, 0);
+    sensor_cache.alt = temp_alt;
+    sensor_cache.pres = temp_pres;
+    osMutexRelease(sensor_data_mutexID);
     return ERROR_OK;
 }
 

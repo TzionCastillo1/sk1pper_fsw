@@ -1,7 +1,8 @@
 #include "param_mgr.h"
-#include "fatfs.h"
 #include "string.h"
 #include "stdlib.h"
+#include "fatfs.h"
+#include "sensor_mgr.h"
 
 #include "printf/printf.h"
 
@@ -9,6 +10,8 @@
 #define PARAM_DELIM ","
 #define PARAM_MIN_ASCII     32
 #define PARAM_MAX_ASCII     126
+
+#define PARAM_GYRO_KEY "gyro"
 
 //Default param values
 #define DEFAULT_PID 0.0
