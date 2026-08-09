@@ -312,7 +312,11 @@ void start_lm(void *argument)
   uint32_t slow_tick = osKernelGetTickCount();
   uint32_t base_tick;
   const float Gs_to_mGs = 1000;
-  const float dps_to_mrads = 1000*3.1415/180.0;  
+  const float dps_to_mrads = 1000*3.1415/180.0;
+
+  //Need some way to wait until the sensors are initialized
+  float alt_at_boot;
+  sensormgr_get_baro_alt(&alt_at_boot);
 
 
   /* Infinite loop */
@@ -326,6 +330,7 @@ void start_lm(void *argument)
     /******** Insert 5Hz code ***************/
     if((base_tick - slow_tick) % period_ticks_5Hz == 0)
     {
+      /************** Scaled IMU Message ********************/
       uint8_t txbuff[MAVLINK_MAX_PACKET_LEN];
       uint8_t system_id = 42;
       uint8_t base_mode = 0;
@@ -355,9 +360,29 @@ void start_lm(void *argument)
         69.69420//TODO: IMU temperature
       );
 
-      const int len = mavlink_msg_to_send_buffer(txbuff, &message);
+      int len = mavlink_msg_to_send_buffer(txbuff, &message);
       //synchronous tx should prevent us from overwritting buffer mid transmission
       int status = HAL_UART_Transmit(&huart4, txbuff, len, 100);
+
+      /************** Altitude Message ********************/
+      float alt;
+      sensormgr_get_baro_alt(&alt);
+      mavlink_msg_altitude_pack_chan(
+        system_id,
+        MAV_COMP_ID_PERIPHERAL,
+        MAVLINK_COMM_0,
+        &message,
+        0,//TODO: Create system time,
+        alt_at_boot,
+        0,
+        alt,
+        -9999, /** TODO: Make an 'unknown' constant */
+        -9999,
+        -9999
+      );      
+      len = mavlink_msg_to_send_buffer(txbuff, &message);
+      //synchronous tx should prevent us from overwritting buffer mid transmission
+      status = HAL_UART_Transmit(&huart4, txbuff, len, 100);
     }
     
     /******** Insert 1Hz code ***************/
