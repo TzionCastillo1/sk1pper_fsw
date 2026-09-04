@@ -30,6 +30,7 @@
 #include "servo.h"
 #include "cli.h"
 #include "printf/printf.h"
+#include "link_mgr.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -50,12 +51,17 @@
 /* Private variables ---------------------------------------------------------*/
 
 /* USER CODE BEGIN PV */
-char uart1_buff[1];
+char uart1_rxbuff[1];
+char uart4_rxbuff[1];
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 void MX_FREERTOS_Init(void);
+error_t link_mgr_tx(char *data, uint16_t len)
+{
+  HAL_UART_Transmit(&huart4, data, len, 100);
+}
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
@@ -78,9 +84,15 @@ void main()
   MX_FATFS_Init();
   BSP_LED_Init(LED_GREEN);
   BSP_LED_Init(LED_BLUE);
+
   
   printf_("Starting FreeRTOS\r\n");
+
+  //Come up with a better solution for initializing this peripheral
+  HAL_UART_Receive_IT(&huart4, uart4_rxbuff, sizeof(uart4_rxbuff));
   
+  //link_mgr_init(&link_mgr_tx);
+
   osKernelInitialize();
   MX_FREERTOS_Init();
 
@@ -147,8 +159,14 @@ void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart)
     //HAL_UART_Transmit(&huart1, rx_buffer, 1, 10);
     if (huart->Instance == USART1)
     {
-      cli_char_received(uart1_buff[0]);
-      HAL_UART_Receive_IT(&huart1, uart1_buff, 1);
+      cli_char_received(uart1_rxbuff[0]);
+      HAL_UART_Receive_IT(&huart1, uart1_rxbuff, 1);
+    }
+
+    if (huart->Instance == UART4)
+    {
+      link_mgr_byte_received(uart4_rxbuff[0]);
+      HAL_UART_Receive_IT(&huart4, uart4_rxbuff, 1);
     }
 }
 

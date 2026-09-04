@@ -21,6 +21,8 @@
 #include "errors.h"
 #include "gnc_params.h"
 
+#define PARAM_KEY_MAX_LENGTH    (16 + 1)
+
 /**
  * @brief initialize the parameter table. Pulls from flash where available.
  * Uses defaults when flash does not contain a parameter.
@@ -39,7 +41,26 @@ error_t param_mgr_save(void);
 
 error_t param_mgr_load(void);
 
-error_t param_mgr_find(char *key, int *idx);
+error_t param_mgr_find(char *key, uint32_t *idx);
+
+/**
+ * @brief Method to get a parameter based on its index. Useful for iterating
+ * through the parameter list without knowing parameter names
+ * 
+ * @param idx index in parameter list
+ * @param key pointer to name of returned parameter
+ * @param value value of returned parameter
+ * @return error_t 
+ */
+error_t param_mgr_get_from_idx(uint32_t idx, char *key, float *value);
+
+/**
+ * @brief Method to return the total number of params stored on the Flight
+ * Controller 
+ * 
+ * @return int Total number of parameters 
+ */
+int param_mgr_get_count();
 
 
 #endif //PARAMMANAGER_H

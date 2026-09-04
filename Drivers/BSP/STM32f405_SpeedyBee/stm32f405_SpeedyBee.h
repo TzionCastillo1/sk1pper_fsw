@@ -16,6 +16,7 @@ extern "C" {
 #include "tim.h"
 #include "adc.h"
 #include "dma.h"
+#include "errors.h"
 
 #if !defined(USE_STM32F405_SPEEDYBEE)
 #define USE_STM32F405_SPEEDYBEE
@@ -53,6 +54,7 @@ void BSP_LED_Off(Led_t Led);
 
 void BSP_LED_Toggle(Led_t Led);
 
+error_t BSP_link_mgr_tx_func(char *data, uint16_t len);
 
 #ifdef __cplusplus
 }

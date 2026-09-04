@@ -5,6 +5,21 @@
 #include "errors.h"
 #include "stdbool.h"
 
+/**************** Some Helpful Conversion Constants *********************/
+/**
+ * @brief Constant to convert from G's to milli-G's
+ */
+#define GS_TO_MGS (1000.0f)
+/**
+ * @brief Constant to convert from Degrees to Radians
+ */
+#define DEG_TO_RAD (3.1415/180.0)
+/**
+ * @brief Constant to convert from Degrees per Second to milli-Radians per Second
+ */
+#define DPS_TO_MRADS (1000.0*DEG_TO_RAD)
+/**********************************************************************/
+
 typedef struct sensor_data_t
 {
     float gyro[3];

@@ -6,17 +6,17 @@
 
 #include "printf/printf.h"
 
-#define FATFS_LINE_BUFF_LEN 64
-#define PARAM_DELIM ","
-#define PARAM_MIN_ASCII     32
-#define PARAM_MAX_ASCII     126
+#define FATFS_LINE_BUFF_LEN     64
+#define PARAM_DELIM             ","
+#define PARAM_MIN_ASCII         32
+#define PARAM_MAX_ASCII         126
 
 #define PARAM_GYRO_KEY "gyro"
 
 //Default param values
-#define DEFAULT_PID 0.0
-#define MIN_PID 0.0
-#define MAX_PID 10
+#define DEFAULT_PID             0.0
+#define MIN_PID                 0.0
+#define MAX_PID                 10
 
 
 typedef struct param_t
@@ -183,12 +183,12 @@ error_t param_mgr_load(void)
     //f_mount(NULL, "", 0);
 }
 
-error_t param_mgr_find(char *key, int *idx)
+error_t param_mgr_find(char *key, uint32_t *idx)
 {
     error_t ret = ERROR_PARAM_NOT_FOUND;
 
     //Iterate through param table looking for a matching key
-    for (int param_idx = 0; param_table[param_idx].key != NULL; param_idx++)
+    for (uint32_t param_idx = 0; param_table[param_idx].key != NULL; param_idx++)
     {
         if (strcmp(param_table[param_idx].key, key) == 0)
         {
@@ -198,3 +198,19 @@ error_t param_mgr_find(char *key, int *idx)
     }
     return ret;
 }
+
+error_t param_mgr_get_from_idx(uint32_t idx, char *key, float *value)
+{
+    if (idx >= param_mgr_get_count()) return ERROR_PARAM_INDEX_OUT_OF_BOUNDS;
+    strncpy(key, param_table[idx].key, PARAM_KEY_MAX_LENGTH);
+    *value = param_table[idx].val;
+    return ERROR_OK;
+}
+
+int param_mgr_get_count()
+{
+    //Should work because the 'key' in the param table is a pointer
+    //to a string literal and therefore should all be the same size
+    //Subtract one to remove the end of table entry
+    return (sizeof(param_table) / sizeof(param_table[0])) - 1;
+} 

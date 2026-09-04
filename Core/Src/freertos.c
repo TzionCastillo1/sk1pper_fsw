@@ -30,6 +30,7 @@
 #include "sensor_mgr.h"
 #include <mavlink.h>
 #include "printf/printf.h"
+#include "link_mgr.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -219,7 +220,7 @@ void start_cli(void *argument)
 {
   /* USER CODE BEGIN start_cli */
   //Start CLI UART
-  HAL_UART_Receive_IT(&huart1, uart1_buff, 1);
+  HAL_UART_Receive_IT(&huart1, uart1_rxbuff, 1);
   cli_init();
 
   char cmd_line[CLI_CMD_LINE_BUFF];
@@ -309,109 +310,26 @@ void start_lm(void *argument)
   const uint32_t base_period_ticks = 100;
   const uint32_t period_ticks_5Hz = 200;
   const uint32_t period_ticks_1Hz = 1000;
-  uint32_t slow_tick = osKernelGetTickCount();
-  uint32_t base_tick;
-  const float Gs_to_mGs = 1000;
-  const float dps_to_mrads = 1000*3.1415/180.0;
+  uint32_t start_tick = osKernelGetTickCount();
+  uint32_t new_tick;
 
   //Need some way to wait until the sensors are initialized
   float alt_at_boot;
   sensormgr_get_baro_alt(&alt_at_boot);
 
+  link_mgr_init();
+
 
   /* Infinite loop */
   for(;;)
   {
-    base_tick = osKernelGetTickCount();
+    new_tick = osKernelGetTickCount();
 
     /******** Insert Base-frequency code ***************/
     BSP_LED_Toggle(LED_GREEN);   
-
-    /******** Insert 5Hz code ***************/
-    if((base_tick - slow_tick) % period_ticks_5Hz == 0)
-    {
-      /************** Scaled IMU Message ********************/
-      uint8_t txbuff[MAVLINK_MAX_PACKET_LEN];
-      uint8_t system_id = 42;
-      uint8_t base_mode = 0;
-      uint8_t custom_mode = 0;
-      mavlink_message_t message;
-      sensor_data_t data;
-      sensormgr_get_all(&data);
-      float gyro[3];
-      float acc[3];
-      sensormgr_get_acc(acc);
-      sensormgr_get_gyro(gyro);
-      mavlink_msg_scaled_imu_pack_chan(
-        system_id,
-        MAV_COMP_ID_PERIPHERAL,
-        MAVLINK_COMM_0,
-        &message,
-        0,//TODO: Create system time,
-        (int16_t)(data.acc[0] * Gs_to_mGs),
-        (int16_t)(data.acc[1] * Gs_to_mGs),
-        (int16_t)(data.acc[2] * Gs_to_mGs),
-        (int16_t)(data.gyro[0] * dps_to_mrads),
-        (int16_t)(data.gyro[1] * dps_to_mrads),
-        (int16_t)(data.gyro[2] * dps_to_mrads),
-        0,
-        0,
-        0,
-        69.69420//TODO: IMU temperature
-      );
-
-      int len = mavlink_msg_to_send_buffer(txbuff, &message);
-      //synchronous tx should prevent us from overwritting buffer mid transmission
-      int status = HAL_UART_Transmit(&huart4, txbuff, len, 100);
-
-      /************** Altitude Message ********************/
-      float alt;
-      sensormgr_get_baro_alt(&alt);
-      mavlink_msg_altitude_pack_chan(
-        system_id,
-        MAV_COMP_ID_PERIPHERAL,
-        MAVLINK_COMM_0,
-        &message,
-        0,//TODO: Create system time,
-        alt_at_boot,
-        0,
-        alt,
-        -9999, /** TODO: Make an 'unknown' constant */
-        -9999,
-        -9999
-      );      
-      len = mavlink_msg_to_send_buffer(txbuff, &message);
-      //synchronous tx should prevent us from overwritting buffer mid transmission
-      status = HAL_UART_Transmit(&huart4, txbuff, len, 100);
-    }
-    
-    /******** Insert 1Hz code ***************/
-    if((base_tick - slow_tick) % period_ticks_1Hz == 0)
-    {
-      //Write heartbeat message
-      uint8_t txbuff[MAVLINK_MAX_PACKET_LEN];
-      uint8_t system_id = 42;
-      uint8_t base_mode = 0;
-      uint8_t custom_mode = 0;
-      mavlink_message_t message;
-      mavlink_msg_heartbeat_pack_chan(
-        system_id,
-        MAV_COMP_ID_PERIPHERAL,
-        MAVLINK_COMM_0,
-        &message,
-        MAV_TYPE_GENERIC,
-        MAV_AUTOPILOT_GENERIC,
-        base_mode,
-        custom_mode,
-        MAV_STATE_STANDBY
-      );
-      const int len = mavlink_msg_to_send_buffer(txbuff, &message);
-      int status = HAL_UART_Transmit(&huart4, txbuff, len, 100);
-
-      BSP_LED_Toggle(LED_BLUE);
-    }
-
-    osDelayUntil(base_tick + base_period_ticks); 
+    link_mgr_rx_msg_process();
+    link_mgr_tx_msgs(new_tick - start_tick);
+    osDelayUntil(new_tick + base_period_ticks); 
   }
   /* USER CODE END start_lm */
 }
