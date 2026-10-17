@@ -102,9 +102,11 @@
   :source:
     - Core/Src/**
     - Drivers/**
+    - c_library_v2/**
   :include:
     - Core/Inc/** # In simple projects, this entry often duplicates :source
     - Drivers/**
+    - c_library_v2/**
   :support:
     - test/support
   :libraries: []

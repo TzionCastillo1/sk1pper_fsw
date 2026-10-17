@@ -284,7 +284,7 @@ icm42688P_Status_t icm42688p_read_raw_acc(icm42688p_Handle_t *hicm42688p, int16_
 icm42688P_Status_t icm42688p_read_raw_temp(icm42688p_Handle_t *hicm42688p, int16_t *temp);
 
 /**
- * @brief Read latest gyroscope values and perform scaling to return value in dps (?)
+ * @brief Read latest gyroscope values and perform scaling to return value in dps
  * 
  * @param hicm42688p 
  * @param gyro_vals 

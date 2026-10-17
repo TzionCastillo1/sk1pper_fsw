@@ -5,10 +5,10 @@
 #include "cli_cmd.h"
 #include "ringbuff.h"
 
-char uart_buff[CLI_UART_BUFF_LEN];
-ringbuff_t uart_ringbuff;
+static char uart_buff[CLI_UART_BUFF_LEN];
+static ringbuff_t uart_ringbuff;
 
-char line_buff[CLI_MAX_LINE_LEN];
+static char line_buff[CLI_MAX_LINE_LEN];
 uint8_t line_pos = 0;
 
 bool prev_CR = false;
@@ -19,6 +19,7 @@ int curs_pos = 0;
 void cli_init()
 {
     ringbuff_init(&uart_ringbuff, uart_buff, CLI_UART_BUFF_LEN);
+    printf_("Version: ");
     printf_("Sk1pper>\r\n");
 }
 

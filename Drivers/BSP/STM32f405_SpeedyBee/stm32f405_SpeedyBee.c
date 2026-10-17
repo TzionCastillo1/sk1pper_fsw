@@ -8,8 +8,8 @@
  * 
  */
 
-GPIO_TypeDef *GPIO_PORT[LEDn] = {LED2_GPIO_PORT};
-const uint16_t GPIO_PIN[LEDn] = {LED2_PIN};
+GPIO_TypeDef *GPIO_PORT[LEDn] = {LED2_GPIO_PORT, LED3_GPIO_PORT};
+const uint16_t GPIO_PIN[LEDn] = {LED2_PIN, LED3_PIN};
 
 
 
@@ -98,6 +98,11 @@ void BSP_LED_Off(Led_t Led)
 void BSP_LED_Toggle(Led_t Led)
 {
     HAL_GPIO_TogglePin(GPIO_PORT[Led], GPIO_PIN[Led]);
+}
+
+error_t BSP_link_mgr_tx_func(char *data, uint16_t len)
+{
+  HAL_UART_Transmit(&huart4, data, len, 100);
 }
 
 void putchar_(char c)

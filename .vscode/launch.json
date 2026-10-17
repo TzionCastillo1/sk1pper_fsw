@@ -6,6 +6,17 @@
     "configurations": [
 
         {
+            "name": "app_Debug",
+            "cwd": "${workspaceFolder}",
+            "executable": "./build/speedybee/firmware.elf",
+            "request": "launch",
+            "type": "cortex-debug",
+            "runToEntryPoint": "main",
+            "servertype": "stlink",
+            "device": "STM32F405",
+            "showDevDebugOutput": "raw"
+        },
+        {
             "name": "sensor_mgr Debug",
             "cwd": "${workspaceFolder}",
             "executable": "./build/speedybee/test_sensor_mgr/test_sensor_mgr.elf",

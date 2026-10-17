@@ -4,6 +4,7 @@
 #include "string.h"
 #include "stdlib.h"
 #include "param_mgr.h"
+#include "sensor_mgr.h"
 
 const cli_cmd_t cmd_table[] =
 {
@@ -46,6 +47,38 @@ void cli_cmd_get(int argc, char **argv)
         if(res == ERROR_OK)
         {
             printf_("%f\r\n", val);
+        }
+        else if (strncmp(argv[1], "gyro", sizeof("gyro")) == 0)
+        {
+            float gyro[3];
+            if ((res = sensormgr_get_gyro(gyro)) == ERROR_OK)
+            {
+                printf_("Gyro X: %f\r\nGyro Y: %f\r\nGyro Z: %f\r\n", gyro[0], gyro[1], gyro[2]);
+            }
+        }
+        else if (strncmp(argv[1], "acc", sizeof("acc")) == 0)
+        {
+            float acc[3];
+            if ((res = sensormgr_get_acc(acc)) == ERROR_OK)
+            {
+                printf_("Acc X: %f\r\nAcc Y: %f\r\nAcc Z: %f\r\n", acc[0], acc[1], acc[2]);
+            }
+        }
+        else if (strncmp(argv[1], "pres", sizeof("pres")) == 0)
+        {
+            float pres;
+            if ((res = sensormgr_get_baro_pres(&pres)) == ERROR_OK)
+            {
+                printf_("Pressure (Pa): %f\r\n", pres);
+            }
+        }
+        else if (strncmp(argv[1], "alt", sizeof("alt")) == 0)
+        {
+            float alt;
+            if ((res = sensormgr_get_baro_alt(&alt)) == ERROR_OK)
+            {
+                printf_("Altitude (m): %f\r\n", alt);
+            }
         }
         else
         {

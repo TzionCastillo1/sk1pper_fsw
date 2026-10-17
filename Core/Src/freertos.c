@@ -27,10 +27,15 @@
 /* USER CODE BEGIN Includes */
 #include "cli.h"
 #include "param_mgr.h"
+#include "sensor_mgr.h"
+#include <mavlink.h>
+#include "printf/printf.h"
+#include "link_mgr.h"
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
 typedef StaticTask_t osStaticThreadDef_t;
+typedef StaticSemaphore_t osStaticMutexDef_t;
 /* USER CODE BEGIN PTD */
 
 /* USER CODE END PTD */
@@ -97,6 +102,26 @@ const osThreadAttr_t flight_mgr_attributes = {
   .stack_size = sizeof(flight_mgrBuffer),
   .priority = (osPriority_t) osPriorityHigh,
 };
+/* Definitions for link_mgr */
+osThreadId_t link_mgrHandle;
+uint32_t link_mgrBuffer[ 1024 ];
+osStaticThreadDef_t link_mgrControlBlock;
+const osThreadAttr_t link_mgr_attributes = {
+  .name = "link_mgr",
+  .cb_mem = &link_mgrControlBlock,
+  .cb_size = sizeof(link_mgrControlBlock),
+  .stack_mem = &link_mgrBuffer[0],
+  .stack_size = sizeof(link_mgrBuffer),
+  .priority = (osPriority_t) osPriorityBelowNormal,
+};
+/* Definitions for test_mutex */
+osMutexId_t test_mutexHandle;
+osStaticMutexDef_t test_mutexControlBlock;
+const osMutexAttr_t test_mutex_attributes = {
+  .name = "test_mutex",
+  .cb_mem = &test_mutexControlBlock,
+  .cb_size = sizeof(test_mutexControlBlock),
+};
 
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN FunctionPrototypes */
@@ -107,6 +132,7 @@ void StartDefaultTask(void *argument);
 void start_cli(void *argument);
 void start_hk(void *argument);
 void start_fm(void *argument);
+void start_lm(void *argument);
 
 void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
 
@@ -119,6 +145,9 @@ void MX_FREERTOS_Init(void) {
   /* USER CODE BEGIN Init */
 
   /* USER CODE END Init */
+  /* Create the mutex(es) */
+  /* creation of test_mutex */
+  test_mutexHandle = osMutexNew(&test_mutex_attributes);
 
   /* USER CODE BEGIN RTOS_MUTEX */
   /* add mutexes, ... */
@@ -148,6 +177,9 @@ void MX_FREERTOS_Init(void) {
 
   /* creation of flight_mgr */
   flight_mgrHandle = osThreadNew(start_fm, NULL, &flight_mgr_attributes);
+
+  /* creation of link_mgr */
+  link_mgrHandle = osThreadNew(start_lm, NULL, &link_mgr_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
   /* add threads, ... */
@@ -188,7 +220,7 @@ void start_cli(void *argument)
 {
   /* USER CODE BEGIN start_cli */
   //Start CLI UART
-  HAL_UART_Receive_IT(&huart1, uart1_buff, 1);
+  HAL_UART_Receive_IT(&huart1, uart1_rxbuff, 1);
   cli_init();
 
   char cmd_line[CLI_CMD_LINE_BUFF];
@@ -239,12 +271,67 @@ void start_hk(void *argument)
 void start_fm(void *argument)
 {
   /* USER CODE BEGIN start_fm */
+  //Base rate of 200Hz
+  uint32_t base_period_ticks = 5;
+  uint32_t base_tick;
+
+  error_t status = sensormgr_init();
+
+  if (status != ERROR_OK)
+  {
+      printf_("Error: %d\r\n", status);
+  }
+
+  float gyro[3];
+
   /* Infinite loop */
   for(;;)
   {
-    osDelay(1);
+    base_tick = osKernelGetTickCount();
+    sensormgr_update_gyro();
+    sensormgr_update_acc();
+    sensormgr_update_baro();
+    osDelayUntil(base_tick + base_period_ticks);
   }
   /* USER CODE END start_fm */
+}
+
+/* USER CODE BEGIN Header_start_lm */
+/**
+* @brief Function implementing the link_mgr thread.
+* @param argument: Not used
+* @retval None
+*/
+/* USER CODE END Header_start_lm */
+void start_lm(void *argument)
+{
+  /* USER CODE BEGIN start_lm */
+  //Base rate of 10Hz
+  const uint32_t base_period_ticks = 100;
+  const uint32_t period_ticks_5Hz = 200;
+  const uint32_t period_ticks_1Hz = 1000;
+  uint32_t start_tick = osKernelGetTickCount();
+  uint32_t new_tick;
+
+  //Need some way to wait until the sensors are initialized
+  float alt_at_boot;
+  sensormgr_get_baro_alt(&alt_at_boot);
+
+  link_mgr_init();
+
+
+  /* Infinite loop */
+  for(;;)
+  {
+    new_tick = osKernelGetTickCount();
+
+    /******** Insert Base-frequency code ***************/
+    BSP_LED_Toggle(LED_GREEN);   
+    link_mgr_rx_msg_process();
+    link_mgr_tx_msgs(new_tick - start_tick);
+    osDelayUntil(new_tick + base_period_ticks); 
+  }
+  /* USER CODE END start_lm */
 }
 
 /* Private application code --------------------------------------------------*/
